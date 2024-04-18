@@ -1,8 +1,8 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
 
-@customElement('main-app')
-export class MainApp extends LitElement {
+@customElement('my-element')
+export class MyElement extends LitElement {
     static override styles = css`
         h1 {
             text-align: center;
@@ -18,6 +18,6 @@ export class MainApp extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'main-app': MainApp;
+        'my-element': MyElement;
     }
 }

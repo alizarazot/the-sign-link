@@ -31,12 +31,12 @@
     "plugins": [
       {
         "name": "ts-lit-plugin",
-        "strict": true,
-      },
+        "strict": true
+      }
     ],
 
-    "baseUrl": "./src",
+    "baseUrl": "./src"
   },
 
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts"]
 }

@@ -10,6 +10,8 @@ import {
 
 import "igniteui-webcomponents/themes/light/bootstrap.css";
 
+import { registerServiceWorker } from "service-worker";
+
 @customElement("my-element")
 export class MyElement extends LitElement {
   static override styles = css`
@@ -32,6 +34,8 @@ export class MyElement extends LitElement {
     super.connectedCallback();
 
     defineComponents(IgcNavbarComponent, IgcCardComponent, IgcButtonComponent);
+
+    registerServiceWorker();
   }
 
   override render() {

@@ -43,5 +43,8 @@ const serviceWorker = {
 };
 
 export default defineConfig({
+  server: {
+    port: 1921,
+  },
   plugins: [tsConfigPaths(), serviceWorker],
 });

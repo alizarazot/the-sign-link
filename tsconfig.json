@@ -1,10 +1,7 @@
 {
   "compilerOptions": {
     // Enable latest features.
-    "lib": [
-      "ESNext",
-      "DOM"
-    ],
+    "lib": ["ESNext", "DOM"],
     "target": "ESNext",
     "module": "ESNext",
     "moduleDetection": "force",
@@ -36,10 +33,6 @@
     ],
     "baseUrl": "./src"
   },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "src/service-worker/service-worker.ts"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/service-worker/service-worker.ts"]
 }

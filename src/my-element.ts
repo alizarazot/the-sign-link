@@ -12,6 +12,8 @@ import "igniteui-webcomponents/themes/light/bootstrap.css";
 
 import { registerServiceWorker } from "service-worker";
 
+import * as logging from "pkg/logging";
+
 @customElement("my-element")
 export class MyElement extends LitElement {
   static override styles = css`
@@ -32,6 +34,8 @@ export class MyElement extends LitElement {
 
   override connectedCallback() {
     super.connectedCallback();
+
+    logging.setDefaultLogger(new logging.Logger("TSL", logging.Level.Debug));
 
     defineComponents(IgcNavbarComponent, IgcCardComponent, IgcButtonComponent);
 

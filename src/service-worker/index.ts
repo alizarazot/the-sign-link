@@ -1,10 +1,10 @@
-const preffix = "[Service-Worker-Installer]";
+import { getDefaultLogger } from "pkg/logging";
 
 export const registerServiceWorker = async () => {
+  const log = getDefaultLogger().extend("Service-Worker-Installer");
+
   if (!("serviceWorker" in navigator)) {
-    console.log(
-      `${preffix}: Service Workers are not supported in this browser.`,
-    );
+    log.info("Service Workers are not supported in this browser.");
   }
 
   try {
@@ -16,14 +16,13 @@ export const registerServiceWorker = async () => {
     );
 
     if (registration.installing) {
-      console.log(`${preffix}: Installing...`);
+      log.info("Installing...");
     } else if (registration.waiting) {
-      console.log(`${preffix}: Installed.`);
-      console.log(`${preffix}: Waiting...`);
+      log.info("Waiting...");
     } else if (registration.active) {
-      console.log(`${preffix}: Service Worker active.`);
+      log.info("Service Worker active.");
     }
   } catch (err) {
-    console.log(`${preffix}: Registration failed with: ${err}`);
+    log.info("Registration failed with:", err);
   }
 };

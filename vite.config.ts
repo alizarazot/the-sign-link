@@ -43,8 +43,16 @@ const serviceWorker = {
 };
 
 export default defineConfig({
+  plugins: [tsConfigPaths(), serviceWorker],
   server: {
     port: 1921,
   },
-  plugins: [tsConfigPaths(), serviceWorker],
+  build: {
+    rollupOptions: {
+      output: {
+        entryFileNames: "assets/[name].js",
+        assetFileNames: "assets/[name].[ext]",
+      },
+    },
+  },
 });

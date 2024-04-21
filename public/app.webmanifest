@@ -475,6 +475,7 @@
   "id": "v0.1.0-preview",
   "dir": "ltr",
   "scope": "/",
+  "prefer_related_applications": false,
   "display_override": [
     "standalone",
     "window-controls-overlay",
@@ -482,5 +483,8 @@
     "fullscreen",
     "browser"
   ],
+  "launch_handler": {
+    "client_mode": ["focus-existing", "auto"]
+  },
   "categories": ["education", "entertainment", "productivity", "social"]
 }

@@ -10,7 +10,7 @@ import {
 
 import "igniteui-webcomponents/themes/light/bootstrap.css";
 
-import { registerServiceWorker } from "service-worker";
+import { registerServiceWorker } from "internal/service-worker";
 
 import * as logging from "pkg/logging";
 

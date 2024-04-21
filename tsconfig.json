@@ -34,5 +34,5 @@
     "baseUrl": "./src"
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["src/service-worker/service-worker.ts"]
+  "exclude": ["src/internal/service-worker/service-worker.ts"]
 }

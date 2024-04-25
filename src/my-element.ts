@@ -87,7 +87,9 @@ export class MyElement extends LitElement {
           </igc-card-content>
           <igc-card-actions>
             <igc-button slot="start">Comenzar</igc-button>
-            <igc-button slot="end">Previsualizar</igc-button>
+            <igc-button slot="end" @click=${this._handleLessonDescription}
+              >Previsualizar</igc-button
+            >
           </igc-card-actions>
         </igc-card>
 
@@ -101,7 +103,9 @@ export class MyElement extends LitElement {
           </igc-card-content>
           <igc-card-actions>
             <igc-button slot="start">Comenzar</igc-button>
-            <igc-button slot="end">Previsualizar</igc-button>
+            <igc-button slot="end" @click=${this._handleLessonDescription}
+              >Previsualizar</igc-button
+            >
           </igc-card-actions>
         </igc-card>
       </div>

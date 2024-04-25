@@ -33,6 +33,5 @@
     ],
     "baseUrl": "./src"
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["src/service-worker/service-worker.ts"]
+  "include": ["src/**/*.ts"]
 }

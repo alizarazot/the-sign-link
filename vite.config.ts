@@ -6,7 +6,7 @@ import { buildSync } from "esbuild";
 
 const serviceWorkerSrc = join(
   process.cwd(),
-  "src/service-worker/service-worker.ts",
+  "src/internal/service-worker/service-worker.ts",
 );
 
 const serviceWorkerDest = join(process.cwd(), "dist", "service-worker.js");
@@ -43,8 +43,16 @@ const serviceWorker = {
 };
 
 export default defineConfig({
+  plugins: [tsConfigPaths(), serviceWorker],
   server: {
     port: 1921,
   },
-  plugins: [tsConfigPaths(), serviceWorker],
+  build: {
+    rollupOptions: {
+      output: {
+        entryFileNames: "assets/[name].js",
+        assetFileNames: "assets/[name].[ext]",
+      },
+    },
+  },
 });

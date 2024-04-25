@@ -1,10 +1,11 @@
 import { LitElement, css, html } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, query } from "lit/decorators.js";
 
 import {
   defineComponents,
   IgcNavbarComponent,
   IgcCardComponent,
+  IgcDialogComponent,
   IgcButtonComponent,
 } from "igniteui-webcomponents";
 
@@ -22,13 +23,19 @@ export class MyElement extends LitElement {
     }
 
     .container {
-      display: grid;
-      place-items: center;
-      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
     }
 
     igc-card {
-      max-width: 320px;
+      width: 480px;
+    }
+
+    igc-dialog::part(base) {
+      width: 80vw;
     }
   `;
 
@@ -37,7 +44,12 @@ export class MyElement extends LitElement {
 
     logging.setDefaultLogger(new logging.Logger("TSL", logging.Level.Debug));
 
-    defineComponents(IgcNavbarComponent, IgcCardComponent, IgcButtonComponent);
+    defineComponents(
+      IgcNavbarComponent,
+      IgcCardComponent,
+      IgcDialogComponent,
+      IgcButtonComponent,
+    );
 
     registerServiceWorker();
   }
@@ -51,32 +63,60 @@ export class MyElement extends LitElement {
       <div class="container">
         <igc-card>
           <igc-card-header>
-            <h2 slot="title">¡Esta aplicación está en construcción!</h2>
-            <h3 slot="subtitle">
-              Un viaje a través de la Lengua de Señas Colombiana
-            </h3>
+            <h2 slot="title">Lección 1</h2>
+            <h3 slot="subtitle">Conceptos básicos de LSC</h3>
           </igc-card-header>
           <igc-card-content>
-            <p>
-              Un proyecto que busca promover el aprendizaje y la valoración de
-              la Lengua de Señas Colombiana (LSC) en todo el país.
-            </p>
-            <p>
-              El objetivo es fortalecer la identidad cultural de la comunidad
-              sorda, fomentar el respeto y la comprensión hacia la diversidad
-              lingüística, y ampliar la oferta educativa inclusiva.
-            </p>
+            <p>Aprende los conceptos básicos de Lengua de Señas Colombiana.</p>
           </igc-card-content>
           <igc-card-actions>
-            <igc-button
-              slot="start"
-              href="https://github.com/alizarazot/the-sign-link"
-              >Ver el código fuente</igc-button
+            <igc-button slot="start">Comenzar</igc-button>
+            <igc-button slot="end" @click=${this._handleLessonDescription}
+              >Previsualizar</igc-button
             >
           </igc-card-actions>
         </igc-card>
+
+        <igc-card>
+          <igc-card-header>
+            <h2 slot="title">Lección 2</h2>
+            <h3 slot="subtitle">Alfabeto</h3>
+          </igc-card-header>
+          <igc-card-content>
+            <p>Aprende el alfabeto de la Lengua de Señas Colombiana.</p>
+          </igc-card-content>
+          <igc-card-actions>
+            <igc-button slot="start">Comenzar</igc-button>
+            <igc-button slot="end">Previsualizar</igc-button>
+          </igc-card-actions>
+        </igc-card>
+
+        <igc-card>
+          <igc-card-header>
+            <h2 slot="title">Lección 3</h2>
+            <h3 slot="subtitle">Gramática</h3>
+          </igc-card-header>
+          <igc-card-content>
+            <p>Aprende la gramática de la Lengua de Señas Colombiana.</p>
+          </igc-card-content>
+          <igc-card-actions>
+            <igc-button slot="start">Comenzar</igc-button>
+            <igc-button slot="end">Previsualizar</igc-button>
+          </igc-card-actions>
+        </igc-card>
       </div>
+
+      <igc-dialog title="Descripción">
+        <p>Por hacer...</p>
+      </igc-dialog>
     `;
+  }
+
+  @query("igc-dialog", true)
+  private _dialog!: IgcDialogComponent;
+
+  private _handleLessonDescription() {
+    this._dialog.show();
   }
 }
 

@@ -11,9 +11,12 @@ import {
 
 import "igniteui-webcomponents/themes/light/bootstrap.css";
 
+import "pane/lesson.ts";
+
 import { registerServiceWorker } from "service-worker";
 
 import * as logging from "pkg/logging";
+import type { Lesson } from "pane/lesson.ts";
 
 @customElement("my-element")
 export class MyElement extends LitElement {
@@ -60,6 +63,8 @@ export class MyElement extends LitElement {
         <h1>The Sign Link</h1>
       </igc-navbar>
 
+      <pane-lesson hidden></pane-lesson>
+
       <div class="container">
         <igc-card>
           <igc-card-header>
@@ -70,7 +75,9 @@ export class MyElement extends LitElement {
             <p>Aprende los conceptos básicos de Lengua de Señas Colombiana.</p>
           </igc-card-content>
           <igc-card-actions>
-            <igc-button slot="start">Comenzar</igc-button>
+            <igc-button slot="start" @click=${this._startLesson}
+              >Comenzar</igc-button
+            >
             <igc-button slot="end" @click=${this._handleLessonDescription}
               >Previsualizar</igc-button
             >
@@ -121,6 +128,16 @@ export class MyElement extends LitElement {
 
   private _handleLessonDescription() {
     this._dialog.show();
+  }
+
+  @query("pane-lesson", true)
+  private _paneLesson!: Lesson;
+  @query(".container", true)
+  private _container!: HTMLDivElement;
+
+  private _startLesson() {
+    this._container.style.display = "none";
+    this._paneLesson.style.display = "block";
   }
 }
 

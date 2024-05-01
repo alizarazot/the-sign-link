@@ -1,9 +1,10 @@
 import { LitElement, css, html } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, query } from "lit/decorators.js";
 
 import {
   defineComponents,
   IgcNavbarComponent,
+  IgcNavDrawerComponent,
   IgcCardComponent,
   IgcButtonComponent,
 } from "igniteui-webcomponents";
@@ -37,16 +38,41 @@ export class MyElement extends LitElement {
 
     logging.setDefaultLogger(new logging.Logger("TSL", logging.Level.Debug));
 
-    defineComponents(IgcNavbarComponent, IgcCardComponent, IgcButtonComponent);
+    defineComponents(
+      IgcNavbarComponent,
+      IgcNavDrawerComponent,
+      IgcCardComponent,
+      IgcButtonComponent,
+    );
 
     registerServiceWorker();
   }
 
+  @query("igc-nav-drawer", true)
+  private _navDrawer!: IgcNavDrawerComponent;
+
   override render() {
     return html`
       <igc-navbar>
+        <span
+          slot="start"
+          @click=${() => {
+            this._navDrawer.show();
+          }}
+          >Menú</span
+        >
         <h1>The Sign Link</h1>
       </igc-navbar>
+
+      <igc-nav-drawer>
+        <igc-nav-drawer-header-item> The Sign Link </igc-nav-drawer-header-item>
+        <igc-nav-drawer-item>
+          <span slot="content">Inicio</span>
+        </igc-nav-drawer-item>
+        <igc-nav-drawer-item>
+          <span slot="content">Clasificación</span>
+        </igc-nav-drawer-item>
+      </igc-nav-drawer>
 
       <div class="container">
         <igc-card>

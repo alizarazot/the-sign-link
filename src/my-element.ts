@@ -3,13 +3,19 @@ import { customElement, query } from "lit/decorators.js";
 
 import {
   defineComponents,
+  IgcIconComponent,
   IgcNavbarComponent,
   IgcNavDrawerComponent,
   IgcCardComponent,
   IgcButtonComponent,
+  registerIcon,
 } from "igniteui-webcomponents";
 
 import "igniteui-webcomponents/themes/light/bootstrap.css";
+
+import iconMenu from "@material-symbols/svg-400/rounded/menu.svg";
+import iconHome from "@material-symbols/svg-400/rounded/home.svg";
+import iconTrophy from "@material-symbols/svg-400/rounded/trophy.svg";
 
 import { registerServiceWorker } from "internal/service-worker";
 
@@ -39,6 +45,7 @@ export class MyElement extends LitElement {
     logging.setDefaultLogger(new logging.Logger("TSL", logging.Level.Debug));
 
     defineComponents(
+      IgcIconComponent,
       IgcNavbarComponent,
       IgcNavDrawerComponent,
       IgcCardComponent,
@@ -46,6 +53,10 @@ export class MyElement extends LitElement {
     );
 
     registerServiceWorker();
+
+    registerIcon("menu", iconMenu);
+    registerIcon("home", iconHome);
+    registerIcon("trophy", iconTrophy);
   }
 
   @query("igc-nav-drawer", true)
@@ -54,22 +65,24 @@ export class MyElement extends LitElement {
   override render() {
     return html`
       <igc-navbar>
-        <span
+        <igc-icon
+          name="menu"
           slot="start"
           @click=${() => {
             this._navDrawer.show();
           }}
-          >Menú</span
-        >
+        ></igc-icon>
         <h1>The Sign Link</h1>
       </igc-navbar>
 
       <igc-nav-drawer>
         <igc-nav-drawer-header-item> The Sign Link </igc-nav-drawer-header-item>
         <igc-nav-drawer-item>
+          <igc-icon slot="icon" name="home"></igc-icon>
           <span slot="content">Inicio</span>
         </igc-nav-drawer-item>
         <igc-nav-drawer-item>
+          <igc-icon slot="icon" name="trophy"></igc-icon>
           <span slot="content">Clasificación</span>
         </igc-nav-drawer-item>
       </igc-nav-drawer>

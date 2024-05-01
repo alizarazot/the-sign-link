@@ -6,8 +6,6 @@ import {
   IgcIconComponent,
   IgcNavbarComponent,
   IgcNavDrawerComponent,
-  IgcCardComponent,
-  IgcButtonComponent,
   registerIcon,
 } from "igniteui-webcomponents";
 
@@ -17,25 +15,17 @@ import iconMenu from "@material-symbols/svg-400/rounded/menu.svg";
 import iconHome from "@material-symbols/svg-400/rounded/home.svg";
 import iconTrophy from "@material-symbols/svg-400/rounded/trophy.svg";
 
+import * as logging from "pkg/logging";
+
 import { registerServiceWorker } from "internal/service-worker";
 
-import * as logging from "pkg/logging";
+import "internal/pane/home.ts";
 
 @customElement("my-element")
 export class MyElement extends LitElement {
   static override styles = css`
     :host {
       display: block;
-    }
-
-    .container {
-      display: grid;
-      place-items: center;
-      margin-top: 20px;
-    }
-
-    igc-card {
-      max-width: 320px;
     }
   `;
 
@@ -48,8 +38,6 @@ export class MyElement extends LitElement {
       IgcIconComponent,
       IgcNavbarComponent,
       IgcNavDrawerComponent,
-      IgcCardComponent,
-      IgcButtonComponent,
     );
 
     registerServiceWorker();
@@ -87,34 +75,7 @@ export class MyElement extends LitElement {
         </igc-nav-drawer-item>
       </igc-nav-drawer>
 
-      <div class="container">
-        <igc-card>
-          <igc-card-header>
-            <h2 slot="title">¡Esta aplicación está en construcción!</h2>
-            <h3 slot="subtitle">
-              Un viaje a través de la Lengua de Señas Colombiana
-            </h3>
-          </igc-card-header>
-          <igc-card-content>
-            <p>
-              Un proyecto que busca promover el aprendizaje y la valoración de
-              la Lengua de Señas Colombiana (LSC) en todo el país.
-            </p>
-            <p>
-              El objetivo es fortalecer la identidad cultural de la comunidad
-              sorda, fomentar el respeto y la comprensión hacia la diversidad
-              lingüística, y ampliar la oferta educativa inclusiva.
-            </p>
-          </igc-card-content>
-          <igc-card-actions>
-            <igc-button
-              slot="start"
-              href="https://github.com/alizarazot/the-sign-link"
-              >Ver el código fuente</igc-button
-            >
-          </igc-card-actions>
-        </igc-card>
-      </div>
+      <pane-home></pane-home>
     `;
   }
 }

@@ -12,6 +12,8 @@ import "igniteui-webcomponents/themes/light/bootstrap.css";
 
 import { registerServiceWorker } from "internal/service-worker";
 
+import { getCurrentUser, signIn } from "./cloud";
+
 import * as logging from "pkg/logging";
 
 @customElement("my-element")
@@ -35,11 +37,16 @@ export class MyElement extends LitElement {
   override connectedCallback() {
     super.connectedCallback();
 
-    logging.setDefaultLogger(new logging.Logger("TSL", logging.Level.Debug));
+    const log = logging.setDefaultLogger(
+      new logging.Logger("TSL", logging.Level.Debug),
+    );
 
     defineComponents(IgcNavbarComponent, IgcCardComponent, IgcButtonComponent);
 
     registerServiceWorker();
+
+    log.info("Checking user session status...");
+    getCurrentUser();
   }
 
   override render() {
@@ -73,6 +80,10 @@ export class MyElement extends LitElement {
               href="https://github.com/alizarazot/the-sign-link"
               >Ver el código fuente</igc-button
             >
+            <br />
+            <igc-button style="padding-top: 10px" @click=${signIn}>
+              Iniciar sesión
+            </igc-button>
           </igc-card-actions>
         </igc-card>
       </div>

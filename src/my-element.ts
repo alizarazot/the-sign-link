@@ -2,10 +2,10 @@ import { LitElement, css, html } from "lit";
 import { customElement, query } from "lit/decorators.js";
 
 import {
-  defineComponents,
   IgcIconComponent,
-  IgcNavbarComponent,
   IgcNavDrawerComponent,
+  IgcNavbarComponent,
+  defineComponents,
   registerIcon,
 } from "igniteui-webcomponents";
 
@@ -20,12 +20,22 @@ import * as logging from "pkg/logging";
 import { registerServiceWorker } from "internal/service-worker";
 
 import "internal/pane/home.ts";
+import "internal/pane/lesson.ts";
+import type { Lesson } from "internal/pane/lesson.ts";
+import type { PaneHome } from "internal/pane/home.ts";
 
 @customElement("my-element")
 export class MyElement extends LitElement {
   static override styles = css`
     :host {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .pane {
+      flex-grow: 1;
+      overflow-y: auto;
     }
   `;
 
@@ -40,11 +50,11 @@ export class MyElement extends LitElement {
       IgcNavDrawerComponent,
     );
 
-    registerServiceWorker();
-
     registerIcon("menu", iconMenu);
     registerIcon("home", iconHome);
     registerIcon("trophy", iconTrophy);
+
+    registerServiceWorker();
   }
 
   @query("igc-nav-drawer", true)
@@ -75,8 +85,21 @@ export class MyElement extends LitElement {
         </igc-nav-drawer-item>
       </igc-nav-drawer>
 
-      <pane-home></pane-home>
+      <div class="pane">
+        <pane-home @start-lesson=${this._handleStartLesson}></pane-home>
+        <pane-lesson hidden></pane-lesson>
+      </div>
     `;
+  }
+
+  @query("pane-lesson", true)
+  private _paneLesson!: Lesson;
+
+  private _handleStartLesson(e: Event) {
+    const elem = e.target as PaneHome;
+
+    elem.setAttribute("hidden", "");
+    this._paneLesson.removeAttribute("hidden");
   }
 }
 

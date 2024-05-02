@@ -75,7 +75,7 @@ export class MyElement extends LitElement {
 
       <igc-nav-drawer>
         <igc-nav-drawer-header-item> The Sign Link </igc-nav-drawer-header-item>
-        <igc-nav-drawer-item>
+        <igc-nav-drawer-item @click=${this.showHome}>
           <igc-icon slot="icon" name="home"></igc-icon>
           <span slot="content">Inicio</span>
         </igc-nav-drawer-item>
@@ -92,8 +92,16 @@ export class MyElement extends LitElement {
     `;
   }
 
+  @query("pane-home", true)
+  private _paneHome!: PaneHome;
   @query("pane-lesson", true)
   private _paneLesson!: Lesson;
+
+  protected showHome() {
+    this._paneLesson.setAttribute("hidden", "");
+    this._paneHome.removeAttribute("hidden");
+    this._navDrawer.toggle();
+  }
 
   private _handleStartLesson(e: Event) {
     const elem = e.target as PaneHome;

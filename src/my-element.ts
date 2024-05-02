@@ -2,43 +2,40 @@ import { LitElement, css, html } from "lit";
 import { customElement, query } from "lit/decorators.js";
 
 import {
-  defineComponents,
+  IgcIconComponent,
+  IgcNavDrawerComponent,
   IgcNavbarComponent,
-  IgcCardComponent,
-  IgcDialogComponent,
-  IgcButtonComponent,
+  defineComponents,
+  registerIcon,
 } from "igniteui-webcomponents";
 
 import "igniteui-webcomponents/themes/light/bootstrap.css";
 
-import "pane/lesson.ts";
-
-import { registerServiceWorker } from "service-worker";
+import iconMenu from "@material-symbols/svg-400/rounded/menu.svg";
+import iconHome from "@material-symbols/svg-400/rounded/home.svg";
+import iconTrophy from "@material-symbols/svg-400/rounded/trophy.svg";
 
 import * as logging from "pkg/logging";
-import type { Lesson } from "pane/lesson.ts";
+
+import { registerServiceWorker } from "internal/service-worker";
+
+import "internal/pane/home.ts";
+import "internal/pane/lesson.ts";
+import type { Lesson } from "internal/pane/lesson.ts";
+import type { PaneHome } from "internal/pane/home.ts";
 
 @customElement("my-element")
 export class MyElement extends LitElement {
   static override styles = css`
     :host {
-      display: block;
-    }
-
-    .container {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      padding: 20px;
+      flex-direction: column;
+      height: 100vh;
     }
 
-    igc-card {
-      width: 480px;
-    }
-
-    igc-dialog::part(base) {
-      width: 80vw;
+    .pane {
+      flex-grow: 1;
+      overflow-y: auto;
     }
   `;
 
@@ -48,96 +45,61 @@ export class MyElement extends LitElement {
     logging.setDefaultLogger(new logging.Logger("TSL", logging.Level.Debug));
 
     defineComponents(
+      IgcIconComponent,
       IgcNavbarComponent,
-      IgcCardComponent,
-      IgcDialogComponent,
-      IgcButtonComponent,
+      IgcNavDrawerComponent,
     );
+
+    registerIcon("menu", iconMenu);
+    registerIcon("home", iconHome);
+    registerIcon("trophy", iconTrophy);
 
     registerServiceWorker();
   }
 
+  @query("igc-nav-drawer", true)
+  private _navDrawer!: IgcNavDrawerComponent;
+
   override render() {
     return html`
       <igc-navbar>
+        <igc-icon
+          name="menu"
+          slot="start"
+          @click=${() => {
+            this._navDrawer.show();
+          }}
+        ></igc-icon>
         <h1>The Sign Link</h1>
       </igc-navbar>
 
-      <pane-lesson hidden></pane-lesson>
+      <igc-nav-drawer>
+        <igc-nav-drawer-header-item> The Sign Link </igc-nav-drawer-header-item>
+        <igc-nav-drawer-item>
+          <igc-icon slot="icon" name="home"></igc-icon>
+          <span slot="content">Inicio</span>
+        </igc-nav-drawer-item>
+        <igc-nav-drawer-item>
+          <igc-icon slot="icon" name="trophy"></igc-icon>
+          <span slot="content">Clasificación</span>
+        </igc-nav-drawer-item>
+      </igc-nav-drawer>
 
-      <div class="container">
-        <igc-card>
-          <igc-card-header>
-            <h2 slot="title">Lección 1</h2>
-            <h3 slot="subtitle">Conceptos básicos de LSC</h3>
-          </igc-card-header>
-          <igc-card-content>
-            <p>Aprende los conceptos básicos de Lengua de Señas Colombiana.</p>
-          </igc-card-content>
-          <igc-card-actions>
-            <igc-button slot="start" @click=${this._startLesson}
-              >Comenzar</igc-button
-            >
-            <igc-button slot="end" @click=${this._handleLessonDescription}
-              >Previsualizar</igc-button
-            >
-          </igc-card-actions>
-        </igc-card>
-
-        <igc-card>
-          <igc-card-header>
-            <h2 slot="title">Lección 2</h2>
-            <h3 slot="subtitle">Alfabeto</h3>
-          </igc-card-header>
-          <igc-card-content>
-            <p>Aprende el alfabeto de la Lengua de Señas Colombiana.</p>
-          </igc-card-content>
-          <igc-card-actions>
-            <igc-button slot="start">Comenzar</igc-button>
-            <igc-button slot="end" @click=${this._handleLessonDescription}
-              >Previsualizar</igc-button
-            >
-          </igc-card-actions>
-        </igc-card>
-
-        <igc-card>
-          <igc-card-header>
-            <h2 slot="title">Lección 3</h2>
-            <h3 slot="subtitle">Gramática</h3>
-          </igc-card-header>
-          <igc-card-content>
-            <p>Aprende la gramática de la Lengua de Señas Colombiana.</p>
-          </igc-card-content>
-          <igc-card-actions>
-            <igc-button slot="start">Comenzar</igc-button>
-            <igc-button slot="end" @click=${this._handleLessonDescription}
-              >Previsualizar</igc-button
-            >
-          </igc-card-actions>
-        </igc-card>
+      <div class="pane">
+        <pane-home @start-lesson=${this._handleStartLesson}></pane-home>
+        <pane-lesson hidden></pane-lesson>
       </div>
-
-      <igc-dialog title="Descripción">
-        <p>Por hacer...</p>
-      </igc-dialog>
     `;
-  }
-
-  @query("igc-dialog", true)
-  private _dialog!: IgcDialogComponent;
-
-  private _handleLessonDescription() {
-    this._dialog.show();
   }
 
   @query("pane-lesson", true)
   private _paneLesson!: Lesson;
-  @query(".container", true)
-  private _container!: HTMLDivElement;
 
-  private _startLesson() {
-    this._container.style.display = "none";
-    this._paneLesson.style.display = "block";
+  private _handleStartLesson(e: Event) {
+    const elem = e.target as PaneHome;
+
+    elem.setAttribute("hidden", "");
+    this._paneLesson.removeAttribute("hidden");
   }
 }
 

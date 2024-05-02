@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@material-symbols/svg-400": "^0.17.4",
     "firebase": "^10.11.0",
     "igniteui-webcomponents": "^4.8.2",
     "lit": "^3.1.2"

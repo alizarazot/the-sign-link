@@ -45,6 +45,15 @@ export class PaneHome extends LitElement {
   override render() {
     return html`
       <igc-card>
+        <igc-card-header>Necesita hacer la prueba diagnóstica.</igc-card-header>
+        <igc-card-actions>
+          <igc-button @click=${this._showDiagnosticTest}
+            >Hacer prueba</igc-button
+          >
+        </igc-card-actions>
+      </igc-card>
+
+      <igc-card>
         <igc-card-header>
           <h2 slot="title">Lección 1</h2>
           <h3 slot="subtitle">Conceptos básicos de LSC</h3>
@@ -109,6 +118,10 @@ export class PaneHome extends LitElement {
 
   private _startLesson() {
     this.dispatchEvent(new Event("start-lesson"));
+  }
+
+  private _showDiagnosticTest() {
+    this.dispatchEvent(new Event("start-diagnostic-test"));
   }
 }
 

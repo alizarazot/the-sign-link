@@ -1,11 +1,16 @@
 import { LitElement, css, html } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 
 import {
   IgcNavbarComponent,
+  IgcRadioComponent,
+  IgcRadioGroupComponent,
   IgcStepperComponent,
   defineComponents,
 } from "igniteui-webcomponents";
+
+import "internal/component/multiple-selection.ts";
+import { ComponentMultipleSelection } from "internal/component/multiple-selection.ts";
 
 @customElement("pane-diagnostic-test")
 export class PaneDiagnosticTest extends LitElement {
@@ -28,13 +33,25 @@ export class PaneDiagnosticTest extends LitElement {
       max-width: 70ch;
       margin: auto;
     }
+
+    .container component-multiple-selection {
+      margin-bottom: 40px;
+    }
   `;
 
   override connectedCallback(): void {
     super.connectedCallback();
 
-    defineComponents(IgcStepperComponent, IgcNavbarComponent);
+    defineComponents(
+      IgcStepperComponent,
+      IgcNavbarComponent,
+      IgcRadioGroupComponent,
+      IgcRadioComponent,
+    );
   }
+
+  @state()
+  private _score = 0;
 
   protected override render() {
     return html`
@@ -123,7 +140,61 @@ export class PaneDiagnosticTest extends LitElement {
           <span slot="title">Preguntas</span>
 
           <div class="container">
-            <p>TODO(alizarazot): Añadir preguntas.</p>
+            <component-multiple-selection
+              question="¿Cuál es el alfabeto manual de la Lengua de Señas Colombiana?"
+              correctAnswer="Un conjunto de gestos que representan las letras del abecedario español."
+              answer1="El mismo que el alfabeto dactilológico español."
+              answer2="Un alfabeto único que no se basa en ninguna otra lengua."
+              answer3="La LSC no tiene un alfabeto manual."
+            ></component-multiple-selection>
+
+            <component-multiple-selection
+              question="¿Cómo se indica el plural en la LSC?"
+              correctAnswer="Repitiendo el signo principal varias veces."
+              answer1="Agregando un gesto específico que significa 'plural'."
+              answer2="Usando expresiones faciales y corporales enfáticas."
+              answer3="La LSC no tiene una forma específica para indicar el plural."
+            ></component-multiple-selection>
+
+            <component-multiple-selection
+              question="¿Qué son los clasificadores en la LSC?"
+              correctAnswer="Gestos manuales que representan la forma, el tamaño o la ubicación de objetos o conceptos."
+              answer1="Palabras señadas que se utilizan para describir características específicas."
+              answer2="Marcadores gramaticales que indican la función de las palabras en una oración."
+              answer3="La LSC no utiliza clasificadores."
+            ></component-multiple-selection>
+
+            <component-multiple-selection
+              question="¿Cuál es la estructura básica de una oración en la LSC?"
+              correctAnswer="Sujeto-Verbo-Objeto (SVO)."
+              answer1="Verbo-Sujeto-Objeto (VSO)."
+              answer2="Objeto-Verbo-Sujeto (OVS)."
+              answer3="La LSC no tiene una estructura de oración definida."
+            ></component-multiple-selection>
+
+            <component-multiple-selection
+              question="¿Qué son los modismos en la LSC?"
+              correctAnswer="Expresiones idiomáticas que tienen un significado diferente al de las palabras individuales."
+              answer1="Gestos manuales que representan emociones o ideas abstractas."
+              answer2="Palabras señadas que se utilizan en contextos específicos."
+              answer3="La LSC no tiene modismos."
+            ></component-multiple-selection>
+
+            <component-multiple-selection
+              question="¿Cómo se considera la Lengua de Señas Colombiana en Colombia?"
+              correctAnswer="Una lengua oficial con los mismos derechos que el español."
+              answer1="Un dialecto del español."
+              answer2="Una lengua minoritaria sin reconocimiento oficial."
+              answer3="La LSC no tiene un estatus legal definido en Colombia."
+            ></component-multiple-selection>
+
+            <component-multiple-selection
+              question="¿Cuál es la importancia de aprender Lengua de Señas Colombiana?"
+              correctAnswer="Todas las anteriores."
+              answer1="Para comunicarse con personas sordas o con dificultades auditivas."
+              answer2="Para promover la inclusión y la diversidad cultural."
+              answer3="Para comprender mejor la cultura sorda en Colombia."
+            ></component-multiple-selection>
           </div>
         </igc-step>
 
@@ -135,10 +206,29 @@ export class PaneDiagnosticTest extends LitElement {
               Esperamos que esta prueba sea una herramienta útil para usted y
               para el desarrollo de la LSC en Colombia.
             </p>
+            <igc-button @click=${this._getScore}>Calcular puntaje</igc-button>
+            <p>Su puntaje fue: ${this._score}</p>
           </div>
         </igc-step>
       </igc-stepper>
     `;
+  }
+
+  private _getScore() {
+    this._score = 0;
+
+    this.renderRoot
+      .querySelectorAll<ComponentMultipleSelection>(
+        "component-multiple-selection",
+      )
+      .forEach((elem) => {
+        if (elem.isActiveCorrectAnswer()) {
+          this._score++;
+        }
+      });
+
+    this._score *= 100 / 7;
+    this._score = Math.round(this._score);
   }
 }
 

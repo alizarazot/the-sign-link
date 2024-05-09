@@ -108,7 +108,7 @@ export class MyElement extends LitElement {
       <div class="pane">
         <pane-home @start-lesson=${this._handleStartLesson}></pane-home>
         <pane-lesson hidden></pane-lesson>
-        <pane-ranking> </pane-ranking>
+        <pane-ranking hidden> </pane-ranking>
       </div>
     `;
   }

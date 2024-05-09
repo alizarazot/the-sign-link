@@ -20,11 +20,13 @@ import * as logging from "pkg/logging";
 
 import { registerServiceWorker } from "internal/service-worker";
 
+import "internal/pane/ranking.ts";
 import "internal/pane/home.ts";
 import "internal/pane/lesson.ts";
 
 import type { PaneHome } from "internal/pane/home.ts";
 import type { PaneLesson } from "internal/pane/lesson.ts";
+import { PaneRanking } from "internal/pane/ranking.ts";
 
 import { currentSession } from "internal/session";
 
@@ -96,7 +98,8 @@ export class MyElement extends LitElement {
           <igc-icon slot="icon" name="home"></igc-icon>
           <span slot="content">Inicio</span>
         </igc-nav-drawer-item>
-        <igc-nav-drawer-item>
+
+        <igc-nav-drawer-item @click=${this.showRanking}>
           <igc-icon slot="icon" name="trophy"></igc-icon>
           <span slot="content">Clasificación</span>
         </igc-nav-drawer-item>
@@ -105,6 +108,7 @@ export class MyElement extends LitElement {
       <div class="pane">
         <pane-home @start-lesson=${this._handleStartLesson}></pane-home>
         <pane-lesson hidden></pane-lesson>
+        <pane-ranking> </pane-ranking>
       </div>
     `;
   }
@@ -113,11 +117,21 @@ export class MyElement extends LitElement {
   private _paneHome!: PaneHome;
   @query("pane-lesson", true)
   private _paneLesson!: PaneLesson;
+  @query("pane-ranking", true)
+  private _paneRanking!: PaneRanking;
 
   protected showHome() {
     this._paneLesson.setAttribute("hidden", "");
 
     this._paneHome.removeAttribute("hidden");
+    this._paneRanking.setAttribute("hidden", "");
+    this._navDrawer.toggle();
+  }
+
+  protected showRanking() {
+    this._paneLesson.setAttribute("hidden", "");
+    this._paneHome.setAttribute("hidden", "");
+    this._paneRanking.removeAttribute("hidden"); // Muestra el ranking al hacer clic en la opción de clasificación
     this._navDrawer.toggle();
   }
 
@@ -129,6 +143,7 @@ export class MyElement extends LitElement {
 
     elem.setAttribute("hidden", "");
     this._paneLesson.removeAttribute("hidden");
+    this._paneRanking.setAttribute("hidden", ""); // Oculta el ranking al mostrar una lección
   }
 }
 

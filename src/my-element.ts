@@ -1,10 +1,11 @@
 import { LitElement, css, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
+import { customElement, query, state } from "lit/decorators.js";
 
 import {
   IgcIconComponent,
   IgcNavDrawerComponent,
   IgcNavbarComponent,
+  IgcAvatarComponent,
   defineComponents,
   registerIcon,
 } from "igniteui-webcomponents";
@@ -26,6 +27,8 @@ import "internal/pane/diagnostic-test.ts";
 import type { Lesson } from "internal/pane/lesson.ts";
 import type { PaneHome } from "internal/pane/home.ts";
 import type { PaneDiagnosticTest } from "internal/pane/diagnostic-test.ts";
+
+import { currentSession } from "internal/session";
 
 @customElement("my-element")
 export class MyElement extends LitElement {
@@ -51,6 +54,7 @@ export class MyElement extends LitElement {
       IgcIconComponent,
       IgcNavbarComponent,
       IgcNavDrawerComponent,
+      IgcAvatarComponent,
     );
 
     registerIcon("menu", iconMenu);
@@ -59,6 +63,9 @@ export class MyElement extends LitElement {
 
     registerServiceWorker();
   }
+
+  @state()
+  private _currentSession = currentSession();
 
   @query("igc-nav-drawer", true)
   private _navDrawer!: IgcNavDrawerComponent;
@@ -74,6 +81,13 @@ export class MyElement extends LitElement {
           }}
         ></igc-icon>
         <h1>The Sign Link</h1>
+        <igc-avatar
+          slot="end"
+          shape="circle"
+          src=${this._currentSession.photo}
+          alt="User photo"
+        >
+        </igc-avatar>
       </igc-navbar>
 
       <igc-nav-drawer>

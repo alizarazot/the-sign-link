@@ -10,7 +10,7 @@ import {
   registerIcon,
 } from "igniteui-webcomponents";
 
-import "igniteui-webcomponents/themes/light/bootstrap.css";
+import "igniteui-webcomponents/themes/light/fluent.css";
 
 import iconMenu from "@material-symbols/svg-400/rounded/menu.svg";
 import iconHome from "@material-symbols/svg-400/rounded/home.svg";

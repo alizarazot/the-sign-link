@@ -30,6 +30,8 @@ import type { PaneDiagnosticTest } from "internal/pane/diagnostic-test.ts";
 
 import { currentSession } from "internal/session";
 
+import type { Lesson } from "internal/lesson";
+
 @customElement("my-element")
 export class MyElement extends LitElement {
   static override styles = css`
@@ -103,10 +105,7 @@ export class MyElement extends LitElement {
       </igc-nav-drawer>
 
       <div class="pane">
-        <pane-home
-          @start-lesson=${this._handleStartLesson}
-          @start-diagnostic-test=${this._handleStartDiagnosticTest}
-        ></pane-home>
+        <pane-home @start-lesson=${this._handleStartLesson}></pane-home>
         <pane-lesson hidden></pane-lesson>
         <pane-diagnostic-test hidden></pane-diagnostic-test>
       </div>
@@ -128,16 +127,14 @@ export class MyElement extends LitElement {
     this._navDrawer.toggle();
   }
 
-  private _handleStartLesson(e: Event) {
+  private _handleStartLesson(e: CustomEvent) {
     const elem = e.target as PaneHome;
+    const lesson = e.detail as Lesson;
+
+    this._paneLesson.lesson = lesson;
 
     elem.setAttribute("hidden", "");
     this._paneLesson.removeAttribute("hidden");
-  }
-
-  private _handleStartDiagnosticTest() {
-    this._paneHome.setAttribute("hidden", "");
-    this._paneDiagnosticTest.removeAttribute("hidden");
   }
 }
 

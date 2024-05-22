@@ -65,7 +65,11 @@ export class PaneHome extends LitElement {
                 <p>${i.description}</p>
               </igc-card-content>
               <igc-card-actions>
-                <igc-button slot="start" @click=${this._startLesson}
+                <igc-button
+                  slot="start"
+                  @click=${() => {
+                    this._startLesson(i);
+                  }}
                   >Comenzar</igc-button
                 >
                 <igc-button
@@ -95,8 +99,8 @@ export class PaneHome extends LitElement {
     this._dialog.show();
   }
 
-  private _startLesson() {
-    this.dispatchEvent(new Event("start-lesson"));
+  private _startLesson(lesson: Lesson) {
+    this.dispatchEvent(new CustomEvent("start-lesson", { detail: lesson }));
   }
 }
 

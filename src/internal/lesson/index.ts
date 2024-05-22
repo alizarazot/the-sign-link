@@ -32,6 +32,8 @@ export class Lesson {
         continue;
       }
 
+      let questions = Lesson.parseQuestions(rawLessonDetails.questions);
+
       lessons.push(
         new Lesson(
           rawLesson.id,
@@ -40,15 +42,20 @@ export class Lesson {
           rawLessonDetails.description,
           rawLessonDetails.summary,
           [],
-          [],
+          questions,
         ),
       );
 
       log.debug("Skipped content", rawLessonDetails.content);
-      log.debug("Skipped questions", rawLessonDetails.question);
     }
 
     return lessons;
+  }
+
+  protected static async rawLessonDetails(id: string): Promise<any> {
+    return await (
+      await fetch(Lesson.rootDirectory + "/" + id + "/index.json")
+    ).json();
   }
 
   protected static parseRequeriments(
@@ -68,10 +75,25 @@ export class Lesson {
     return requeriments;
   }
 
-  protected static async rawLessonDetails(id: string): Promise<any> {
-    return await (
-      await fetch(Lesson.rootDirectory + "/" + id + "/index.json")
-    ).json();
+  protected static parseQuestions(questions: any): SingleChoiceQuestion[] {
+    let parsedQuestions: SingleChoiceQuestion[] = [];
+
+    for (let question of questions) {
+      if (question.type !== "single-choice") {
+        log.error("Unkonow question type:", question.type);
+        continue;
+      }
+
+      parsedQuestions.push(
+        new SingleChoiceQuestion(
+          question.question,
+          question.answers,
+          question.correct,
+        ),
+      );
+    }
+
+    return parsedQuestions;
   }
 }
 
@@ -80,4 +102,16 @@ export class LessonContent {
     public readonly type: "title" | "paragraph" | "image",
     public readonly content: string,
   ) {}
+}
+
+export class SingleChoiceQuestion {
+  constructor(
+    public readonly question: string,
+    public readonly answers: string[],
+    private readonly _indexCorrect: number,
+  ) {}
+
+  get correct(): string {
+    return this.answers[this._indexCorrect];
+  }
 }

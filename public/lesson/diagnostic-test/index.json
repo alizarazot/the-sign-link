@@ -15,11 +15,11 @@
       "content": "test.png"
     }
   ],
-  "question": [
+  "questions": [
     {
       "type": "single-choice",
-      "mainQuestion": "Select one:",
-      "subQuestions": ["Correct", "One", "Two"],
+      "question": "Select one:",
+      "answers": ["Correct", "One", "Two"],
       "correct": 0
     }
   ]

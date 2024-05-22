@@ -8,5 +8,15 @@
     "id": "lesson-1",
     "name": "Lección 1",
     "require": ["diagnostic-test"]
+  },
+  {
+    "id": "lesson-2",
+    "name": "Lección 2",
+    "require": ["lesson-1"]
+  },
+  {
+    "id": "lesson-3",
+    "name": "Lección 3",
+    "require": ["lesson-2"]
   }
 ]

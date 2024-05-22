@@ -15,7 +15,7 @@ Estas son las características que debe tener la PWA al final de su desarrollo.
 - [ ] Resultados de aprendizaje.
   - [ ] Mostrar al usuario su nivel de aprendizaje.
 - [ ] Lecciones sin conexión a la Internet.
-  - [ ] Descarga de lecciones.
+  - [x] Descarga de lecciones.
   - [ ] Repaso fuera de línea del contenido visto.
 - [ ] Prueba diagnóstica.
   - [ ] Intefaz.

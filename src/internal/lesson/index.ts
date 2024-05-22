@@ -32,8 +32,6 @@ export class Lesson {
         continue;
       }
 
-      let questions = Lesson.parseQuestions(rawLessonDetails.questions);
-
       lessons.push(
         new Lesson(
           rawLesson.id,
@@ -41,12 +39,10 @@ export class Lesson {
           require,
           rawLessonDetails.description,
           rawLessonDetails.summary,
-          [],
-          questions,
+          Lesson.parseContent(rawLessonDetails.content),
+          Lesson.parseQuestions(rawLessonDetails.questions),
         ),
       );
-
-      log.debug("Skipped content", rawLessonDetails.content);
     }
 
     return lessons;
@@ -89,6 +85,16 @@ export class Lesson {
 
     return parsedQuestions;
   }
+
+  protected static parseContent(content: any): LessonContent[] {
+    let parsedContent: LessonContent[] = [];
+
+    for (let c of content) {
+      parsedContent.push(LessonContent.parse(c));
+    }
+
+    return parsedContent;
+  }
 }
 
 export class LessonContent {
@@ -96,6 +102,10 @@ export class LessonContent {
     public readonly type: "title" | "paragraph" | "image",
     public readonly content: string,
   ) {}
+
+  static parse(content: any): LessonContent {
+    return new LessonContent(content.type, content.content);
+  }
 }
 
 export class SingleChoiceQuestion {

@@ -1,0 +1,12 @@
+[
+  {
+    "id": "diagnostic-test",
+    "name": "Prueba diagnóstica",
+    "require": []
+  },
+  {
+    "id": "lesson-1",
+    "name": "Lección 1",
+    "require": ["diagnostic-test"]
+  }
+]

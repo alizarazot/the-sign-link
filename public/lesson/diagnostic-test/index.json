@@ -1,0 +1,26 @@
+{
+  "description": "Description",
+  "summary": "Summary",
+  "content": [
+    {
+      "type": "title",
+      "content": "Title"
+    },
+    {
+      "type": "paragraph",
+      "content": "This is a paragraph..."
+    },
+    {
+      "type": "image",
+      "content": "test.png"
+    }
+  ],
+  "question": [
+    {
+      "type": "single-choice",
+      "mainQuestion": "Select one:",
+      "subQuestions": ["Correct", "One", "Two"],
+      "correct": 0
+    }
+  ]
+}

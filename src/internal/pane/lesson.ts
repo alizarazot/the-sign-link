@@ -21,7 +21,6 @@ export class PaneLesson extends LitElement {
   lesson = new Lesson("", "", "", [], "", "", [], []); // Prevent undefined lesson.
 
   protected override render(): unknown {
-    console.log(this.lesson.content);
     return html`
       <igc-navbar>
         <h1>${this.lesson.name}</h1>
@@ -44,6 +43,21 @@ export class PaneLesson extends LitElement {
                   break;
               }
             })}
+          </div>
+        </igc-step>
+        <igc-step>
+          <span slot="title">Preguntas</span>
+          <div class="container">
+            ${this.lesson.questions.map(
+              (i) => html`
+                <div class="question">
+                  <span class="title">${i.question}</span>
+                  <ul>
+                    ${i.answers.map((j) => html`<li>${j}</li>`)}
+                  </ul>
+                </div>
+              `,
+            )}
           </div>
         </igc-step>
       </igc-stepper>

@@ -2,6 +2,54 @@
   "title": "Prueba de conocimientos",
   "description": "¡Pon a prueba tus conocimientos de Lengua de Señas Colombiana!",
   "summary": "Esta prueba nos permitirá conocer su nivel de conocimiento actual de la Lengua de Señas Colombiana.",
-  "content": [],
-  "questions": []
+  "content": [
+    {
+      "type": "title",
+      "content": "Prueba diagnóstica de Lengua de Señas Colombiana (LSC)"
+    },
+    {
+      "type": "paragraph",
+      "content": "La prueba diagnóstica de Lengua de Señas Colombiana (LSC) se utiliza para evaluar el nivel de competencia y fluidez en la Lengua de Señas Colombiana. Esta prueba es crucial para determinar el grado de habilidad y comprensión en la comunicación a través de la LSC."
+    },
+    {
+      "type": "paragraph",
+      "content": "Durante la prueba, se evalúan diferentes aspectos del uso y comprensión de la LSC, como la gramática, el vocabulario, la expresión facial, y la fluidez en la comunicación. Los resultados de esta prueba pueden ayudar a identificar áreas de mejora y diseñar estrategias de enseñanza personalizadas para los usuarios de la LSC."
+    }
+  ],
+  "questions": [
+    {
+      "question": "¿Qué parte del cuerpo se utiliza principalmente para expresar emociones en Lengua de Señas Colombiana?",
+      "type": "single-choice",
+      "answers": ["Manos", "Pies", "Brazos", "Rostro"],
+      "correct": 3
+    },
+    {
+      "question": "¿Qué significa cuando se agita la mano de un lado a otro en Lengua de Señas Colombiana?",
+      "type": "single-choice",
+      "answers": ["Saludo", "Aprobación", "Negación", "Agradecimiento"],
+      "correct": 2
+    },
+    {
+      "question": "¿Cuál es la importancia de las expresiones faciales en la Lengua de Señas Colombiana?",
+      "type": "single-choice",
+      "answers": [
+        "No tienen importancia",
+        "Solo se utilizan para enfatizar",
+        "Son fundamentales para transmitir significado",
+        "Son opcionales"
+      ],
+      "correct": 2
+    },
+    {
+      "question": "¿Cómo se expresan los números del 1 al 5 en Lengua de Señas Colombiana?",
+      "type": "single-choice",
+      "answers": [
+        "Con movimientos de los labios",
+        "Con gestos faciales",
+        "Con una sola mano",
+        "Con los dedos de ambas manos"
+      ],
+      "correct": 3
+    }
+  ]
 }

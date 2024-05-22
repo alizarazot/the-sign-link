@@ -16,6 +16,11 @@ export class ComponentSingleChoiceQuestion extends LitElement {
       display: block;
     }
 
+    span {
+      display: block;
+      margin-bottom: 15px;
+    }
+
     igc-radio {
       padding-left: 20px;
     }

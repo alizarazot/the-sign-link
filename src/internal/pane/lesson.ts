@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { LitElement, css, html, type CSSResultGroup } from "lit";
 import {
   customElement,
   property,
@@ -18,6 +18,38 @@ import { ComponentSingleChoiceQuestion } from "internal/component/single-choice-
 
 @customElement("pane-lesson")
 export class PaneLesson extends LitElement {
+  static override styles = css`
+    :host {
+      display: block;
+      height: 80px;
+    }
+
+    :host([hidden]) {
+      display: none;
+    }
+
+    igc-stepper {
+      padding: 2px;
+      overflow-x: auto;
+    }
+
+    .container {
+      max-width: 70ch;
+      margin: auto;
+    }
+
+    .container component-single-choice-question {
+      margin-bottom: 40px;
+    }
+
+    .result {
+      text-align: center;
+      font-weight: bold;
+      font-size: 50px;
+      display: block;
+    }
+  `;
+
   override connectedCallback(): void {
     super.connectedCallback();
 

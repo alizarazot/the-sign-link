@@ -2,7 +2,7 @@ import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 
 @customElement("pane-lesson")
-export class Lesson extends LitElement {
+export class PaneLesson extends LitElement {
   protected override render(): unknown {
     return html` Contenido de la lección. `;
   }
@@ -10,6 +10,6 @@ export class Lesson extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "pane-lesson": Lesson;
+    "pane-lesson": PaneLesson;
   }
 }

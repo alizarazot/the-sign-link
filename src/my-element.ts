@@ -24,7 +24,7 @@ import "internal/pane/home.ts";
 import "internal/pane/lesson.ts";
 import "internal/pane/diagnostic-test.ts";
 
-import type { Lesson } from "internal/pane/lesson.ts";
+import type { PaneLesson } from "internal/pane/lesson.ts";
 import type { PaneHome } from "internal/pane/home.ts";
 import type { PaneDiagnosticTest } from "internal/pane/diagnostic-test.ts";
 
@@ -116,7 +116,7 @@ export class MyElement extends LitElement {
   @query("pane-home", true)
   private _paneHome!: PaneHome;
   @query("pane-lesson", true)
-  private _paneLesson!: Lesson;
+  private _paneLesson!: PaneLesson;
   @query("pane-diagnostic-test", true)
   private _paneDiagnosticTest!: PaneDiagnosticTest;
 

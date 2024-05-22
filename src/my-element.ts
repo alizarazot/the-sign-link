@@ -22,11 +22,9 @@ import { registerServiceWorker } from "internal/service-worker";
 
 import "internal/pane/home.ts";
 import "internal/pane/lesson.ts";
-import "internal/pane/diagnostic-test.ts";
 
-import type { PaneLesson } from "internal/pane/lesson.ts";
 import type { PaneHome } from "internal/pane/home.ts";
-import type { PaneDiagnosticTest } from "internal/pane/diagnostic-test.ts";
+import type { PaneLesson } from "internal/pane/lesson.ts";
 
 import { currentSession } from "internal/session";
 
@@ -107,7 +105,6 @@ export class MyElement extends LitElement {
       <div class="pane">
         <pane-home @start-lesson=${this._handleStartLesson}></pane-home>
         <pane-lesson hidden></pane-lesson>
-        <pane-diagnostic-test hidden></pane-diagnostic-test>
       </div>
     `;
   }
@@ -116,12 +113,9 @@ export class MyElement extends LitElement {
   private _paneHome!: PaneHome;
   @query("pane-lesson", true)
   private _paneLesson!: PaneLesson;
-  @query("pane-diagnostic-test", true)
-  private _paneDiagnosticTest!: PaneDiagnosticTest;
 
   protected showHome() {
     this._paneLesson.setAttribute("hidden", "");
-    this._paneDiagnosticTest.setAttribute("hidden", "");
 
     this._paneHome.removeAttribute("hidden");
     this._navDrawer.toggle();

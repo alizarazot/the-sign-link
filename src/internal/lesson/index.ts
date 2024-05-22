@@ -84,13 +84,7 @@ export class Lesson {
         continue;
       }
 
-      parsedQuestions.push(
-        new SingleChoiceQuestion(
-          question.question,
-          question.answers,
-          question.correct,
-        ),
-      );
+      parsedQuestions.push(SingleChoiceQuestion.parse(question));
     }
 
     return parsedQuestions;
@@ -113,5 +107,13 @@ export class SingleChoiceQuestion {
 
   get correct(): string {
     return this.answers[this._indexCorrect];
+  }
+
+  static parse(question: any): SingleChoiceQuestion {
+    return new SingleChoiceQuestion(
+      question.question,
+      question.answers,
+      question.correct,
+    );
   }
 }

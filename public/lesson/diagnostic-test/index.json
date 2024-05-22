@@ -1,27 +1,7 @@
 {
-  "title": "Title",
-  "description": "Description",
-  "summary": "Summary",
-  "content": [
-    {
-      "type": "title",
-      "content": "Title"
-    },
-    {
-      "type": "paragraph",
-      "content": "This is a paragraph..."
-    },
-    {
-      "type": "image",
-      "content": "test.png"
-    }
-  ],
-  "questions": [
-    {
-      "type": "single-choice",
-      "question": "Select one:",
-      "answers": ["Correct", "One", "Two"],
-      "correct": 0
-    }
-  ]
+  "title": "Prueba de conocimientos",
+  "description": "¡Pon a prueba tus conocimientos de Lengua de Señas Colombiana!",
+  "summary": "Esta prueba nos permitirá conocer su nivel de conocimiento actual de la Lengua de Señas Colombiana.",
+  "content": [],
+  "questions": []
 }

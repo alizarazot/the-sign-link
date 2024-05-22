@@ -9,6 +9,7 @@ export class Lesson {
   constructor(
     public readonly id: string,
     public readonly name: string,
+    public readonly title: string,
     public readonly require: Lesson[],
     public readonly description: string,
     public readonly summary: string,
@@ -36,6 +37,7 @@ export class Lesson {
         new Lesson(
           rawLesson.id,
           rawLesson.name,
+          rawLessonDetails.title,
           require,
           rawLessonDetails.description,
           rawLessonDetails.summary,

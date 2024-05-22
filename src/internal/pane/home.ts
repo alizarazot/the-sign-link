@@ -13,7 +13,7 @@ import { Lesson } from "internal/lesson";
 @customElement("pane-home")
 export class PaneHome extends LitElement {
   static override styles = css`
-    :host {
+    .container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
@@ -53,31 +53,33 @@ export class PaneHome extends LitElement {
 
   override render() {
     return html`
-      ${this._lessons.map(
-        (i) => html`
-          <igc-card>
-            <igc-card-header>
-              <h2 slot="title">${i.name}</h2>
-              <h3 slot="subtitle">${i.title}</h3>
-            </igc-card-header>
-            <igc-card-content>
-              <p>${i.description}</p>
-            </igc-card-content>
-            <igc-card-actions>
-              <igc-button slot="start" @click=${this._startLesson}
-                >Comenzar</igc-button
-              >
-              <igc-button
-                slot="end"
-                @click=${() => {
-                  this._showLessonDescription(i);
-                }}
-                >Previsualizar</igc-button
-              >
-            </igc-card-actions>
-          </igc-card>
-        `,
-      )}
+      <div class="container">
+        ${this._lessons.map(
+          (i) => html`
+            <igc-card>
+              <igc-card-header>
+                <h2 slot="title">${i.name}</h2>
+                <h3 slot="subtitle">${i.title}</h3>
+              </igc-card-header>
+              <igc-card-content>
+                <p>${i.description}</p>
+              </igc-card-content>
+              <igc-card-actions>
+                <igc-button slot="start" @click=${this._startLesson}
+                  >Comenzar</igc-button
+                >
+                <igc-button
+                  slot="end"
+                  @click=${() => {
+                    this._showLessonDescription(i);
+                  }}
+                  >Previsualizar</igc-button
+                >
+              </igc-card-actions>
+            </igc-card>
+          `,
+        )}
+      </div>
 
       <igc-dialog title="Descripción">
         <p>Por hacer...</p>

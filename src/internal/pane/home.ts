@@ -1,5 +1,5 @@
 import { LitElement, css, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
+import { customElement, query, state } from "lit/decorators.js";
 
 import {
   defineComponents,
@@ -7,6 +7,8 @@ import {
   IgcButtonComponent,
   IgcDialogComponent,
 } from "igniteui-webcomponents";
+
+import { Lesson } from "internal/lesson";
 
 @customElement("pane-home")
 export class PaneHome extends LitElement {
@@ -40,68 +42,42 @@ export class PaneHome extends LitElement {
     super.connectedCallback();
 
     defineComponents(IgcDialogComponent, IgcCardComponent, IgcButtonComponent);
+
+    Lesson.avaible().then((lessons) => {
+      this._lessons = lessons;
+    });
   }
+
+  @state()
+  private _lessons: Lesson[] = [];
 
   override render() {
     return html`
-      <igc-card>
-        <igc-card-header>Necesita hacer la prueba diagnóstica.</igc-card-header>
-        <igc-card-actions>
-          <igc-button @click=${this._showDiagnosticTest}
-            >Hacer prueba</igc-button
-          >
-        </igc-card-actions>
-      </igc-card>
-
-      <igc-card>
-        <igc-card-header>
-          <h2 slot="title">Lección 1</h2>
-          <h3 slot="subtitle">Conceptos básicos de LSC</h3>
-        </igc-card-header>
-        <igc-card-content>
-          <p>Aprende los conceptos básicos de Lengua de Señas Colombiana.</p>
-        </igc-card-content>
-        <igc-card-actions>
-          <igc-button slot="start" @click=${this._startLesson}
-            >Comenzar</igc-button
-          >
-          <igc-button slot="end" @click=${this._handleLessonDescription}
-            >Previsualizar</igc-button
-          >
-        </igc-card-actions>
-      </igc-card>
-
-      <igc-card>
-        <igc-card-header>
-          <h2 slot="title">Lección 2</h2>
-          <h3 slot="subtitle">Alfabeto</h3>
-        </igc-card-header>
-        <igc-card-content>
-          <p>Aprende el alfabeto de la Lengua de Señas Colombiana.</p>
-        </igc-card-content>
-        <igc-card-actions>
-          <igc-button slot="start">Comenzar</igc-button>
-          <igc-button slot="end" @click=${this._handleLessonDescription}
-            >Previsualizar</igc-button
-          >
-        </igc-card-actions>
-      </igc-card>
-
-      <igc-card>
-        <igc-card-header>
-          <h2 slot="title">Lección 3</h2>
-          <h3 slot="subtitle">Gramática</h3>
-        </igc-card-header>
-        <igc-card-content>
-          <p>Aprende la gramática de la Lengua de Señas Colombiana.</p>
-        </igc-card-content>
-        <igc-card-actions>
-          <igc-button slot="start">Comenzar</igc-button>
-          <igc-button slot="end" @click=${this._handleLessonDescription}
-            >Previsualizar</igc-button
-          >
-        </igc-card-actions>
-      </igc-card>
+      ${this._lessons.map(
+        (i) => html`
+          <igc-card>
+            <igc-card-header>
+              <h2 slot="title">${i.name}</h2>
+              <h3 slot="subtitle">${i.title}</h3>
+            </igc-card-header>
+            <igc-card-content>
+              <p>${i.description}</p>
+            </igc-card-content>
+            <igc-card-actions>
+              <igc-button slot="start" @click=${this._startLesson}
+                >Comenzar</igc-button
+              >
+              <igc-button
+                slot="end"
+                @click=${() => {
+                  this._showLessonDescription(i);
+                }}
+                >Previsualizar</igc-button
+              >
+            </igc-card-actions>
+          </igc-card>
+        `,
+      )}
 
       <igc-dialog title="Descripción">
         <p>Por hacer...</p>
@@ -112,16 +88,13 @@ export class PaneHome extends LitElement {
   @query("igc-dialog", true)
   private _dialog!: IgcDialogComponent;
 
-  private _handleLessonDescription() {
+  private _showLessonDescription(lesson: Lesson) {
+    this._dialog.innerHTML = `<p>${lesson.summary}</p>`;
     this._dialog.show();
   }
 
   private _startLesson() {
     this.dispatchEvent(new Event("start-lesson"));
-  }
-
-  private _showDiagnosticTest() {
-    this.dispatchEvent(new Event("start-diagnostic-test"));
   }
 }
 

@@ -9,8 +9,8 @@ import {
   defineComponents,
 } from "igniteui-webcomponents";
 
-import "internal/component/multiple-selection.ts";
-import { ComponentMultipleSelection } from "internal/component/multiple-selection.ts";
+//import "internal/component/multiple-selection.ts";
+//import { ComponentSingleChoiceQuestion } from "internal/component/multiple-selection.ts";
 
 @customElement("pane-diagnostic-test")
 export class PaneDiagnosticTest extends LitElement {
@@ -218,7 +218,7 @@ export class PaneDiagnosticTest extends LitElement {
     this._score = 0;
 
     this.renderRoot
-      .querySelectorAll<ComponentMultipleSelection>(
+      .querySelectorAll<ComponentSingleChoiceQuestion>(
         "component-multiple-selection",
       )
       .forEach((elem) => {

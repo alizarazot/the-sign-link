@@ -8,6 +8,7 @@ import {
 } from "igniteui-webcomponents";
 
 import { Lesson } from "internal/lesson";
+import { ComponentSingleChoiceQuestion } from "internal/component/single-choice-question.ts";
 
 @customElement("pane-lesson")
 export class PaneLesson extends LitElement {
@@ -21,6 +22,12 @@ export class PaneLesson extends LitElement {
   lesson = new Lesson("", "", "", [], "", "", [], []); // Prevent undefined lesson.
 
   protected override render(): unknown {
+    let questions: ComponentSingleChoiceQuestion[] = [];
+
+    for (let question of this.lesson.questions) {
+      questions.push(new ComponentSingleChoiceQuestion(question));
+    }
+
     return html`
       <igc-navbar>
         <h1>${this.lesson.name}</h1>
@@ -47,18 +54,7 @@ export class PaneLesson extends LitElement {
         </igc-step>
         <igc-step>
           <span slot="title">Preguntas</span>
-          <div class="container">
-            ${this.lesson.questions.map(
-              (i) => html`
-                <div class="question">
-                  <span class="title">${i.question}</span>
-                  <ul>
-                    ${i.answers.map((j) => html`<li>${j}</li>`)}
-                  </ul>
-                </div>
-              `,
-            )}
-          </div>
+          <div class="container">${questions}</div>
         </igc-step>
       </igc-stepper>
     `;

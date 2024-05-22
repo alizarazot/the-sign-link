@@ -1,13 +1,16 @@
+import { LitElement, css, html } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
+
 import {
   IgcRadioComponent,
   IgcRadioGroupComponent,
   defineComponents,
 } from "igniteui-webcomponents";
-import { LitElement, css, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
 
-@customElement("component-multiple-selection")
-export class ComponentMultipleSelection extends LitElement {
+import { SingleChoiceQuestion } from "internal/lesson";
+
+@customElement("component-single-choice-question")
+export class ComponentSingleChoiceQuestion extends LitElement {
   static override styles = css`
     :host {
       display: block;
@@ -18,38 +21,37 @@ export class ComponentMultipleSelection extends LitElement {
     }
   `;
 
+  constructor(question: SingleChoiceQuestion) {
+    super();
+
+    this.question = question;
+  }
+
   override connectedCallback(): void {
     super.connectedCallback();
 
     defineComponents(IgcRadioGroupComponent, IgcRadioComponent);
   }
 
-  @property({ type: String, reflect: true })
-  question: string = "";
-
-  @property({ type: String, reflect: true })
-  correctAnswer: string = "";
-
-  @property({ type: String, reflect: true })
-  answer1: string = "";
-  @property({ type: String, reflect: true })
-  answer2: string = "";
-  @property({ type: String, reflect: true })
-  answer3: string = "";
+  @property({ attribute: false })
+  question: SingleChoiceQuestion;
 
   @state()
   private _lastRadio = -1;
 
   override render() {
-    return html` <span>${this.question}</span>
+    return html`
+      <span>${this.question.question}</span>
       <igc-radio-group>
-        ${[this.correctAnswer, this.answer1, this.answer2, this.answer3].map(
-          (elem, i) =>
-            html`<igc-radio @click=${this._handleRadioClick} data-index=${i}
-              >${elem}</igc-radio
-            >`,
+        ${this.question.answers.map(
+          (elem, i) => html`
+            <igc-radio @click=${this._handleRadioClick} data-index=${i}>
+              ${elem}
+            </igc-radio>
+          `,
         )}
-      </igc-radio-group>`;
+      </igc-radio-group>
+    `;
   }
 
   private _handleRadioClick(e: Event) {
@@ -78,7 +80,7 @@ export class ComponentMultipleSelection extends LitElement {
         this.shadowRoot?.querySelectorAll("igc-radio")[
           this._lastRadio
         ] as IgcRadioComponent
-      ).innerText === this.correctAnswer
+      ).innerText === this.question.correct
     ) {
       return true;
     }

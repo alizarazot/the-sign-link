@@ -1,5 +1,11 @@
 import { LitElement, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import {
+  customElement,
+  property,
+  query,
+  queryAll,
+  state,
+} from "lit/decorators.js";
 
 import {
   IgcNavbarComponent,
@@ -21,6 +27,9 @@ export class PaneLesson extends LitElement {
   @property({ attribute: false })
   lesson = new Lesson("", "", "", [], "", "", [], []); // Prevent undefined lesson.
 
+  @state()
+  private _score = 0;
+
   protected override render(): unknown {
     let questions: ComponentSingleChoiceQuestion[] = [];
 
@@ -33,7 +42,7 @@ export class PaneLesson extends LitElement {
         <h1>${this.lesson.name}</h1>
       </igc-navbar>
 
-      <igc-stepper>
+      <igc-stepper @igcActiveStepChanging=${this._calculateScore}>
         <igc-step>
           <span slot="title">Descripción</span>
           <div class="container">
@@ -56,8 +65,28 @@ export class PaneLesson extends LitElement {
           <span slot="title">Preguntas</span>
           <div class="container">${questions}</div>
         </igc-step>
+        <igc-step>
+          <span slot="title">Resultados</span>
+          <div class="container">
+            <p>Estos son los resultados de tu prueba:</p>
+            <span class="result">${this._score}/100.</span>
+          </div>
+        </igc-step>
       </igc-stepper>
     `;
+  }
+
+  @queryAll("component-single-choice-question")
+  private _singleChoiceQuestions!: ComponentSingleChoiceQuestion[];
+
+  protected _calculateScore() {
+    this._score = 0;
+
+    this._singleChoiceQuestions.forEach((question) => {
+      if (question.isActiveCorrectAnswer()) {
+        this._score += 100 / this._singleChoiceQuestions.length;
+      }
+    });
   }
 }
 

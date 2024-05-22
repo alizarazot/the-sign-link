@@ -1,11 +1,5 @@
-import { LitElement, css, html, type CSSResultGroup } from "lit";
-import {
-  customElement,
-  property,
-  query,
-  queryAll,
-  state,
-} from "lit/decorators.js";
+import { LitElement, css, html } from "lit";
+import { customElement, property, queryAll, state } from "lit/decorators.js";
 
 import {
   IgcNavbarComponent,

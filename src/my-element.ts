@@ -24,11 +24,13 @@ import { registerServiceWorker } from "internal/service-worker";
 import "internal/pane/welcome.ts";
 import "internal/pane/home.ts";
 import "internal/pane/lesson.ts";
+import "internal/pane/ranking.ts";
 import "internal/pane/stats.ts";
 
 import type { PaneHome } from "internal/pane/home.ts";
 import type { PaneWelcome } from "internal/pane/welcome.ts";
 import type { PaneLesson } from "internal/pane/lesson.ts";
+import type { PaneRanking } from "internal/pane/ranking.ts";
 import type { PaneStats } from "internal/pane/stats.ts";
 
 import type { Lesson } from "internal/lesson";
@@ -121,10 +123,12 @@ export class MyElement extends LitElement {
             <igc-icon slot="icon" name="home"></igc-icon>
             <span slot="content">Inicio</span>
           </igc-nav-drawer-item>
-          <igc-nav-drawer-item>
+
+          <igc-nav-drawer-item @click=${this.showRanking}>
             <igc-icon slot="icon" name="trophy"></igc-icon>
             <span slot="content">Clasificación</span>
           </igc-nav-drawer-item>
+
           <igc-nav-drawer-item
             @click=${() => {
               this._paneWelcome.restart();
@@ -148,6 +152,7 @@ export class MyElement extends LitElement {
             hidden
           ></pane-lesson>
           <pane-stats hidden></pane-stats>
+          <pane-ranking hidden></pane-ranking>
         </div>
       </div>
     `;
@@ -157,6 +162,8 @@ export class MyElement extends LitElement {
   private _paneHome!: PaneHome;
   @query("pane-lesson", true)
   private _paneLesson!: PaneLesson;
+  @query("pane-ranking", true)
+  private _paneRanking!: PaneRanking;
   @query("pane-stats")
   private _paneStats!: PaneStats;
 
@@ -164,7 +171,15 @@ export class MyElement extends LitElement {
     this._paneLesson.setAttribute("hidden", "");
     this._paneStats.setAttribute("hidden", "");
     this._paneHome.removeAttribute("hidden");
+    this._paneRanking.setAttribute("hidden", "");
     this._navDrawer.hide();
+  }
+
+  protected showRanking() {
+    this._paneLesson.setAttribute("hidden", "");
+    this._paneHome.setAttribute("hidden", "");
+    this._paneRanking.removeAttribute("hidden"); // Muestra el ranking al hacer clic en la opción de clasificación
+    this._navDrawer.toggle();
   }
 
   private _handleStartLesson(e: CustomEvent) {
@@ -176,6 +191,7 @@ export class MyElement extends LitElement {
 
     elem.setAttribute("hidden", "");
     this._paneLesson.removeAttribute("hidden");
+    this._paneRanking.setAttribute("hidden", ""); // Oculta el ranking al mostrar una lección
   }
 
   private _showStats() {
@@ -183,6 +199,7 @@ export class MyElement extends LitElement {
     this._paneStats.points = this._currentSession.listPoints();
     this._paneHome.setAttribute("hidden", "");
     this._paneLesson.setAttribute("hidden", "");
+    this._paneRanking.setAttribute("hidden", "");
     this._paneStats.removeAttribute("hidden");
   }
 }

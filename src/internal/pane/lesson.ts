@@ -1,5 +1,11 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property, queryAll, state } from "lit/decorators.js";
+import {
+  customElement,
+  property,
+  query,
+  queryAll,
+  state,
+} from "lit/decorators.js";
 
 import {
   IgcNavbarComponent,
@@ -7,8 +13,10 @@ import {
   defineComponents,
 } from "igniteui-webcomponents";
 
-import { Lesson } from "internal/lesson";
 import { ComponentSingleChoiceQuestion } from "internal/component/single-choice-question.ts";
+
+import { Lesson } from "internal/lesson";
+import { currentSession } from "internal/session";
 
 @customElement("pane-lesson")
 export class PaneLesson extends LitElement {
@@ -105,6 +113,9 @@ export class PaneLesson extends LitElement {
           <div class="container">
             <p>Estos son los resultados de tu prueba:</p>
             <span class="result">${this._score}/100.</span>
+            <igc-button @click=${this._handleLessonEnd}
+              >Finalizar lección</igc-button
+            >
           </div>
         </igc-step>
       </igc-stepper>
@@ -122,6 +133,19 @@ export class PaneLesson extends LitElement {
         this._score += 100 / this._singleChoiceQuestions.length;
       }
     });
+  }
+
+  private _handleLessonEnd() {
+    currentSession().setPoints(this.lesson.id, this._score);
+
+    this.dispatchEvent(new Event("end-lesson"));
+  }
+
+  @query("igc-stepper")
+  private _igcStepper!: IgcStepperComponent;
+
+  reset() {
+    this._igcStepper.navigateTo(0);
   }
 }
 

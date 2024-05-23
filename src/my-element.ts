@@ -24,14 +24,15 @@ import { registerServiceWorker } from "internal/service-worker";
 import "internal/pane/welcome.ts";
 import "internal/pane/home.ts";
 import "internal/pane/lesson.ts";
+import "internal/pane/stats.ts";
 
 import type { PaneHome } from "internal/pane/home.ts";
 import type { PaneWelcome } from "internal/pane/welcome.ts";
 import type { PaneLesson } from "internal/pane/lesson.ts";
-
-import { currentSession } from "internal/session";
+import type { PaneStats } from "internal/pane/stats.ts";
 
 import type { Lesson } from "internal/lesson";
+import { currentSession } from "internal/session";
 
 @customElement("my-element")
 export class MyElement extends LitElement {
@@ -107,6 +108,7 @@ export class MyElement extends LitElement {
             shape="circle"
             src=${this._currentSession.photo}
             alt="User photo"
+            @click=${this._showStats}
           >
           </igc-avatar>
         </igc-navbar>
@@ -138,7 +140,14 @@ export class MyElement extends LitElement {
 
         <div class="pane">
           <pane-home @start-lesson=${this._handleStartLesson}></pane-home>
-          <pane-lesson hidden></pane-lesson>
+          <pane-lesson
+            @end-lesson=${() => {
+              this._paneHome.loadTotalScore();
+              this.showHome();
+            }}
+            hidden
+          ></pane-lesson>
+          <pane-stats hidden></pane-stats>
         </div>
       </div>
     `;
@@ -148,22 +157,33 @@ export class MyElement extends LitElement {
   private _paneHome!: PaneHome;
   @query("pane-lesson", true)
   private _paneLesson!: PaneLesson;
+  @query("pane-stats")
+  private _paneStats!: PaneStats;
 
   protected showHome() {
     this._paneLesson.setAttribute("hidden", "");
-
+    this._paneStats.setAttribute("hidden", "");
     this._paneHome.removeAttribute("hidden");
-    this._navDrawer.toggle();
+    this._navDrawer.hide();
   }
 
   private _handleStartLesson(e: CustomEvent) {
     const elem = e.target as PaneHome;
     const lesson = e.detail as Lesson;
 
+    this._paneLesson.reset();
     this._paneLesson.lesson = lesson;
 
     elem.setAttribute("hidden", "");
     this._paneLesson.removeAttribute("hidden");
+  }
+
+  private _showStats() {
+    this._paneStats.lessons = this._paneHome.lessons;
+    this._paneStats.points = this._currentSession.listPoints();
+    this._paneHome.setAttribute("hidden", "");
+    this._paneLesson.setAttribute("hidden", "");
+    this._paneStats.removeAttribute("hidden");
   }
 }
 

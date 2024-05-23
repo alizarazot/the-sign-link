@@ -106,6 +106,13 @@ export class LessonContent {
   ) {}
 
   static parse(content: any): LessonContent {
+    if (content.type === "image") {
+      return new LessonContent(
+        content.type,
+        Lesson.rootDirectory + "/image/" + content.content,
+      );
+    }
+
     return new LessonContent(content.type, content.content);
   }
 }

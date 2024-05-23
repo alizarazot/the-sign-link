@@ -36,6 +36,15 @@ export class PaneLesson extends LitElement {
       margin-bottom: 40px;
     }
 
+    img {
+      max-width: 80%;
+      width: 300px;
+      margin: 40px auto;
+      display: block;
+      border: 5px solid #000;
+      border-radius: 25px;
+    }
+
     .result {
       text-align: center;
       font-weight: bold;

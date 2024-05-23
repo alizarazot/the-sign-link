@@ -2,6 +2,79 @@
   "title": "Alfabeto",
   "description": "Aprende el alfabeto de la Lengua de Señas Colombiana.",
   "summary": "El alfabeto de la LSC es un sistema manual que representa las letras del español. Cada letra se forma con una configuración específica de la mano, la orientación y el movimiento.",
-  "content": [],
-  "questions": []
+  "content": [
+    {
+      "type": "title",
+      "content": "Conceptos básicos del alfabeto en Lengua de Señas Colombiana (LSC)"
+    },
+    {
+      "type": "paragraph",
+      "content": "El alfabeto en Lengua de Señas Colombiana (LSC) es un conjunto de signos que representan las letras del abecedario utilizado por personas sordas para deletrear palabras y expresar ideas."
+    },
+    {
+      "type": "paragraph",
+      "content": "Cada letra del alfabeto en LSC se representa con un gesto específico de la mano, que puede incluir movimientos y posiciones particulares."
+    },
+    {
+      "type": "paragraph",
+      "content": "Dominar el alfabeto en LSC es fundamental para la comunicación efectiva, ya que proporciona la base para la formación de palabras y frases en este sistema de comunicación."
+    }
+  ],
+  "questions": [
+    {
+      "question": "¿Cuál es la letra 'A' en Lengua de Señas Colombiana?",
+      "type": "single-choice",
+      "answers": [
+        "Mano con el pulgar, índice y medio extendidos y los otros dedos cerrados",
+        "Punta del dedo índice tocando la barbilla",
+        "Mano extendida moviéndose hacia arriba",
+        "Puño con el pulgar hacia arriba golpeando el pecho"
+      ],
+      "correct": 0
+    },
+    {
+      "question": "¿Cómo se hace la letra 'B' en Lengua de Señas Colombiana?",
+      "type": "single-choice",
+      "answers": [
+        "Mano con el pulgar, índice y medio extendidos y los otros dedos cerrados",
+        "Manos unidas y levantadas",
+        "Puño con el pulgar hacia arriba golpeando el pecho",
+        "Movimiento circular con la mano sobre el pecho"
+      ],
+      "correct": 1
+    },
+    {
+      "question": "¿Cuál es la forma de la letra 'C' en Lengua de Señas Colombiana?",
+      "type": "single-choice",
+      "answers": [
+        "Puño con el pulgar hacia arriba golpeando el pecho",
+        "Manos unidas y levantadas",
+        "Mano extendida moviéndose hacia arriba",
+        "Mano con el pulgar, índice y medio extendidos y los otros dedos cerrados"
+      ],
+      "correct": 3
+    },
+    {
+      "question": "¿Qué signo representa la letra 'D' en Lengua de Señas Colombiana?",
+      "type": "single-choice",
+      "answers": [
+        "Manos unidas y levantadas",
+        "Puño con el pulgar hacia arriba golpeando el pecho",
+        "Mano extendida moviéndose hacia arriba",
+        "Mano con el pulgar, índice y medio extendidos y los otros dedos cerrados"
+      ],
+      "correct": 2
+    },
+    {
+      "question": "¿Cómo se hace la letra 'E' en Lengua de Señas Colombiana?",
+      "type": "single-choice",
+      "answers": [
+        "Puño con el pulgar hacia arriba golpeando el pecho",
+        "Mano extendida moviéndose hacia arriba",
+        "Punta del dedo índice tocando la barbilla",
+        "Mano con el pulgar, índice y medio extendidos y los otros dedos cerrados"
+      ],
+      "correct": 2
+    }
+  ]
 }

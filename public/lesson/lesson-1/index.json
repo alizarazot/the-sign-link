@@ -2,6 +2,68 @@
   "title": "Conceptos básicos de LSC",
   "description": "Aprende los conceptos básicos de Lengua de Señas Colombiana.",
   "summary": "La LSC es una herramienta vital para la comunicación, la identidad y la participación de las personas sordas y con dificultades auditivas en Colombia. Su aprendizaje abre un mundo de posibilidades para la interacción y el desarrollo personal.",
-  "content": [],
-  "questions": []
+  "content": [
+    {
+      "type": "title",
+      "content": "Conceptos básicos de Lengua de Señas Colombiana (LSC)"
+    },
+    {
+      "type": "paragraph",
+      "content": "La Lengua de Señas Colombiana (LSC) es un sistema de comunicación utilizado por personas sordas en Colombia. A diferencia del lenguaje hablado, la LSC se basa en gestos y movimientos de manos."
+    },
+    {
+      "type": "paragraph",
+      "content": "Los signos en LSC representan palabras, conceptos o ideas, y pueden incluir movimientos de manos, expresiones faciales y posturas corporales."
+    },
+    {
+      "type": "paragraph",
+      "content": "La gramática de la LSC incluye aspectos como la configuración de las manos, el movimiento, la ubicación y la expresión facial, que son cruciales para la comprensión adecuada del mensaje."
+    }
+  ],
+  "questions": [
+    {
+      "question": "¿Cuál es el signo de Lengua de Señas Colombiana para 'casa'?",
+      "type": "single-choice",
+      "answers": [
+        "Punta del dedo índice tocando la barbilla",
+        "Movimiento circular con la mano sobre el pecho",
+        "Puño con el pulgar hacia arriba golpeando el pecho",
+        "Mano extendida moviéndose hacia arriba"
+      ],
+      "correct": 2
+    },
+    {
+      "question": "¿Cómo se hace el signo para 'familia' en Lengua de Señas Colombiana?",
+      "type": "single-choice",
+      "answers": [
+        "Punta del dedo índice tocando la barbilla",
+        "Manos unidas y levantadas",
+        "Puño con el pulgar hacia arriba golpeando el pecho",
+        "Mano extendida moviéndose hacia arriba"
+      ],
+      "correct": 1
+    },
+    {
+      "question": "¿Cuál es el signo para 'amor' en Lengua de Señas Colombiana?",
+      "type": "single-choice",
+      "answers": [
+        "Manos unidas formando un corazón",
+        "Puño con el pulgar hacia arriba golpeando el pecho",
+        "Movimiento circular con la mano sobre el pecho",
+        "Mano extendida moviéndose hacia arriba"
+      ],
+      "correct": 0
+    },
+    {
+      "question": "¿Cómo se dice 'gracias' en Lengua de Señas Colombiana?",
+      "type": "single-choice",
+      "answers": [
+        "Movimiento circular con la mano sobre el pecho",
+        "Mano extendida moviéndose hacia arriba",
+        "Puño con el pulgar hacia arriba golpeando el pecho",
+        "Manos unidas y levantadas"
+      ],
+      "correct": 3
+    }
+  ]
 }

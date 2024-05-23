@@ -1,5 +1,11 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property, queryAll, state } from "lit/decorators.js";
+import {
+  customElement,
+  property,
+  query,
+  queryAll,
+  state,
+} from "lit/decorators.js";
 
 import {
   IgcNavbarComponent,
@@ -133,6 +139,13 @@ export class PaneLesson extends LitElement {
     currentSession().setPoints(this.lesson.id, this._score);
 
     this.dispatchEvent(new Event("end-lesson"));
+  }
+
+  @query("igc-stepper")
+  private _igcStepper!: IgcStepperComponent;
+
+  reset() {
+    this._igcStepper.navigateTo(0);
   }
 }
 

@@ -165,6 +165,7 @@ export class MyElement extends LitElement {
     const elem = e.target as PaneHome;
     const lesson = e.detail as Lesson;
 
+    this._paneLesson.reset();
     this._paneLesson.lesson = lesson;
 
     elem.setAttribute("hidden", "");

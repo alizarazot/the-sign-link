@@ -24,7 +24,7 @@ export class PaneWelcome extends LitElement {
       height: 100vh;
       box-sizing: border-box;
 
-      transition: all linear 3s;
+      transition: background-color linear 2s;
 
       display: grid;
       grid-template-areas:

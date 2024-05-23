@@ -127,6 +127,7 @@ export class MyElement extends LitElement {
             @click=${() => {
               this._paneWelcome.restart();
               this._paneWelcome.removeAttribute("hidden");
+              this._rootPane.setAttribute("hidden", "");
               this._navDrawer.hide();
             }}
           >

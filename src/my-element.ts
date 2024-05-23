@@ -125,6 +125,7 @@ export class MyElement extends LitElement {
           </igc-nav-drawer-item>
           <igc-nav-drawer-item
             @click=${() => {
+              this._paneWelcome.restart();
               this._paneWelcome.removeAttribute("hidden");
               this._navDrawer.hide();
             }}

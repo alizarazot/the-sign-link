@@ -170,6 +170,10 @@ export class PaneWelcome extends LitElement {
     this.dispatchEvent(new Event("finish-introduction"));
     localStorage.setItem("no-welcome", "1");
   }
+
+  restart() {
+    this._screenIndex = 0;
+  }
 }
 
 declare global {

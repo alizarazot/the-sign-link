@@ -47,6 +47,8 @@ export class PaneHome extends LitElement {
     Lesson.avaible().then((lessons) => {
       this._lessons = lessons;
     });
+
+    this.loadTotalScore();
   }
 
   @state()
@@ -117,6 +119,13 @@ export class PaneHome extends LitElement {
 
   private _startLesson(lesson: Lesson) {
     this.dispatchEvent(new CustomEvent("start-lesson", { detail: lesson }));
+  }
+
+  loadTotalScore() {
+    this.totalScore = 0;
+    for (let i in this._session.listPoints()) {
+      this.totalScore += this._session.getPoints(i);
+    }
   }
 }
 

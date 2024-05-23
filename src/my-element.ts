@@ -140,11 +140,7 @@ export class MyElement extends LitElement {
           <pane-home @start-lesson=${this._handleStartLesson}></pane-home>
           <pane-lesson
             @end-lesson=${() => {
-              this._paneHome.totalScore = 0;
-              for (let i in this._currentSession.listPoints()) {
-                this._paneHome.totalScore += this._currentSession.getPoints(i);
-              }
-
+              this._paneHome.loadTotalScore();
               this.showHome();
             }}
             hidden

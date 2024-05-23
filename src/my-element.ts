@@ -15,30 +15,39 @@ import "igniteui-webcomponents/themes/light/fluent.css";
 import iconMenu from "@material-symbols/svg-400/rounded/menu.svg";
 import iconHome from "@material-symbols/svg-400/rounded/home.svg";
 import iconTrophy from "@material-symbols/svg-400/rounded/trophy.svg";
+import iconStar from "@material-symbols/svg-400/rounded/star.svg";
 
 import * as logging from "pkg/logging";
 
 import { registerServiceWorker } from "internal/service-worker";
 
-import "internal/pane/ranking.ts";
+import "internal/pane/welcome.ts";
 import "internal/pane/home.ts";
 import "internal/pane/lesson.ts";
+import "internal/pane/ranking.ts";
+import "internal/pane/stats.ts";
 
 import type { PaneHome } from "internal/pane/home.ts";
+import type { PaneWelcome } from "internal/pane/welcome.ts";
 import type { PaneLesson } from "internal/pane/lesson.ts";
-import { PaneRanking } from "internal/pane/ranking.ts";
-
-import { currentSession } from "internal/session";
+import type { PaneRanking } from "internal/pane/ranking.ts";
+import type { PaneStats } from "internal/pane/stats.ts";
 
 import type { Lesson } from "internal/lesson";
+import { currentSession } from "internal/session";
 
 @customElement("my-element")
 export class MyElement extends LitElement {
   static override styles = css`
-    :host {
+    :host,
+    #root-pane {
       display: flex;
       flex-direction: column;
       height: 100vh;
+    }
+
+    #root-pane[hidden=""] {
+      display: none;
     }
 
     .pane {
@@ -62,6 +71,7 @@ export class MyElement extends LitElement {
     registerIcon("menu", iconMenu);
     registerIcon("home", iconHome);
     registerIcon("trophy", iconTrophy);
+    registerIcon("star", iconStar);
 
     registerServiceWorker();
   }
@@ -72,43 +82,78 @@ export class MyElement extends LitElement {
   @query("igc-nav-drawer", true)
   private _navDrawer!: IgcNavDrawerComponent;
 
+  @query("#root-pane")
+  private _rootPane!: HTMLDivElement;
+  @query("pane-welcome")
+  private _paneWelcome!: PaneWelcome;
+
   override render() {
     return html`
-      <igc-navbar>
-        <igc-icon
-          name="menu"
-          slot="start"
-          @click=${() => {
-            this._navDrawer.show();
-          }}
-        ></igc-icon>
-        <h1>The Sign Link</h1>
-        <igc-avatar
-          slot="end"
-          shape="circle"
-          src=${this._currentSession.photo}
-          alt="User photo"
-        >
-        </igc-avatar>
-      </igc-navbar>
+      <pane-welcome
+        @finish-introduction=${() => {
+          this._rootPane.removeAttribute("hidden");
+          this._paneWelcome.setAttribute("hidden", "");
+        }}
+      ></pane-welcome>
+      <div id="root-pane" hidden>
+        <igc-navbar>
+          <igc-icon
+            name="menu"
+            slot="start"
+            @click=${() => {
+              this._navDrawer.show();
+            }}
+          ></igc-icon>
+          <h1>The Sign Link</h1>
+          <igc-avatar
+            slot="end"
+            shape="circle"
+            src=${this._currentSession.photo}
+            alt="User photo"
+            @click=${this._showStats}
+          >
+          </igc-avatar>
+        </igc-navbar>
 
-      <igc-nav-drawer>
-        <igc-nav-drawer-header-item> The Sign Link </igc-nav-drawer-header-item>
-        <igc-nav-drawer-item @click=${this.showHome}>
-          <igc-icon slot="icon" name="home"></igc-icon>
-          <span slot="content">Inicio</span>
-        </igc-nav-drawer-item>
+        <igc-nav-drawer>
+          <igc-nav-drawer-header-item>
+            The Sign Link
+          </igc-nav-drawer-header-item>
+          <igc-nav-drawer-item @click=${this.showHome}>
+            <igc-icon slot="icon" name="home"></igc-icon>
+            <span slot="content">Inicio</span>
+          </igc-nav-drawer-item>
 
-        <igc-nav-drawer-item @click=${this.showRanking}>
-          <igc-icon slot="icon" name="trophy"></igc-icon>
-          <span slot="content">Clasificación</span>
-        </igc-nav-drawer-item>
-      </igc-nav-drawer>
+          <igc-nav-drawer-item @click=${this.showRanking}>
+            <igc-icon slot="icon" name="trophy"></igc-icon>
+            <span slot="content">Clasificación</span>
+          </igc-nav-drawer-item>
 
-      <div class="pane">
-        <pane-home @start-lesson=${this._handleStartLesson}></pane-home>
-        <pane-lesson hidden></pane-lesson>
-        <pane-ranking hidden> </pane-ranking>
+          <igc-nav-drawer-item
+            @click=${() => {
+              this._paneWelcome.restart();
+              this._paneWelcome.removeAttribute("hidden");
+              this._rootPane.setAttribute("hidden", "");
+              this._navDrawer.hide();
+            }}
+          >
+            <igc-icon slot="icon" name="star"></igc-icon>
+            <span slot="content">Motivación</span>
+          </igc-nav-drawer-item>
+        </igc-nav-drawer>
+
+        <div class="pane">
+          <pane-home @start-lesson=${this._handleStartLesson}></pane-home>
+          <pane-lesson
+            @end-lesson=${() => {
+              this._paneHome.loadTotalScore();
+              this.showHome();
+            }}
+            hidden
+          ></pane-lesson>
+          <pane-stats hidden></pane-stats>
+          <pane-ranking hidden></pane-ranking>
+        </div>
       </div>
     `;
   }
@@ -119,13 +164,15 @@ export class MyElement extends LitElement {
   private _paneLesson!: PaneLesson;
   @query("pane-ranking", true)
   private _paneRanking!: PaneRanking;
+  @query("pane-stats")
+  private _paneStats!: PaneStats;
 
   protected showHome() {
     this._paneLesson.setAttribute("hidden", "");
-
+    this._paneStats.setAttribute("hidden", "");
     this._paneHome.removeAttribute("hidden");
     this._paneRanking.setAttribute("hidden", "");
-    this._navDrawer.toggle();
+    this._navDrawer.hide();
   }
 
   protected showRanking() {
@@ -139,11 +186,21 @@ export class MyElement extends LitElement {
     const elem = e.target as PaneHome;
     const lesson = e.detail as Lesson;
 
+    this._paneLesson.reset();
     this._paneLesson.lesson = lesson;
 
     elem.setAttribute("hidden", "");
     this._paneLesson.removeAttribute("hidden");
     this._paneRanking.setAttribute("hidden", ""); // Oculta el ranking al mostrar una lección
+  }
+
+  private _showStats() {
+    this._paneStats.lessons = this._paneHome.lessons;
+    this._paneStats.points = this._currentSession.listPoints();
+    this._paneHome.setAttribute("hidden", "");
+    this._paneLesson.setAttribute("hidden", "");
+    this._paneRanking.setAttribute("hidden", "");
+    this._paneStats.removeAttribute("hidden");
   }
 }
 

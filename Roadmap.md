@@ -4,7 +4,7 @@
 Estas son las características que debe tener la PWA al final de su desarrollo.
 
 - [ ] Lecciones cortas y explicativas en línea.
-  - [ ] Interfaz para visualizar lecciones.
+  - [x] Interfaz para visualizar lecciones.
   - [ ] Contenido de las lecciones.
   - [ ] Explicación de las lecciones.
   - [ ] Sistema de repetición espaciada (FSRF).
@@ -15,16 +15,16 @@ Estas son las características que debe tener la PWA al final de su desarrollo.
 - [ ] Resultados de aprendizaje.
   - [ ] Mostrar al usuario su nivel de aprendizaje.
 - [ ] Lecciones sin conexión a la Internet.
-  - [ ] Descarga de lecciones.
+  - [x] Descarga de lecciones.
   - [ ] Repaso fuera de línea del contenido visto.
 - [ ] Prueba diagnóstica.
-  - [ ] Intefaz.
-  - [ ] Puntaje.
+  - [x] Intefaz.
+  - [x] Puntaje.
   - [ ] Requerimiento antes de iniciar las lecciones.
 - [ ] Página de bienvenida.
-  - [ ] Motivar al usuario a apriender LSC.
+  - [x] Motivar al usuario a aprender LSC.
   - [ ] Resumen del funcionamiento de la aplicación.
-  - [ ] Mostrarla sólo la primera vez y cuando el usuario la solicite (opción en el menú).
+  - [x] Mostrarla sólo la primera vez y cuando el usuario la solicite (opción en el menú).
 - [ ] Extras.
   - [x] Funcionamiento sin conexión a la Internet.
   - [ ] Instalable.

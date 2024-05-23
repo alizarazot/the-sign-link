@@ -15,6 +15,7 @@ import "igniteui-webcomponents/themes/light/bootstrap.css";
 import iconMenu from "@material-symbols/svg-400/rounded/menu.svg";
 import iconHome from "@material-symbols/svg-400/rounded/home.svg";
 import iconTrophy from "@material-symbols/svg-400/rounded/trophy.svg";
+import iconStar from "@material-symbols/svg-400/rounded/star.svg";
 
 import * as logging from "pkg/logging";
 
@@ -67,6 +68,7 @@ export class MyElement extends LitElement {
     registerIcon("menu", iconMenu);
     registerIcon("home", iconHome);
     registerIcon("trophy", iconTrophy);
+    registerIcon("star", iconStar);
 
     registerServiceWorker();
   }
@@ -120,6 +122,15 @@ export class MyElement extends LitElement {
           <igc-nav-drawer-item>
             <igc-icon slot="icon" name="trophy"></igc-icon>
             <span slot="content">Clasificación</span>
+          </igc-nav-drawer-item>
+          <igc-nav-drawer-item
+            @click=${() => {
+              this._paneWelcome.removeAttribute("hidden");
+              this._navDrawer.hide();
+            }}
+          >
+            <igc-icon slot="icon" name="star"></igc-icon>
+            <span slot="content">Motivación</span>
           </igc-nav-drawer-item>
         </igc-nav-drawer>
 

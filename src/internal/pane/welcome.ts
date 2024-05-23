@@ -1,21 +1,125 @@
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
+import { LitElement, css, html } from "lit";
+import { customElement, state } from "lit/decorators.js";
 
-import { IgcButtonComponent, defineComponents } from "igniteui-webcomponents";
+import {
+  IgcIconButtonComponent,
+  defineComponents,
+  registerIcon,
+} from "igniteui-webcomponents";
+
+import iconArrowBack from "@material-symbols/svg-400/rounded/arrow_back.svg";
+import iconArrowForward from "@material-symbols/svg-400/rounded/arrow_forward.svg";
 
 @customElement("pane-welcome")
 export class PaneWelcome extends LitElement {
+  static override styles = css`
+    :host {
+      user-select: none;
+    }
+
+    .container {
+      font-family: sans-serif;
+      color: white;
+
+      height: 100vh;
+      box-sizing: border-box;
+
+      transition: all linear 3s;
+
+      display: grid;
+      grid-template-areas:
+        "back title forward"
+        "back desc forward";
+    }
+
+    .title,
+    .desc {
+      display: block;
+      text-align: center;
+      margin: 30px;
+    }
+
+    .title {
+      grid-area: title;
+      font-size: 60px;
+    }
+
+    .desc {
+      grid-area: desc;
+      font-size: 35px;
+    }
+
+    igc-icon-button,
+    igc-icon-button::part(base) {
+      height: 100%;
+      width: 15vw;
+      background-color: transparent;
+      border-radius: 0;
+    }
+
+    igc-icon-button::part(base):hover {
+      background-color: rgba(0, 0, 0, 0.2);
+      box-shadow: none;
+    }
+
+    igc-icon-button::part(base):active {
+      background-color: rgba(0, 0, 0, 0.4);
+      box-shadow: none;
+    }
+
+    igc-icon-button::part(base):focus {
+      box-shadow: none;
+    }
+
+    [name="arrow-back"] {
+      grid-area: back;
+    }
+
+    [name="arrow-forward"] {
+      grid-area: forward;
+    }
+  `;
+
   override connectedCallback(): void {
     super.connectedCallback();
 
-    defineComponents(IgcButtonComponent);
+    defineComponents(IgcIconButtonComponent);
+
+    registerIcon("arrow-back", iconArrowBack);
+    registerIcon("arrow-forward", iconArrowForward);
   }
+
+  @state()
+  private _screenIndex = 0;
 
   protected override render(): unknown {
     return html`
-      <span>Welcome!</span>
-      <br />
-      <igc-button @click=${this._handleClick}>Close</igc-button>
+      <div
+        class="container"
+        style="background-color: ${screens[this._screenIndex].color}"
+      >
+        <span class="title">${screens[this._screenIndex].title}</span>
+        <span class="desc">${screens[this._screenIndex].desc}</span>
+        <igc-icon-button
+          name="arrow-back"
+          @click=${() => {
+            if (this._screenIndex > 0) {
+              this._screenIndex--;
+            }
+          }}
+        ></igc-icon-button>
+        <igc-icon-button
+          name="arrow-forward"
+          @click=${() => {
+            if (this._screenIndex < screens.length - 1) {
+              this._screenIndex++;
+              return;
+            }
+
+            this._handleClick();
+          }}
+        ></igc-icon-button>
+      </div>
     `;
   }
 
@@ -29,3 +133,39 @@ declare global {
     "pane-welcome": PaneWelcome;
   }
 }
+
+class Screen {
+  constructor(
+    public color: string,
+    public title: string,
+    public desc: string,
+  ) {}
+}
+
+const screens = [
+  new Screen(
+    "#0078d7",
+    "¡Derriba barreras de comunicación!",
+    "Genera un impacto positivo al facilitar la inclusión y la accesibilidad para las personas sordas en tu entorno.",
+  ),
+  new Screen(
+    "#d13438",
+    "¡Desarrolla nuevas habilidades!",
+    "Amplía tus perspectivas al desarrollar una nueva forma de comunicación y expresión.",
+  ),
+  new Screen(
+    "#038387",
+    "¡Abre nuevas oportunidades!",
+    "Contribuye a la sociedad al participar en proyectos de inclusión y ayudar a crear una sociedad más justa.",
+  ),
+  new Screen(
+    "#c30052",
+    "¡Experimenta la satisfacción personal!",
+    "Contribuye a una causa noble al apoyar a la comunidad sorda y luchar por sus derechos.",
+  ),
+  new Screen(
+    "#6b69d6",
+    "¡Un idioma único y fascinante!",
+    "¡Anímate a aprender Lengua de Señas Colombiana y descubre un mundo de nuevas posibilidades!",
+  ),
+];

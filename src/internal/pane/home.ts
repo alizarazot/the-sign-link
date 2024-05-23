@@ -45,14 +45,14 @@ export class PaneHome extends LitElement {
     defineComponents(IgcDialogComponent, IgcCardComponent, IgcButtonComponent);
 
     Lesson.avaible().then((lessons) => {
-      this._lessons = lessons;
+      this.lessons = lessons;
     });
 
     this.loadTotalScore();
   }
 
   @state()
-  private _lessons: Lesson[] = [];
+  lessons: Lesson[] = [];
 
   @state()
   private _session = currentSession();
@@ -61,7 +61,7 @@ export class PaneHome extends LitElement {
   totalScore = 0;
 
   override render() {
-    const lessons = this._lessons.filter(
+    const lessons = this.lessons.filter(
       (lesson) => this._session.getPoints(lesson.id) <= 75,
     );
 

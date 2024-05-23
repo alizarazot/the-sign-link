@@ -126,6 +126,10 @@ export class PaneWelcome extends LitElement {
 
     registerIcon("arrow-back", iconArrowBack);
     registerIcon("arrow-forward", iconArrowForward);
+
+    if (localStorage.getItem("no-welcome") === "1") {
+      this._removeWelcome();
+    }
   }
 
   @state()
@@ -155,15 +159,16 @@ export class PaneWelcome extends LitElement {
               return;
             }
 
-            this._handleClick();
+            this._removeWelcome();
           }}
         ></igc-icon-button>
       </div>
     `;
   }
 
-  private _handleClick() {
+  private _removeWelcome() {
     this.dispatchEvent(new Event("finish-introduction"));
+    localStorage.setItem("no-welcome", "1");
   }
 }
 

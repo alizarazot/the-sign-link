@@ -1,5 +1,5 @@
 import { LitElement, css, html } from "lit";
-import { customElement, query, state } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 
 import {
   defineComponents,
@@ -9,6 +9,7 @@ import {
 } from "igniteui-webcomponents";
 
 import { Lesson } from "internal/lesson";
+import { currentSession } from "internal/session";
 
 @customElement("pane-home")
 export class PaneHome extends LitElement {
@@ -51,10 +52,25 @@ export class PaneHome extends LitElement {
   @state()
   private _lessons: Lesson[] = [];
 
+  @state()
+  private _session = currentSession();
+
+  @property({ type: Number })
+  totalScore = 0;
+
   override render() {
+    const lessons = this._lessons.filter(
+      (lesson) => this._session.getPoints(lesson.id) <= 75,
+    );
+
     return html`
       <div class="container">
-        ${this._lessons.map(
+        <igc-card>
+          <igc-card-header>
+            <h2 slot="title">Puntos totales: ${this.totalScore}</h2>
+          </igc-card-header>
+        </igc-card>
+        ${lessons.map(
           (i) => html`
             <igc-card>
               <igc-card-header>

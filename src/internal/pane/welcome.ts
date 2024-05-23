@@ -78,6 +78,45 @@ export class PaneWelcome extends LitElement {
     [name="arrow-forward"] {
       grid-area: forward;
     }
+
+    @media (max-width: 700px) {
+      .container {
+        grid-template-areas:
+          "title title"
+          "desc desc"
+          "back forward";
+      }
+
+      igc-icon-button,
+      igc-icon-button::part(base) {
+        width: 50vw;
+      }
+    }
+
+    @media (max-width: 1200px) {
+      .title {
+        font-size: 40px;
+      }
+
+      .desc {
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 330px) {
+      .title,
+      .desc {
+        margin: 10px;
+      }
+
+      .title {
+        font-size: 30px;
+      }
+
+      .desc {
+        font-size: 16px;
+      }
+    }
   `;
 
   override connectedCallback(): void {

@@ -138,7 +138,7 @@ export class MyElement extends LitElement {
 
         <div class="pane">
           <pane-home @start-lesson=${this._handleStartLesson}></pane-home>
-          <pane-lesson hidden></pane-lesson>
+          <pane-lesson @end-lesson=${this.showHome} hidden></pane-lesson>
         </div>
       </div>
     `;
@@ -151,9 +151,8 @@ export class MyElement extends LitElement {
 
   protected showHome() {
     this._paneLesson.setAttribute("hidden", "");
-
     this._paneHome.removeAttribute("hidden");
-    this._navDrawer.toggle();
+    this._navDrawer.hide();
   }
 
   private _handleStartLesson(e: CustomEvent) {

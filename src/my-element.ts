@@ -10,7 +10,7 @@ import {
   registerIcon,
 } from "igniteui-webcomponents";
 
-import "igniteui-webcomponents/themes/light/bootstrap.css";
+import "igniteui-webcomponents/themes/light/fluent.css";
 
 import iconMenu from "@material-symbols/svg-400/rounded/menu.svg";
 import iconHome from "@material-symbols/svg-400/rounded/home.svg";
@@ -24,14 +24,14 @@ import { registerServiceWorker } from "internal/service-worker";
 import "internal/pane/welcome.ts";
 import "internal/pane/home.ts";
 import "internal/pane/lesson.ts";
-import "internal/pane/diagnostic-test.ts";
 
-import type { Lesson } from "internal/pane/lesson.ts";
 import type { PaneHome } from "internal/pane/home.ts";
-import type { PaneDiagnosticTest } from "internal/pane/diagnostic-test.ts";
 import type { PaneWelcome } from "internal/pane/welcome.ts";
+import type { PaneLesson } from "internal/pane/lesson.ts";
 
 import { currentSession } from "internal/session";
+
+import type { Lesson } from "internal/lesson";
 
 @customElement("my-element")
 export class MyElement extends LitElement {
@@ -135,12 +135,8 @@ export class MyElement extends LitElement {
         </igc-nav-drawer>
 
         <div class="pane">
-          <pane-home
-            @start-lesson=${this._handleStartLesson}
-            @start-diagnostic-test=${this._handleStartDiagnosticTest}
-          ></pane-home>
+          <pane-home @start-lesson=${this._handleStartLesson}></pane-home>
           <pane-lesson hidden></pane-lesson>
-          <pane-diagnostic-test hidden></pane-diagnostic-test>
         </div>
       </div>
     `;
@@ -149,28 +145,23 @@ export class MyElement extends LitElement {
   @query("pane-home", true)
   private _paneHome!: PaneHome;
   @query("pane-lesson", true)
-  private _paneLesson!: Lesson;
-  @query("pane-diagnostic-test", true)
-  private _paneDiagnosticTest!: PaneDiagnosticTest;
+  private _paneLesson!: PaneLesson;
 
   protected showHome() {
     this._paneLesson.setAttribute("hidden", "");
-    this._paneDiagnosticTest.setAttribute("hidden", "");
 
     this._paneHome.removeAttribute("hidden");
     this._navDrawer.toggle();
   }
 
-  private _handleStartLesson(e: Event) {
+  private _handleStartLesson(e: CustomEvent) {
     const elem = e.target as PaneHome;
+    const lesson = e.detail as Lesson;
+
+    this._paneLesson.lesson = lesson;
 
     elem.setAttribute("hidden", "");
     this._paneLesson.removeAttribute("hidden");
-  }
-
-  private _handleStartDiagnosticTest() {
-    this._paneHome.setAttribute("hidden", "");
-    this._paneDiagnosticTest.removeAttribute("hidden");
   }
 }
 

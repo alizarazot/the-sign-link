@@ -10,7 +10,7 @@ import "igniteui-webcomponents/themes/light/fluent.css";
 
 import "view/home";
 import "view/motivation";
-import "./view/ranking";
+import "view/ranking";
 
 @customElement("main-component")
 export class MainComponent extends LitElement {
@@ -31,6 +31,7 @@ export class MainComponent extends LitElement {
 
     registerServiceWorker();
 
+    // @ts-ignore: Event declared in `view/partial/nav-drawer.ts`.
     this.addEventListener("goto-url", (e: CustomEvent) => {
       this.router.goto(e.detail);
     });

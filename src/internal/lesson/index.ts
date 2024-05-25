@@ -1,7 +1,3 @@
-import { getDefaultLogger } from "pkg/logging";
-
-const log = getDefaultLogger().extend("Lesson");
-
 export class Lesson {
   static readonly rootDirectory = location.origin + "/lesson";
   static readonly rootIndex = Lesson.rootDirectory + "/index.json";
@@ -29,7 +25,7 @@ export class Lesson {
       try {
         rawLessonDetails = await Lesson.rawLessonDetails(rawLesson.id);
       } catch (e) {
-        log.error("Invalid or unexistent lesson content:", rawLesson.id);
+        console.error("Invalid or unexistent lesson content:", rawLesson.id);
         continue;
       }
 
@@ -78,7 +74,7 @@ export class Lesson {
 
     for (let question of questions) {
       if (question.type !== "single-choice") {
-        log.error("Unkonow question type:", question.type);
+        console.error("Unkonow question type:", question.type);
         continue;
       }
 

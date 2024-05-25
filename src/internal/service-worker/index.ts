@@ -1,10 +1,6 @@
-import { getDefaultLogger } from "pkg/logging";
-
 export const registerServiceWorker = async () => {
-  const log = getDefaultLogger().extend("Service-Worker-Installer");
-
   if (!("serviceWorker" in navigator)) {
-    log.info("Service Workers are not supported in this browser.");
+    console.info("Service Workers are not supported in this browser.");
   }
 
   try {
@@ -16,13 +12,13 @@ export const registerServiceWorker = async () => {
     );
 
     if (registration.installing) {
-      log.info("Installing...");
+      console.info("[Service-Worker]: Installing...");
     } else if (registration.waiting) {
-      log.info("Waiting...");
+      console.info("[Service-Worker]: Waiting...");
     } else if (registration.active) {
-      log.info("Service Worker active.");
+      console.info("[Service-Worker]: Active!");
     }
   } catch (err) {
-    log.info("Registration failed with:", err);
+    console.info("[Service-Worker]: Registration failed with:", err);
   }
 };

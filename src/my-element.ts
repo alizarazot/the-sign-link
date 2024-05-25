@@ -17,8 +17,6 @@ import iconHome from "@material-symbols/svg-400/rounded/home.svg";
 import iconTrophy from "@material-symbols/svg-400/rounded/trophy.svg";
 import iconStar from "@material-symbols/svg-400/rounded/star.svg";
 
-import * as logging from "pkg/logging";
-
 import { registerServiceWorker } from "internal/service-worker";
 
 import "internal/pane/welcome.ts";
@@ -58,8 +56,6 @@ export class MyElement extends LitElement {
 
   override connectedCallback() {
     super.connectedCallback();
-
-    logging.setDefaultLogger(new logging.Logger("TSL", logging.Level.Debug));
 
     defineComponents(
       IgcIconComponent,

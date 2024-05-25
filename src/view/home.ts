@@ -11,6 +11,11 @@ import {
 import { Lesson } from "internal/lesson";
 import { currentSession } from "internal/session";
 
+import type { PartialNavDrawer } from "./partial/nav-drawer";
+
+import "./partial/navbar";
+import "./partial/nav-drawer";
+
 @customElement("view-home")
 export class ViewHome extends LitElement {
   static override styles = css`
@@ -60,12 +65,22 @@ export class ViewHome extends LitElement {
   @property({ type: Number })
   totalScore = 0;
 
+  @query("partial-nav-drawer", true)
+  private _navDrawer!: PartialNavDrawer;
+
   override render() {
     const lessons = this.lessons.filter(
       (lesson) => this._session.getPoints(lesson.id) <= 75,
     );
 
     return html`
+      <partial-navbar
+        @open-menu=${() => {
+          this._navDrawer.show();
+        }}
+      ></partial-navbar>
+      <partial-nav-drawer></partial-nav-drawer>
+
       <div class="container">
         <igc-card>
           <igc-card-header>

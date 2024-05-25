@@ -8,12 +8,12 @@ import { registerServiceWorker } from "internal/service-worker";
 
 import "igniteui-webcomponents/themes/light/fluent.css";
 
-import "view/root.ts";
+import "view/home";
 
 @customElement("main-component")
 export class MainComponent extends LitElement {
   private router = new Router(this, [
-    { path: "/", render: () => html`<view-root></view-root>` },
+    { path: "/", render: () => html`<view-home></view-home>` },
   ]);
 
   override connectedCallback(): void {

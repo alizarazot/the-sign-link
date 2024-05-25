@@ -43,7 +43,12 @@ export class PartialNavbar extends LitElement {
           src=${this._session.photo}
           alt="User photo"
           @click=${() => {
-            alert("Stats");
+            this.dispatchEvent(
+              new CustomEvent("goto-url", {
+                composed: true,
+                detail: "/stats",
+              }),
+            );
           }}
         >
         </igc-avatar>

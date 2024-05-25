@@ -1,13 +1,14 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 
-import {
-  IgcListComponent,
-  IgcNavbarComponent,
-  defineComponents,
-} from "igniteui-webcomponents";
+import { IgcListComponent, defineComponents } from "igniteui-webcomponents";
 
 import { Lesson } from "internal/lesson";
+
+import type { PartialNavDrawer } from "./partial/nav-drawer";
+
+import "view/partial/navbar";
+import "view/partial/nav-drawer";
 
 @customElement("view-stats")
 export class ViewStats extends LitElement {
@@ -20,7 +21,7 @@ export class ViewStats extends LitElement {
   override connectedCallback(): void {
     super.connectedCallback();
 
-    defineComponents(IgcNavbarComponent, IgcListComponent);
+    defineComponents(IgcListComponent);
   }
 
   @property({ attribute: false })
@@ -28,11 +29,19 @@ export class ViewStats extends LitElement {
   @property({ attribute: false })
   points: { [id: string]: number } = {};
 
+  @query("partial-nav-drawer", true)
+  private _navDrawer!: PartialNavDrawer;
+
   protected override render(): unknown {
     return html`
-      <igc-navbar>
-        <h2>Estadísticas</h2>
-      </igc-navbar>
+      <partial-navbar
+        @open-menu=${() => {
+          this._navDrawer.show();
+        }}
+      ></partial-navbar>
+      <partial-nav-drawer></partial-nav-drawer>
+
+      <h1>Estadísticas</h1>
 
       <igc-list>
         ${this.lessons

@@ -11,6 +11,7 @@ import "igniteui-webcomponents/themes/light/fluent.css";
 import "view/home";
 import "view/motivation";
 import "view/ranking";
+import "view/stats";
 
 @customElement("main-component")
 export class MainComponent extends LitElement {
@@ -23,6 +24,10 @@ export class MainComponent extends LitElement {
     {
       path: "/ranking",
       render: () => html`<view-ranking></view-ranking>`,
+    },
+    {
+      path: "/stats",
+      render: () => html`<view-stats></view-stats>`,
     },
   ]);
 

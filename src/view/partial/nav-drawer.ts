@@ -30,7 +30,7 @@ export class PartialNavDrawer extends LitElement {
         <igc-nav-drawer-header-item> The Sign Link </igc-nav-drawer-header-item>
         <igc-nav-drawer-item
           @click=${() => {
-            alert("Home");
+            this._goto("/");
           }}
         >
           <igc-icon slot="icon" name="home"></igc-icon>
@@ -48,7 +48,7 @@ export class PartialNavDrawer extends LitElement {
 
         <igc-nav-drawer-item
           @click=${() => {
-            alert("Motivation");
+            this._goto("/motivation");
           }}
         >
           <igc-icon slot="icon" name="star"></igc-icon>
@@ -67,6 +67,15 @@ export class PartialNavDrawer extends LitElement {
 
   hide(): void {
     this._navDrawer.hide();
+  }
+
+  private _goto(url: string): void {
+    this.dispatchEvent(
+      new CustomEvent("goto-url", {
+        composed: true,
+        detail: url,
+      }),
+    );
   }
 }
 

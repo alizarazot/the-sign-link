@@ -9,17 +9,26 @@ import { registerServiceWorker } from "internal/service-worker";
 import "igniteui-webcomponents/themes/light/fluent.css";
 
 import "view/home";
+import "view/motivation";
 
 @customElement("main-component")
 export class MainComponent extends LitElement {
   private router = new Router(this, [
     { path: "/", render: () => html`<view-home></view-home>` },
+    {
+      path: "/motivation",
+      render: () => html`<view-motivation></view-motivation>`,
+    },
   ]);
 
   override connectedCallback(): void {
     super.connectedCallback();
 
     registerServiceWorker();
+
+    this.addEventListener("goto-url", (e: CustomEvent) => {
+      this.router.goto(e.detail);
+    });
   }
 
   protected override render(): unknown {

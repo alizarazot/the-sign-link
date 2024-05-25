@@ -1,10 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, query } from "lit/decorators.js";
 
-import "igniteui-webcomponents/themes/light/fluent.css";
-
-import { registerServiceWorker } from "internal/service-worker";
-
 import "view/welcome";
 import "view/home";
 import "view/lesson";
@@ -41,8 +37,6 @@ export class ViewRoot extends LitElement {
 
   override connectedCallback() {
     super.connectedCallback();
-
-    registerServiceWorker();
   }
 
   @query("partial-nav-drawer", true)
@@ -56,7 +50,7 @@ export class ViewRoot extends LitElement {
         }}
       ></partial-navbar>
 
-      <div id="root-pane" hidden>
+      <div id="root-pane">
         <div class="pane">
           <view-home @start-lesson=${this._handleStartLesson}></view-home>
           <view-lesson></view-lesson>

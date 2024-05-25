@@ -13,7 +13,7 @@ import {
   defineComponents,
 } from "igniteui-webcomponents";
 
-import { ComponentSingleChoiceQuestion } from "internal/component/single-choice-question.ts";
+import { ComponentSingleChoiceQuestion } from "component/single-choice-question";
 
 import { Lesson } from "internal/lesson";
 import { currentSession } from "internal/session";

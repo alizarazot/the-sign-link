@@ -1,5 +1,10 @@
 import { LitElement, css, html } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, query } from "lit/decorators.js";
+
+import type { PartialNavDrawer } from "./partial/nav-drawer";
+
+import "./partial/navbar";
+import "./partial/nav-drawer";
 
 interface Player {
   name: string;
@@ -21,8 +26,9 @@ export class ViewRanking extends LitElement {
 
   private players: Player[] = [];
 
-  constructor() {
-    super();
+  override connectedCallback(): void {
+    super.connectedCallback();
+
     this.usuarios();
   }
 
@@ -32,8 +38,18 @@ export class ViewRanking extends LitElement {
     this.requestUpdate(); // Actualiza el DOM
   }
 
+  @query("partial-nav-drawer")
+  private _navDrawer!: PartialNavDrawer;
+
   override render() {
     return html`
+      <partial-navbar
+        @open-menu=${() => {
+          this._navDrawer.show();
+        }}
+      ></partial-navbar>
+      <partial-nav-drawer></partial-nav-drawer>
+
       <h2>Ranking</h2>
       <ul>
         ${this.players.map(

@@ -39,7 +39,7 @@ export class PartialNavDrawer extends LitElement {
 
         <igc-nav-drawer-item
           @click=${() => {
-            alert("Ranking");
+            this._goto("/ranking");
           }}
         >
           <igc-icon slot="icon" name="trophy"></igc-icon>

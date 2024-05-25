@@ -37,8 +37,8 @@ import type { PaneStats } from "internal/pane/stats.ts";
 import type { Lesson } from "internal/lesson";
 import { currentSession } from "internal/session";
 
-@customElement("my-element")
-export class MyElement extends LitElement {
+@customElement("main-component")
+export class MainComponent extends LitElement {
   static override styles = css`
     :host,
     #root-pane {
@@ -213,6 +213,6 @@ export class MyElement extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "my-element": MyElement;
+    "main-component": MainComponent;
   }
 }

@@ -1,6 +1,9 @@
 import { LitElement, css, html } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 
+import { Router } from "@lit-labs/router";
+import "urlpattern-polyfill";
+
 import {
   IgcIconComponent,
   IgcNavDrawerComponent,
@@ -54,6 +57,14 @@ export class MyElement extends LitElement {
     }
   `;
 
+  private router = new Router(this, [
+    { path: "/", render: () => html`The Sign Link` },
+    {
+      path: "/:path",
+      render: (args) => html`Path: ${args["path"]}`,
+    },
+  ]);
+
   override connectedCallback() {
     super.connectedCallback();
 
@@ -100,7 +111,7 @@ export class MyElement extends LitElement {
               this._navDrawer.show();
             }}
           ></igc-icon>
-          <h1>The Sign Link</h1>
+          <h1>${this.router.outlet()}</h1>
           <igc-avatar
             slot="end"
             shape="circle"

@@ -9,8 +9,8 @@ import {
 
 import { Lesson } from "internal/lesson";
 
-@customElement("pane-stats")
-export class PaneStats extends LitElement {
+@customElement("view-stats")
+export class ViewStats extends LitElement {
   static override styles = css`
     igc-list {
       padding: 15px;
@@ -51,6 +51,6 @@ export class PaneStats extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "pane-stats": PaneStats;
+    "view-stats": ViewStats;
   }
 }

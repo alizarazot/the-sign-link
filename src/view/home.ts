@@ -11,8 +11,8 @@ import {
 import { Lesson } from "internal/lesson";
 import { currentSession } from "internal/session";
 
-@customElement("pane-home")
-export class PaneHome extends LitElement {
+@customElement("view-home")
+export class ViewHome extends LitElement {
   static override styles = css`
     .container {
       display: flex;
@@ -131,6 +131,6 @@ export class PaneHome extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "pane-home": PaneHome;
+    "view-home": ViewHome;
   }
 }

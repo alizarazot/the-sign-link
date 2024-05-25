@@ -18,8 +18,8 @@ import { ComponentSingleChoiceQuestion } from "internal/component/single-choice-
 import { Lesson } from "internal/lesson";
 import { currentSession } from "internal/session";
 
-@customElement("pane-lesson")
-export class PaneLesson extends LitElement {
+@customElement("view-lesson")
+export class ViewLesson extends LitElement {
   static override styles = css`
     :host {
       display: block;
@@ -151,6 +151,6 @@ export class PaneLesson extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "pane-lesson": PaneLesson;
+    "view-lesson": ViewLesson;
   }
 }

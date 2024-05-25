@@ -22,17 +22,17 @@ import iconStar from "@material-symbols/svg-400/rounded/star.svg";
 
 import { registerServiceWorker } from "internal/service-worker";
 
-import "internal/pane/welcome.ts";
-import "internal/pane/home.ts";
-import "internal/pane/lesson.ts";
-import "internal/pane/ranking.ts";
-import "internal/pane/stats.ts";
+import "view/welcome";
+import "view/home";
+import "view/lesson";
+import "view/ranking";
+import "view/stats";
 
-import type { PaneHome } from "internal/pane/home.ts";
-import type { PaneWelcome } from "internal/pane/welcome.ts";
-import type { PaneLesson } from "internal/pane/lesson.ts";
-import type { PaneRanking } from "internal/pane/ranking.ts";
-import type { PaneStats } from "internal/pane/stats.ts";
+import type { ViewHome } from "view/home";
+import type { ViewWelcome } from "view/welcome";
+import type { ViewLesson } from "view/lesson";
+import type { ViewRanking } from "view/ranking";
+import type { ViewStats } from "view/stats";
 
 import type { Lesson } from "internal/lesson";
 import { currentSession } from "internal/session";
@@ -90,18 +90,18 @@ export class MainComponent extends LitElement {
   private _navDrawer!: IgcNavDrawerComponent;
 
   @query("#root-pane")
-  private _rootPane!: HTMLDivElement;
-  @query("pane-welcome")
-  private _paneWelcome!: PaneWelcome;
+  private _rootView!: HTMLDivElement;
+  @query("view-welcome")
+  private _viewWelcome!: ViewWelcome;
 
   override render() {
     return html`
-      <pane-welcome
+      <view-welcome
         @finish-introduction=${() => {
-          this._rootPane.removeAttribute("hidden");
-          this._paneWelcome.setAttribute("hidden", "");
+          this._rootView.removeAttribute("hidden");
+          this._viewWelcome.setAttribute("hidden", "");
         }}
-      ></pane-welcome>
+      ></view-welcome>
       <div id="root-pane" hidden>
         <igc-navbar>
           <igc-icon
@@ -138,9 +138,9 @@ export class MainComponent extends LitElement {
 
           <igc-nav-drawer-item
             @click=${() => {
-              this._paneWelcome.restart();
-              this._paneWelcome.removeAttribute("hidden");
-              this._rootPane.setAttribute("hidden", "");
+              this._viewWelcome.restart();
+              this._viewWelcome.removeAttribute("hidden");
+              this._rootView.setAttribute("hidden", "");
               this._navDrawer.hide();
             }}
           >
@@ -150,64 +150,64 @@ export class MainComponent extends LitElement {
         </igc-nav-drawer>
 
         <div class="pane">
-          <pane-home @start-lesson=${this._handleStartLesson}></pane-home>
-          <pane-lesson
+          <view-home @start-lesson=${this._handleStartLesson}></view-home>
+          <view-lesson
             @end-lesson=${() => {
-              this._paneHome.loadTotalScore();
+              this._viewHome.loadTotalScore();
               this.showHome();
             }}
             hidden
-          ></pane-lesson>
-          <pane-stats hidden></pane-stats>
-          <pane-ranking hidden></pane-ranking>
+          ></view-lesson>
+          <view-stats hidden></view-stats>
+          <view-ranking hidden></view-ranking>
         </div>
       </div>
     `;
   }
 
-  @query("pane-home", true)
-  private _paneHome!: PaneHome;
-  @query("pane-lesson", true)
-  private _paneLesson!: PaneLesson;
-  @query("pane-ranking", true)
-  private _paneRanking!: PaneRanking;
-  @query("pane-stats")
-  private _paneStats!: PaneStats;
+  @query("view-home", true)
+  private _viewHome!: ViewHome;
+  @query("view-lesson", true)
+  private _viewLesson!: ViewLesson;
+  @query("view-ranking", true)
+  private _viewRanking!: ViewRanking;
+  @query("view-stats")
+  private _viewStats!: ViewStats;
 
   protected showHome() {
-    this._paneLesson.setAttribute("hidden", "");
-    this._paneStats.setAttribute("hidden", "");
-    this._paneHome.removeAttribute("hidden");
-    this._paneRanking.setAttribute("hidden", "");
+    this._viewLesson.setAttribute("hidden", "");
+    this._viewStats.setAttribute("hidden", "");
+    this._viewHome.removeAttribute("hidden");
+    this._viewRanking.setAttribute("hidden", "");
     this._navDrawer.hide();
   }
 
   protected showRanking() {
-    this._paneLesson.setAttribute("hidden", "");
-    this._paneHome.setAttribute("hidden", "");
-    this._paneRanking.removeAttribute("hidden"); // Muestra el ranking al hacer clic en la opción de clasificación
+    this._viewLesson.setAttribute("hidden", "");
+    this._viewHome.setAttribute("hidden", "");
+    this._viewRanking.removeAttribute("hidden"); // Muestra el ranking al hacer clic en la opción de clasificación
     this._navDrawer.toggle();
   }
 
   private _handleStartLesson(e: CustomEvent) {
-    const elem = e.target as PaneHome;
+    const elem = e.target as ViewHome;
     const lesson = e.detail as Lesson;
 
-    this._paneLesson.reset();
-    this._paneLesson.lesson = lesson;
+    this._viewLesson.reset();
+    this._viewLesson.lesson = lesson;
 
     elem.setAttribute("hidden", "");
-    this._paneLesson.removeAttribute("hidden");
-    this._paneRanking.setAttribute("hidden", ""); // Oculta el ranking al mostrar una lección
+    this._viewLesson.removeAttribute("hidden");
+    this._viewRanking.setAttribute("hidden", ""); // Oculta el ranking al mostrar una lección
   }
 
   private _showStats() {
-    this._paneStats.lessons = this._paneHome.lessons;
-    this._paneStats.points = this._currentSession.listPoints();
-    this._paneHome.setAttribute("hidden", "");
-    this._paneLesson.setAttribute("hidden", "");
-    this._paneRanking.setAttribute("hidden", "");
-    this._paneStats.removeAttribute("hidden");
+    this._viewStats.lessons = this._viewHome.lessons;
+    this._viewStats.points = this._currentSession.listPoints();
+    this._viewHome.setAttribute("hidden", "");
+    this._viewLesson.setAttribute("hidden", "");
+    this._viewRanking.setAttribute("hidden", "");
+    this._viewStats.removeAttribute("hidden");
   }
 }
 

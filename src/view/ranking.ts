@@ -6,8 +6,8 @@ interface Player {
   score: number;
 }
 
-@customElement("pane-ranking")
-export class PaneRanking extends LitElement {
+@customElement("view-ranking")
+export class ViewRanking extends LitElement {
   static override styles = css`
     h2 {
       display: flex;
@@ -34,14 +34,12 @@ export class PaneRanking extends LitElement {
 
   override render() {
     return html`
-      
-        <h2>Ranking</h2>
-        <ul>
-          ${this.players.map(
-            (player) => html`<li>${player.name}: ${player.score + " pts"}</li>`,
-          )}
-        </ul>
-      
+      <h2>Ranking</h2>
+      <ul>
+        ${this.players.map(
+          (player) => html`<li>${player.name}: ${player.score + " pts"}</li>`,
+        )}
+      </ul>
     `;
   }
 
@@ -56,6 +54,6 @@ export class PaneRanking extends LitElement {
 }
 declare global {
   interface HTMLElementTagNameMap {
-    "pane-ranking": PaneRanking;
+    "view-ranking": ViewRanking;
   }
 }

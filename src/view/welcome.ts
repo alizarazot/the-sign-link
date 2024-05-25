@@ -10,8 +10,8 @@ import {
 import iconArrowBack from "@material-symbols/svg-400/rounded/arrow_back.svg";
 import iconArrowForward from "@material-symbols/svg-400/rounded/arrow_forward.svg";
 
-@customElement("pane-welcome")
-export class PaneWelcome extends LitElement {
+@customElement("view-welcome")
+export class ViewWelcome extends LitElement {
   static override styles = css`
     :host {
       user-select: none;
@@ -178,7 +178,7 @@ export class PaneWelcome extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "pane-welcome": PaneWelcome;
+    "view-welcome": ViewWelcome;
   }
 }
 

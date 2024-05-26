@@ -13,10 +13,10 @@ export class Lesson {
     public readonly questions: SingleChoiceQuestion[],
   ) {}
 
-  static async avaible(): Promise<Lesson[]> {
+  static async avaible(): Promise<{ [id: string]: Lesson }> {
     const lessonIndex = await (await fetch(Lesson.rootIndex)).json();
 
-    let lessons: Lesson[] = [];
+    let lessons: { [id: string]: Lesson } = {};
 
     for (let rawLesson of lessonIndex) {
       let require = Lesson.parseRequeriments(rawLesson.require, lessons);
@@ -29,17 +29,15 @@ export class Lesson {
         continue;
       }
 
-      lessons.push(
-        new Lesson(
-          rawLesson.id,
-          rawLesson.name,
-          rawLessonDetails.title,
-          require,
-          rawLessonDetails.description,
-          rawLessonDetails.summary,
-          Lesson.parseContent(rawLessonDetails.content),
-          Lesson.parseQuestions(rawLessonDetails.questions),
-        ),
+      lessons[rawLesson.id] = new Lesson(
+        rawLesson.id,
+        rawLesson.name,
+        rawLessonDetails.title,
+        require,
+        rawLessonDetails.description,
+        rawLessonDetails.summary,
+        Lesson.parseContent(rawLessonDetails.content),
+        Lesson.parseQuestions(rawLessonDetails.questions),
       );
     }
 
@@ -54,14 +52,14 @@ export class Lesson {
 
   protected static parseRequeriments(
     require: string[],
-    lessons: Lesson[],
+    lessons: { [id: string]: Lesson },
   ): Lesson[] {
     let requeriments: Lesson[] = [];
 
-    for (let r of require) {
-      for (let l of lessons) {
-        if (r === l.id) {
-          requeriments.push(l);
+    for (let req of require) {
+      for (let id in lessons) {
+        if (req === id) {
+          requeriments.push(lessons[id]);
         }
       }
     }
@@ -74,7 +72,7 @@ export class Lesson {
 
     for (let question of questions) {
       if (question.type !== "single-choice") {
-        console.error("Unkonow question type:", question.type);
+        console.error("Unkonown question type:", question.type);
         continue;
       }
 

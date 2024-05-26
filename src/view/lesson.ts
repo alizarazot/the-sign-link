@@ -1,4 +1,5 @@
 import { LitElement, css, html } from "lit";
+
 import {
   customElement,
   property,
@@ -8,18 +9,23 @@ import {
 } from "lit/decorators.js";
 
 import {
-  IgcNavbarComponent,
+  IgcButtonComponent,
   IgcStepperComponent,
   defineComponents,
 } from "igniteui-webcomponents";
 
-import { ComponentSingleChoiceQuestion } from "internal/component/single-choice-question.ts";
+import { ComponentSingleChoiceQuestion } from "component/single-choice-question";
 
-import { Lesson } from "internal/lesson";
-import { currentSession } from "internal/session";
+import { Lesson } from "lesson";
+import { currentSession } from "session";
 
-@customElement("pane-lesson")
-export class PaneLesson extends LitElement {
+import type { PartialNavDrawer } from "view/partial/nav-drawer";
+
+import "view/partial/nav-drawer";
+import "view/partial/navbar";
+
+@customElement("view-lesson")
+export class ViewLesson extends LitElement {
   static override styles = css`
     :host {
       display: block;
@@ -64,32 +70,51 @@ export class PaneLesson extends LitElement {
   override connectedCallback(): void {
     super.connectedCallback();
 
-    defineComponents(IgcNavbarComponent, IgcStepperComponent);
+    if (this._lesson == null) {
+      Lesson.avaible().then((lessons) => {
+        this._lesson = lessons[this.lessonId];
+      });
+    }
+
+    defineComponents(IgcButtonComponent, IgcStepperComponent);
   }
 
-  @property({ attribute: false })
-  lesson = new Lesson("", "", "", [], "", "", [], []); // Prevent undefined lesson.
+  @property()
+  lessonId: string = "";
+
+  @state()
+  private _lesson?: Lesson;
 
   @state()
   private _score = 0;
 
+  @query("partial-nav-drawer")
+  private _navDrawer!: PartialNavDrawer;
+
   protected override render(): unknown {
+    if (this._lesson == null) {
+      return html`Loading...`;
+    }
+
     let questions: ComponentSingleChoiceQuestion[] = [];
 
-    for (let question of this.lesson.questions) {
+    for (let question of this._lesson.questions) {
       questions.push(new ComponentSingleChoiceQuestion(question));
     }
 
     return html`
-      <igc-navbar>
-        <h1>${this.lesson.name}</h1>
-      </igc-navbar>
+      <partial-navbar
+        @open-menu=${() => {
+          this._navDrawer.show();
+        }}
+      ></partial-navbar>
+      <partial-nav-drawer></partial-nav-drawer>
 
       <igc-stepper @igcActiveStepChanging=${this._calculateScore}>
         <igc-step>
           <span slot="title">Descripción</span>
           <div class="container">
-            ${this.lesson.content.map((i) => {
+            ${this._lesson.content.map((i) => {
               switch (i.type) {
                 case "title":
                   return html`<h2>${i.content}</h2>`;
@@ -136,9 +161,13 @@ export class PaneLesson extends LitElement {
   }
 
   private _handleLessonEnd() {
-    currentSession().setPoints(this.lesson.id, this._score);
+    if (this._lesson != null) {
+      currentSession().setPoints(this._lesson.id, this._score);
+    }
 
-    this.dispatchEvent(new Event("end-lesson"));
+    this.dispatchEvent(
+      new CustomEvent("goto-url", { composed: true, detail: "/" }),
+    );
   }
 
   @query("igc-stepper")
@@ -151,6 +180,6 @@ export class PaneLesson extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "pane-lesson": PaneLesson;
+    "view-lesson": ViewLesson;
   }
 }

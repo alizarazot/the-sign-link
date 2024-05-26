@@ -7,7 +7,7 @@ import {
   defineComponents,
 } from "igniteui-webcomponents";
 
-import { SingleChoiceQuestion } from "internal/lesson";
+import { SingleChoiceQuestion } from "lesson";
 
 @customElement("component-single-choice-question")
 export class ComponentSingleChoiceQuestion extends LitElement {

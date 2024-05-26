@@ -10,8 +10,8 @@ import {
 import iconArrowBack from "@material-symbols/svg-400/rounded/arrow_back.svg";
 import iconArrowForward from "@material-symbols/svg-400/rounded/arrow_forward.svg";
 
-@customElement("pane-welcome")
-export class PaneWelcome extends LitElement {
+@customElement("view-motivation")
+export class ViewMotivation extends LitElement {
   static override styles = css`
     :host {
       user-select: none;
@@ -126,10 +126,6 @@ export class PaneWelcome extends LitElement {
 
     registerIcon("arrow-back", iconArrowBack);
     registerIcon("arrow-forward", iconArrowForward);
-
-    if (localStorage.getItem("no-welcome") === "1") {
-      this._removeWelcome();
-    }
   }
 
   @state()
@@ -159,26 +155,19 @@ export class PaneWelcome extends LitElement {
               return;
             }
 
-            this._removeWelcome();
+            this.dispatchEvent(
+              new CustomEvent("goto-url", { composed: true, detail: "/" }),
+            );
           }}
         ></igc-icon-button>
       </div>
     `;
   }
-
-  private _removeWelcome() {
-    this.dispatchEvent(new Event("finish-introduction"));
-    localStorage.setItem("no-welcome", "1");
-  }
-
-  restart() {
-    this._screenIndex = 0;
-  }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "pane-welcome": PaneWelcome;
+    "view-motivation": ViewMotivation;
   }
 }
 

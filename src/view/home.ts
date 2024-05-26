@@ -8,11 +8,16 @@ import {
   IgcDialogComponent,
 } from "igniteui-webcomponents";
 
-import { Lesson } from "internal/lesson";
-import { currentSession } from "internal/session";
+import { Lesson } from "lesson";
+import { currentSession } from "session";
 
-@customElement("pane-home")
-export class PaneHome extends LitElement {
+import type { PartialNavDrawer } from "./partial/nav-drawer";
+
+import "./partial/navbar";
+import "./partial/nav-drawer";
+
+@customElement("view-home")
+export class ViewHome extends LitElement {
   static override styles = css`
     .container {
       display: flex;
@@ -52,7 +57,7 @@ export class PaneHome extends LitElement {
   }
 
   @state()
-  lessons: Lesson[] = [];
+  lessons: { [id: string]: Lesson } = {};
 
   @state()
   private _session = currentSession();
@@ -60,12 +65,25 @@ export class PaneHome extends LitElement {
   @property({ type: Number })
   totalScore = 0;
 
+  @query("partial-nav-drawer", true)
+  private _navDrawer!: PartialNavDrawer;
+
   override render() {
-    const lessons = this.lessons.filter(
-      (lesson) => this._session.getPoints(lesson.id) <= 75,
-    );
+    const lessons: Lesson[] = [];
+    for (let id in this.lessons) {
+      if (this._session.getPoints(id) <= 75) {
+        lessons.push(this.lessons[id]);
+      }
+    }
 
     return html`
+      <partial-navbar
+        @open-menu=${() => {
+          this._navDrawer.show();
+        }}
+      ></partial-navbar>
+      <partial-nav-drawer></partial-nav-drawer>
+
       <div class="container">
         <igc-card>
           <igc-card-header>
@@ -118,7 +136,12 @@ export class PaneHome extends LitElement {
   }
 
   private _startLesson(lesson: Lesson) {
-    this.dispatchEvent(new CustomEvent("start-lesson", { detail: lesson }));
+    this.dispatchEvent(
+      new CustomEvent("goto-url", {
+        composed: true,
+        detail: `/lesson/${lesson.id}`,
+      }),
+    );
   }
 
   loadTotalScore() {
@@ -131,6 +154,6 @@ export class PaneHome extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "pane-home": PaneHome;
+    "view-home": ViewHome;
   }
 }

@@ -4,7 +4,7 @@ import { customElement, state } from "lit/decorators.js";
 import { Router } from "@lit-labs/router";
 import "urlpattern-polyfill";
 
-import { registerServiceWorker } from "internal/service-worker";
+import { registerServiceWorker } from "service-worker";
 
 import "igniteui-webcomponents/themes/light/fluent.css";
 

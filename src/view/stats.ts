@@ -3,7 +3,7 @@ import { customElement, property, query } from "lit/decorators.js";
 
 import { IgcListComponent, defineComponents } from "igniteui-webcomponents";
 
-import { Lesson } from "internal/lesson";
+import { Lesson } from "lesson";
 
 import type { PartialNavDrawer } from "./partial/nav-drawer";
 

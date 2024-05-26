@@ -16,7 +16,7 @@ import {
 
 import { ComponentSingleChoiceQuestion } from "component/single-choice-question";
 
-import { Lesson } from "internal/lesson";
+import { Lesson } from "lesson";
 import { currentSession } from "internal/session";
 
 import type { PartialNavDrawer } from "view/partial/nav-drawer";
@@ -72,12 +72,7 @@ export class ViewLesson extends LitElement {
 
     if (this._lesson == null) {
       Lesson.avaible().then((lessons) => {
-        for (let lesson of lessons) {
-          if (this.lessonId === lesson.id) {
-            this._lesson = lesson;
-            break;
-          }
-        }
+        this._lesson = lessons[this.lessonId];
       });
     }
 

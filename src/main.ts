@@ -13,7 +13,7 @@ import "view/motivation";
 import "view/ranking";
 import "view/stats";
 import "view/lesson";
-import { Lesson } from "internal/lesson";
+import { Lesson } from "lesson";
 
 @customElement("main-component")
 export class MainComponent extends LitElement {
@@ -36,10 +36,8 @@ export class MainComponent extends LitElement {
       render: (params) =>
         html`<view-lesson lessonId=${params["id"]!}></view-lesson>`,
       enter: async (params) => {
-        for (let lesson of await Lesson.avaible()) {
-          if (params["id"] === lesson.id) {
-            return true;
-          }
+        if ((await Lesson.avaible())[params["id"]!] != null) {
+          return true;
         }
 
         return false;

@@ -8,7 +8,7 @@ import {
   IgcDialogComponent,
 } from "igniteui-webcomponents";
 
-import { Lesson } from "internal/lesson";
+import { Lesson } from "lesson";
 import { currentSession } from "internal/session";
 
 import type { PartialNavDrawer } from "./partial/nav-drawer";
@@ -57,7 +57,7 @@ export class ViewHome extends LitElement {
   }
 
   @state()
-  lessons: Lesson[] = [];
+  lessons: { [id: string]: Lesson } = {};
 
   @state()
   private _session = currentSession();
@@ -69,9 +69,12 @@ export class ViewHome extends LitElement {
   private _navDrawer!: PartialNavDrawer;
 
   override render() {
-    const lessons = this.lessons.filter(
-      (lesson) => this._session.getPoints(lesson.id) <= 75,
-    );
+    const lessons: Lesson[] = [];
+    for (let id in this.lessons) {
+      if (this._session.getPoints(id) <= 75) {
+        lessons.push(this.lessons[id]);
+      }
+    }
 
     return html`
       <partial-navbar

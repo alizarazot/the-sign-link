@@ -12,6 +12,7 @@ import "view/home";
 import "view/motivation";
 import "view/ranking";
 import "view/stats";
+import "view/lesson";
 
 @customElement("main-component")
 export class MainComponent extends LitElement {
@@ -28,6 +29,10 @@ export class MainComponent extends LitElement {
     {
       path: "/stats",
       render: () => html`<view-stats></view-stats>`,
+    },
+    {
+      path: "/lesson/*",
+      render: () => html`<view-lesson></view-lesson>`,
     },
   ]);
 

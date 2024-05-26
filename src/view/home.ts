@@ -133,7 +133,12 @@ export class ViewHome extends LitElement {
   }
 
   private _startLesson(lesson: Lesson) {
-    this.dispatchEvent(new CustomEvent("start-lesson", { detail: lesson }));
+    this.dispatchEvent(
+      new CustomEvent("goto-url", {
+        composed: true,
+        detail: `/lesson/${lesson.id}`,
+      }),
+    );
   }
 
   loadTotalScore() {

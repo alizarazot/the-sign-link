@@ -1,14 +1,10 @@
 import { LitElement, css, html } from "lit";
-import {
-  customElement,
-  property,
-  query,
-  queryAll,
-  state,
-} from "lit/decorators.js";
+import { customElement, query, queryAll, state } from "lit/decorators.js";
+
+import { Routes } from "@lit-labs/router";
 
 import {
-  IgcNavbarComponent,
+  IgcButtonComponent,
   IgcStepperComponent,
   defineComponents,
 } from "igniteui-webcomponents";
@@ -17,6 +13,11 @@ import { ComponentSingleChoiceQuestion } from "component/single-choice-question"
 
 import { Lesson } from "internal/lesson";
 import { currentSession } from "internal/session";
+
+import type { PartialNavDrawer } from "view/partial/nav-drawer";
+
+import "view/partial/nav-drawer";
+import "view/partial/navbar";
 
 @customElement("view-lesson")
 export class ViewLesson extends LitElement {
@@ -61,35 +62,74 @@ export class ViewLesson extends LitElement {
     }
   `;
 
+  private _routes = new Routes(this, [
+    {
+      path: "{/lesson/}?:id",
+      render: (params) => {
+        return params["id"];
+      },
+      enter: async (params) => {
+        for (let lesson of await Lesson.avaible()) {
+          if (params["id"] === lesson.id) {
+            return true;
+          }
+        }
+
+        return false;
+      },
+    },
+  ]);
+
   override connectedCallback(): void {
     super.connectedCallback();
 
-    defineComponents(IgcNavbarComponent, IgcStepperComponent);
+    if (!this._lesson) {
+      Lesson.avaible().then((lessons) => {
+        for (let lesson of lessons) {
+          if (this._routes.outlet() === lesson.id) {
+            this._lesson = lesson;
+            break;
+          }
+        }
+      });
+    }
+
+    defineComponents(IgcButtonComponent, IgcStepperComponent);
   }
 
-  @property({ attribute: false })
-  lesson = new Lesson("", "", "", [], "", "", [], []); // Prevent undefined lesson.
+  @state()
+  private _lesson?: Lesson;
 
   @state()
   private _score = 0;
 
+  @query("partial-nav-drawer")
+  private _navDrawer!: PartialNavDrawer;
+
   protected override render(): unknown {
+    if (this._lesson == null) {
+      return html`Loading...`;
+    }
+
     let questions: ComponentSingleChoiceQuestion[] = [];
 
-    for (let question of this.lesson.questions) {
+    for (let question of this._lesson.questions) {
       questions.push(new ComponentSingleChoiceQuestion(question));
     }
 
     return html`
-      <igc-navbar>
-        <h1>${this.lesson.name}</h1>
-      </igc-navbar>
+      <partial-navbar
+        @open-menu=${() => {
+          this._navDrawer.show();
+        }}
+      ></partial-navbar>
+      <partial-nav-drawer></partial-nav-drawer>
 
       <igc-stepper @igcActiveStepChanging=${this._calculateScore}>
         <igc-step>
           <span slot="title">Descripción</span>
           <div class="container">
-            ${this.lesson.content.map((i) => {
+            ${this._lesson.content.map((i) => {
               switch (i.type) {
                 case "title":
                   return html`<h2>${i.content}</h2>`;
@@ -136,9 +176,13 @@ export class ViewLesson extends LitElement {
   }
 
   private _handleLessonEnd() {
-    currentSession().setPoints(this.lesson.id, this._score);
+    if (this._lesson != null) {
+      currentSession().setPoints(this._lesson.id, this._score);
+    }
 
-    this.dispatchEvent(new Event("end-lesson"));
+    this.dispatchEvent(
+      new CustomEvent("goto-url", { composed: true, detail: "/" }),
+    );
   }
 
   @query("igc-stepper")

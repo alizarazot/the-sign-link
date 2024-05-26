@@ -4,7 +4,7 @@ import { customElement, query, state } from "lit/decorators.js";
 import { IgcListComponent, defineComponents } from "igniteui-webcomponents";
 
 import { Lesson } from "lesson";
-import { currentSession } from "internal/session";
+import { currentSession } from "session";
 
 import type { PartialNavDrawer } from "./partial/nav-drawer";
 

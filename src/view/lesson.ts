@@ -17,7 +17,7 @@ import {
 import { ComponentSingleChoiceQuestion } from "component/single-choice-question";
 
 import { Lesson } from "lesson";
-import { currentSession } from "internal/session";
+import { currentSession } from "session";
 
 import type { PartialNavDrawer } from "view/partial/nav-drawer";
 

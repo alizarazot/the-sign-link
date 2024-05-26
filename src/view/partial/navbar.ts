@@ -11,7 +11,7 @@ import {
 
 import iconMenu from "@material-symbols/svg-400/rounded/menu.svg";
 
-import { currentSession } from "internal/session";
+import { currentSession } from "session";
 
 @customElement("partial-navbar")
 export class PartialNavbar extends LitElement {

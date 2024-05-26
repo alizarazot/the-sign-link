@@ -9,7 +9,7 @@ import {
 } from "igniteui-webcomponents";
 
 import { Lesson } from "lesson";
-import { currentSession } from "internal/session";
+import { currentSession } from "session";
 
 import type { PartialNavDrawer } from "./partial/nav-drawer";
 

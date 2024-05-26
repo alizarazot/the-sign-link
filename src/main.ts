@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 
 import { Router } from "@lit-labs/router";
 import "urlpattern-polyfill";
@@ -8,12 +8,14 @@ import { registerServiceWorker } from "internal/service-worker";
 
 import "igniteui-webcomponents/themes/light/fluent.css";
 
+import { Lesson } from "lesson";
+import { currentSession } from "session";
+
 import "view/home";
 import "view/motivation";
 import "view/ranking";
 import "view/stats";
 import "view/lesson";
-import { Lesson } from "lesson";
 
 @customElement("main-component")
 export class MainComponent extends LitElement {
@@ -56,7 +58,15 @@ export class MainComponent extends LitElement {
     });
   }
 
+  @state()
+  private _session = currentSession();
+
   protected override render(): unknown {
+    if (!this._session.isMotivated()) {
+      this._session.setMotivated();
+      this.router.goto("/motivation");
+    }
+
     return this.router.outlet();
   }
 }

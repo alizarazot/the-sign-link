@@ -1,7 +1,12 @@
 import { LitElement, css, html } from "lit";
-import { customElement, query, queryAll, state } from "lit/decorators.js";
 
-import { Routes } from "@lit-labs/router";
+import {
+  customElement,
+  property,
+  query,
+  queryAll,
+  state,
+} from "lit/decorators.js";
 
 import {
   IgcButtonComponent,
@@ -62,31 +67,13 @@ export class ViewLesson extends LitElement {
     }
   `;
 
-  private _routes = new Routes(this, [
-    {
-      path: "{/lesson/}?:id",
-      render: (params) => {
-        return params["id"];
-      },
-      enter: async (params) => {
-        for (let lesson of await Lesson.avaible()) {
-          if (params["id"] === lesson.id) {
-            return true;
-          }
-        }
-
-        return false;
-      },
-    },
-  ]);
-
   override connectedCallback(): void {
     super.connectedCallback();
 
-    if (!this._lesson) {
+    if (this._lesson == null) {
       Lesson.avaible().then((lessons) => {
         for (let lesson of lessons) {
-          if (this._routes.outlet() === lesson.id) {
+          if (this.lessonId === lesson.id) {
             this._lesson = lesson;
             break;
           }
@@ -96,6 +83,9 @@ export class ViewLesson extends LitElement {
 
     defineComponents(IgcButtonComponent, IgcStepperComponent);
   }
+
+  @property()
+  lessonId: string = "";
 
   @state()
   private _lesson?: Lesson;

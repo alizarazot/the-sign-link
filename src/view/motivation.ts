@@ -21,7 +21,7 @@ export class ViewMotivation extends LitElement {
       font-family: sans-serif;
       color: white;
 
-      height: 100vh;
+      height: 100dvh;
       box-sizing: border-box;
 
       transition: background-color linear 2s;

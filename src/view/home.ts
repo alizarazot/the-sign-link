@@ -146,12 +146,19 @@ export class ViewHome extends LitElement {
                   Math.floor(Math.random() * colors.length)
                 ]}"
               >
-                <igc-card-header>
-                  <h2 slot="title">${lesson.name}</h2>
-                </igc-card-header>
-                <igc-card-content>
-                  <p>${lesson.description}</p>
-                </igc-card-content>
+                <div class="horizontal">
+                  <igc-card-media>
+                    <img src=${lesson.image} />
+                  </igc-card-media>
+                  <div>
+                    <igc-card-header>
+                      <h2 slot="title">${lesson.name}</h2>
+                    </igc-card-header>
+                    <igc-card-content>
+                      <p>${lesson.description}</p>
+                    </igc-card-content>
+                  </div>
+                </div>
               </igc-card>
             `);
           }

@@ -5,6 +5,7 @@ export class Lesson {
   constructor(
     public readonly name: string,
     public readonly description: string,
+    public readonly image: string,
     public readonly questions: Map<string, Question>,
   ) {}
 }
@@ -61,11 +62,12 @@ export async function avaibleLessons(): Promise<string[]> {
 
 export async function loadLesson(id: string): Promise<Lesson> {
   const lesson = await (await fetch(`${rootDirectory}/${id}.json`)).json();
-  lesson.questions = new Map(Object.entries(lesson.questions));
 
+  lesson.questions = new Map(Object.entries(lesson.questions));
   for (let [_, question] of lesson.questions) {
     question.information = Information.parseList(question.information);
   }
+  lesson.image = `${rootDirectory}/image/${lesson.image}`;
 
   return lesson;
 }

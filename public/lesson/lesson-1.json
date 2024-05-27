@@ -1,5 +1,6 @@
 {
   "name": "Prueba diagnóstica",
+  "image": "s/hola.png",
   "description": "¡Pon a prueba tus conocimientos de Lengua de Señas Colombiana!",
   "questions": {
     "q-1": {

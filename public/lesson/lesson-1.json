@@ -1,7 +1,6 @@
 {
-  "title": "Prueba de conocimientos",
+  "name": "Prueba diagnóstica",
   "description": "¡Pon a prueba tus conocimientos de Lengua de Señas Colombiana!",
-  "summary": "Esta prueba nos permitirá conocer su nivel de conocimiento actual de la Lengua de Señas Colombiana.",
   "questions": {
     "q-1": {
       "lesson": [

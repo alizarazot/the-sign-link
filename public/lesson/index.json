@@ -1,7 +1,3 @@
-[
-  {
-    "id": "diagnostic-test",
-    "name": "Prueba diagnóstica",
-    "require": []
-  }
-]
+{
+  "lesson-1": []
+}

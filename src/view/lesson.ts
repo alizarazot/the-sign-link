@@ -10,6 +10,7 @@ import {
 
 import {
   IgcButtonComponent,
+  IgcCircularProgressComponent,
   IgcStepperComponent,
   defineComponents,
 } from "igniteui-webcomponents";
@@ -65,6 +66,13 @@ export class ViewLesson extends LitElement {
       font-size: 50px;
       display: block;
     }
+
+    igc-circular-progress {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, 50%);
+    }
   `;
 
   override connectedCallback(): void {
@@ -76,7 +84,11 @@ export class ViewLesson extends LitElement {
       });
     }
 
-    defineComponents(IgcButtonComponent, IgcStepperComponent);
+    defineComponents(
+      IgcButtonComponent,
+      IgcStepperComponent,
+      IgcCircularProgressComponent,
+    );
   }
 
   @property()
@@ -93,7 +105,9 @@ export class ViewLesson extends LitElement {
 
   protected override render(): unknown {
     if (this._lesson == null) {
-      return html`Loading...`;
+      return html`<igc-circular-progress
+        indeterminate
+      ></igc-circular-progress>`;
     }
 
     let questions: ComponentSingleChoiceQuestion[] = [];
@@ -101,8 +115,6 @@ export class ViewLesson extends LitElement {
     for (let [_, question] of this._lesson.questions) {
       questions.push(new ComponentSingleChoiceQuestion(question));
     }
-
-    console.log(this._lesson);
 
     return html`
       <partial-navbar

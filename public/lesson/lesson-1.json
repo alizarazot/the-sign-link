@@ -1,0 +1,44 @@
+{
+  "name": "Prueba diagnóstica",
+  "description": "¡Pon a prueba tus conocimientos de Lengua de Señas Colombiana!",
+  "questions": {
+    "q-1": {
+      "information": [
+        {
+          "type": "title",
+          "content": "Prueba diagnóstica de Lengua de Señas Colombiana (LSC)"
+        },
+        {
+          "type": "image",
+          "content": "s/hola.png"
+        },
+        {
+          "type": "paragraph",
+          "content": "La prueba diagnóstica de Lengua de Señas Colombiana (LSC) se utiliza para evaluar el nivel de competencia y fluidez en la Lengua de Señas Colombiana. Esta prueba es crucial para determinar el grado de habilidad y comprensión en la comunicación a través de la LSC."
+        }
+      ],
+      "question": "¿Qué parte del cuerpo se utiliza principalmente para expresar emociones en Lengua de Señas Colombiana?",
+      "answers": ["Manos", "Pies", "Brazos", "Rostro"],
+      "correct": 3
+    },
+    "q-2": {
+      "information": [
+        {
+          "type": "title",
+          "content": "Prueba diagnóstica de Lengua de Señas Colombiana (LSC)"
+        },
+        {
+          "type": "image",
+          "content": "s/hola.png"
+        },
+        {
+          "type": "paragraph",
+          "content": "La prueba diagnóstica de Lengua de Señas Colombiana (LSC) se utiliza para evaluar el nivel de competencia y fluidez en la Lengua de Señas Colombiana. Esta prueba es crucial para determinar el grado de habilidad y comprensión en la comunicación a través de la LSC."
+        }
+      ],
+      "question": "¿Qué parte del cuerpo se utiliza principalmente para expresar emociones en Lengua de Señas Colombiana?",
+      "answers": ["Manos", "Pies", "Brazos", "Rostro"],
+      "correct": 3
+    }
+  }
+}

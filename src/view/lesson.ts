@@ -16,7 +16,7 @@ import {
 
 import { ComponentSingleChoiceQuestion } from "component/single-choice-question";
 
-import { Lesson } from "lesson";
+import { Lesson, loadLesson } from "lesson";
 import { currentSession } from "session";
 
 import type { PartialNavDrawer } from "view/partial/nav-drawer";
@@ -71,8 +71,8 @@ export class ViewLesson extends LitElement {
     super.connectedCallback();
 
     if (this._lesson == null) {
-      Lesson.avaible().then((lessons) => {
-        this._lesson = lessons[this.lessonId];
+      loadLesson(this.lessonId).then((lesson) => {
+        this._lesson = lesson;
       });
     }
 
@@ -98,9 +98,11 @@ export class ViewLesson extends LitElement {
 
     let questions: ComponentSingleChoiceQuestion[] = [];
 
-    for (let question of this._lesson.questions) {
+    for (let [_, question] of this._lesson.questions) {
       questions.push(new ComponentSingleChoiceQuestion(question));
     }
+
+    console.log(this._lesson);
 
     return html`
       <partial-navbar
@@ -114,7 +116,8 @@ export class ViewLesson extends LitElement {
         <igc-step>
           <span slot="title">Descripción</span>
           <div class="container">
-            ${this._lesson.content.map((i) => {
+            ${this._lesson.questions.get("q-1")!.information.map((i) => {
+              // ^ Temporary workarount.
               switch (i.type) {
                 case "title":
                   return html`<h2>${i.content}</h2>`;
@@ -162,7 +165,7 @@ export class ViewLesson extends LitElement {
 
   private _handleLessonEnd() {
     if (this._lesson != null) {
-      currentSession().setPoints(this._lesson.id, this._score);
+      currentSession().setPoints(this.lessonId, this._score);
     }
 
     this.dispatchEvent(

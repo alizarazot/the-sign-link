@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, type TemplateResult } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 
 import {
@@ -8,7 +8,7 @@ import {
   IgcDialogComponent,
 } from "igniteui-webcomponents";
 
-import { Lesson } from "lesson";
+import { Lesson, avaibleLessons, loadLesson } from "lesson";
 import { currentSession } from "session";
 
 import type { PartialNavDrawer } from "./partial/nav-drawer";
@@ -49,15 +49,20 @@ export class ViewHome extends LitElement {
 
     defineComponents(IgcDialogComponent, IgcCardComponent, IgcButtonComponent);
 
-    Lesson.avaible().then((lessons) => {
-      this.lessons = lessons;
+    avaibleLessons().then((lessons) => {
+      for (let id of lessons) {
+        loadLesson(id).then((lesson) => {
+          this._lessons.set(id, lesson);
+          this.requestUpdate();
+        });
+      }
     });
 
     this.loadTotalScore();
   }
 
   @state()
-  lessons: { [id: string]: Lesson } = {};
+  private _lessons = new Map<string, Lesson>();
 
   @state()
   private _session = currentSession();
@@ -69,10 +74,15 @@ export class ViewHome extends LitElement {
   private _navDrawer!: PartialNavDrawer;
 
   override render() {
-    const lessons: Lesson[] = [];
-    for (let id in this.lessons) {
+    if (this._lessons.size === 0) {
+      return html`Loading...`;
+    }
+
+    const lessons = new Map<string, Lesson>();
+
+    for (let [id, lesson] of this._lessons) {
       if (this._session.getPoints(id) <= 75) {
-        lessons.push(this.lessons[id]);
+        lessons.set(id, lesson);
       }
     }
 
@@ -90,56 +100,42 @@ export class ViewHome extends LitElement {
             <h2 slot="title">Puntos totales: ${this.totalScore}</h2>
           </igc-card-header>
         </igc-card>
-        ${lessons.map(
-          (i) => html`
-            <igc-card>
-              <igc-card-header>
-                <h2 slot="title">${i.name}</h2>
-                <h3 slot="subtitle">${i.title}</h3>
-              </igc-card-header>
-              <igc-card-content>
-                <p>${i.description}</p>
-              </igc-card-content>
-              <igc-card-actions>
-                <igc-button
-                  slot="start"
-                  @click=${() => {
-                    this._startLesson(i);
-                  }}
-                  >Comenzar</igc-button
-                >
-                <igc-button
-                  slot="end"
-                  @click=${() => {
-                    this._showLessonDescription(i);
-                  }}
-                  >Previsualizar</igc-button
-                >
-              </igc-card-actions>
-            </igc-card>
-          `,
-        )}
-      </div>
+        ${(() => {
+          const render = new Array<TemplateResult>();
 
-      <igc-dialog title="Descripción">
-        <p>Por hacer...</p>
-      </igc-dialog>
+          for (let [id, lesson] of lessons) {
+            render.push(html`
+              <igc-card>
+                <igc-card-header>
+                  <h2 slot="title">${lesson.name}</h2>
+                </igc-card-header>
+                <igc-card-content>
+                  <p>${lesson.description}</p>
+                </igc-card-content>
+                <igc-card-actions>
+                  <igc-button
+                    slot="start"
+                    @click=${() => {
+                      this._startLesson(id);
+                    }}
+                    >Comenzar</igc-button
+                  >
+                </igc-card-actions>
+              </igc-card>
+            `);
+          }
+
+          return render;
+        })()}
+      </div>
     `;
   }
 
-  @query("igc-dialog", true)
-  private _dialog!: IgcDialogComponent;
-
-  private _showLessonDescription(lesson: Lesson) {
-    this._dialog.innerHTML = `<p>${lesson.summary}</p>`;
-    this._dialog.show();
-  }
-
-  private _startLesson(lesson: Lesson) {
+  private _startLesson(id: string) {
     this.dispatchEvent(
       new CustomEvent("goto-url", {
         composed: true,
-        detail: `/lesson/${lesson.id}`,
+        detail: `/lesson/${id}`,
       }),
     );
   }

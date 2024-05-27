@@ -5,8 +5,8 @@ import {
   defineComponents,
   IgcCardComponent,
   IgcButtonComponent,
-  IgcDialogComponent,
   registerIcon,
+  IgcCircularProgressComponent,
 } from "igniteui-webcomponents";
 
 import iconTrophy from "@material-symbols/svg-400/rounded/trophy.svg";
@@ -67,12 +67,20 @@ export class ViewHome extends LitElement {
     igc-card .horizontal {
       display: flex;
     }
+
+    igc-circular-progress {
+      margin-top: 25%;
+    }
   `;
 
   override connectedCallback() {
     super.connectedCallback();
 
-    defineComponents(IgcDialogComponent, IgcCardComponent, IgcButtonComponent);
+    defineComponents(
+      IgcCardComponent,
+      IgcCircularProgressComponent,
+      IgcButtonComponent,
+    );
     registerIcon("trophy", iconTrophy);
 
     avaibleLessons().then((lessons) => {
@@ -101,7 +109,16 @@ export class ViewHome extends LitElement {
 
   override render() {
     if (this._lessons.size === 0) {
-      return html`Loading...`;
+      return html`
+        <partial-navbar
+          @open-menu=${() => {
+            this._navDrawer.show();
+          }}
+        ></partial-navbar>
+        <partial-nav-drawer></partial-nav-drawer>
+
+        <igc-circular-progress indeterminate></igc-circular-progress>
+      `;
     }
 
     const lessons = new Map<string, Lesson>();

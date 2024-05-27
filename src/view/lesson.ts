@@ -16,7 +16,7 @@ import {
 
 import { ComponentSingleChoiceQuestion } from "component/single-choice-question";
 
-import { LessonData, avaibleLessons } from "lesson";
+import { Lesson, loadLesson } from "lesson";
 import { currentSession } from "session";
 
 import type { PartialNavDrawer } from "view/partial/nav-drawer";
@@ -71,13 +71,9 @@ export class ViewLesson extends LitElement {
     super.connectedCallback();
 
     if (this._lesson == null) {
-      avaibleLessons()
-        .then((lessons) => {
-          return lessons.get(this.lessonId)!.load();
-        })
-        .then((lesson) => {
-          this._lesson = lesson;
-        });
+      loadLesson(this.lessonId).then((lesson) => {
+        this._lesson = lesson;
+      });
     }
 
     defineComponents(IgcButtonComponent, IgcStepperComponent);
@@ -87,7 +83,7 @@ export class ViewLesson extends LitElement {
   lessonId: string = "";
 
   @state()
-  private _lesson?: LessonData;
+  private _lesson?: Lesson;
 
   @state()
   private _score = 0;
@@ -102,9 +98,11 @@ export class ViewLesson extends LitElement {
 
     let questions: ComponentSingleChoiceQuestion[] = [];
 
-    for (let question of this._lesson.questions) {
+    for (let [_, question] of this._lesson.questions) {
       questions.push(new ComponentSingleChoiceQuestion(question));
     }
+
+    console.log(this._lesson);
 
     return html`
       <partial-navbar
@@ -118,7 +116,8 @@ export class ViewLesson extends LitElement {
         <igc-step>
           <span slot="title">Descripción</span>
           <div class="container">
-            ${this._lesson.questions[0].lesson.map((i) => {
+            ${this._lesson.questions.get("q-1")!.information.map((i) => {
+              // ^ Temporary workarount.
               switch (i.type) {
                 case "title":
                   return html`<h2>${i.content}</h2>`;

@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, type TemplateResult } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 
 import {
@@ -8,7 +8,7 @@ import {
   IgcDialogComponent,
 } from "igniteui-webcomponents";
 
-import { LessonData, LessonMetadata, avaibleLessons } from "lesson";
+import { Lesson, avaibleLessons, loadLesson } from "lesson";
 import { currentSession } from "session";
 
 import type { PartialNavDrawer } from "./partial/nav-drawer";
@@ -50,16 +50,11 @@ export class ViewHome extends LitElement {
     defineComponents(IgcDialogComponent, IgcCardComponent, IgcButtonComponent);
 
     avaibleLessons().then((lessons) => {
-      this._lessonsMetadata = lessons;
-
-      for (let [id] of this._lessonsMetadata) {
-        this._lessonsMetadata
-          .get(id)!
-          .load()
-          .then((lesson) => {
-            this._lessonsData.set(id, lesson);
-            this.requestUpdate();
-          });
+      for (let id of lessons) {
+        loadLesson(id).then((lesson) => {
+          this._lessons.set(id, lesson);
+          this.requestUpdate();
+        });
       }
     });
 
@@ -67,9 +62,7 @@ export class ViewHome extends LitElement {
   }
 
   @state()
-  private _lessonsMetadata = new Map<string, LessonMetadata>();
-  @state()
-  private _lessonsData = new Map<string, LessonData>();
+  private _lessons = new Map<string, Lesson>();
 
   @state()
   private _session = currentSession();
@@ -81,14 +74,15 @@ export class ViewHome extends LitElement {
   private _navDrawer!: PartialNavDrawer;
 
   override render() {
-    if (this._lessonsData.size === 0) {
+    if (this._lessons.size === 0) {
       return html`Loading...`;
     }
 
-    const lessonsId: string[] = [];
-    for (let [id] of this._lessonsMetadata) {
+    const lessons = new Map<string, Lesson>();
+
+    for (let [id, lesson] of this._lessons) {
       if (this._session.getPoints(id) <= 75) {
-        lessonsId.push(id);
+        lessons.set(id, lesson);
       }
     }
 
@@ -106,49 +100,35 @@ export class ViewHome extends LitElement {
             <h2 slot="title">Puntos totales: ${this.totalScore}</h2>
           </igc-card-header>
         </igc-card>
-        ${lessonsId.map(
-          (id) => html`
-            <igc-card>
-              <igc-card-header>
-                <h2 slot="title">${this._lessonsMetadata.get(id)!.name}</h2>
-                <h3 slot="subtitle">${this._lessonsData.get(id)!.title}</h3>
-              </igc-card-header>
-              <igc-card-content>
-                <p>${this._lessonsData.get(id)!.description}</p>
-              </igc-card-content>
-              <igc-card-actions>
-                <igc-button
-                  slot="start"
-                  @click=${() => {
-                    this._startLesson(id);
-                  }}
-                  >Comenzar</igc-button
-                >
-                <igc-button
-                  slot="end"
-                  @click=${() => {
-                    this._showLessonDescription(this._lessonsData.get(id)!);
-                  }}
-                  >Previsualizar</igc-button
-                >
-              </igc-card-actions>
-            </igc-card>
-          `,
-        )}
+        ${(() => {
+          const render = new Array<TemplateResult>();
+
+          for (let [id, lesson] of lessons) {
+            render.push(html`
+              <igc-card>
+                <igc-card-header>
+                  <h2 slot="title">${lesson.name}</h2>
+                </igc-card-header>
+                <igc-card-content>
+                  <p>${lesson.description}</p>
+                </igc-card-content>
+                <igc-card-actions>
+                  <igc-button
+                    slot="start"
+                    @click=${() => {
+                      this._startLesson(id);
+                    }}
+                    >Comenzar</igc-button
+                  >
+                </igc-card-actions>
+              </igc-card>
+            `);
+          }
+
+          return render;
+        })()}
       </div>
-
-      <igc-dialog title="Descripción">
-        <p>Por hacer...</p>
-      </igc-dialog>
     `;
-  }
-
-  @query("igc-dialog", true)
-  private _dialog!: IgcDialogComponent;
-
-  private _showLessonDescription(lesson: LessonData) {
-    this._dialog.innerHTML = `<p>${lesson.summary}</p>`;
-    this._dialog.show();
   }
 
   private _startLesson(id: string) {

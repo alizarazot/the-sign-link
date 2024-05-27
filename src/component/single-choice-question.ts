@@ -80,13 +80,7 @@ export class ComponentSingleChoiceQuestion extends LitElement {
       return false;
     }
 
-    if (
-      (
-        this.shadowRoot?.querySelectorAll("igc-radio")[
-          this._lastRadio
-        ] as IgcRadioComponent
-      ).innerText === this.question.correct
-    ) {
+    if (this._lastRadio === this.question.correct) {
       return true;
     }
 

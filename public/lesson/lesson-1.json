@@ -3,7 +3,7 @@
   "description": "¡Pon a prueba tus conocimientos de Lengua de Señas Colombiana!",
   "questions": {
     "q-1": {
-      "lesson": [
+      "information": [
         {
           "type": "title",
           "content": "Prueba diagnóstica de Lengua de Señas Colombiana (LSC)"
@@ -22,7 +22,7 @@
       "correct": 3
     },
     "q-2": {
-      "lesson": [
+      "information": [
         {
           "type": "title",
           "content": "Prueba diagnóstica de Lengua de Señas Colombiana (LSC)"

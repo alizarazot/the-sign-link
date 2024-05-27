@@ -3,7 +3,7 @@ import { customElement, query, state } from "lit/decorators.js";
 
 import { IgcListComponent, defineComponents } from "igniteui-webcomponents";
 
-import { LessonMetadata, avaibleLessons } from "lesson";
+import { Lesson, avaibleLessons, loadLesson } from "lesson";
 import { currentSession } from "session";
 
 import type { PartialNavDrawer } from "./partial/nav-drawer";
@@ -23,14 +23,19 @@ export class ViewStats extends LitElement {
     super.connectedCallback();
 
     avaibleLessons().then((lessons) => {
-      this._lessons = lessons;
+      for (let id of lessons) {
+        loadLesson(id).then((lesson) => {
+          this._lessons.set(id, lesson);
+          this.requestUpdate();
+        });
+      }
     });
 
     defineComponents(IgcListComponent);
   }
 
   @state()
-  private _lessons = new Map<string, LessonMetadata>();
+  private _lessons = new Map<string, Lesson>();
   @state()
   private _session = currentSession();
 
@@ -38,10 +43,11 @@ export class ViewStats extends LitElement {
   private _navDrawer!: PartialNavDrawer;
 
   protected override render(): unknown {
-    const idsWithPoints = [];
-    for (let id in this._lessons) {
-      if (this._session.getPoints(id) > 0) {
-        idsWithPoints.push(id);
+    const lessonsWithPoints = new Array<{ name: string; points: number }>();
+    for (let [id, lesson] of this._lessons) {
+      const points = this._session.getPoints(id);
+      if (points > 0) {
+        lessonsWithPoints.push({ name: lesson.name, points: points });
       }
     }
 
@@ -56,11 +62,10 @@ export class ViewStats extends LitElement {
       <h1>Estadísticas</h1>
 
       <igc-list>
-        ${idsWithPoints.map(
-          (id) => html`
+        ${lessonsWithPoints.map(
+          (lesson) => html`
             <igc-list-item
-              >${this._lessons.get(id)!.name}: ${this._session.getPoints(id)}
-              puntos.</igc-list-item
+              >${lesson.name}: ${lesson.points} puntos.</igc-list-item
             >
           `,
         )}

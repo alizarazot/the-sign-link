@@ -1,90 +1,25 @@
 const rootDirectory = location.origin + "/lesson";
-const rootIndex = rootDirectory + "/index.json";
+const rootIndex = `${rootDirectory}/index.json`;
 
-export class LessonMetadata {
+export class Lesson {
   constructor(
-    private readonly _id: string,
     public readonly name: string,
-    public readonly require: LessonMetadata[],
-  ) {}
-
-  async load(): Promise<LessonData> {
-    const rawLesson = await LessonMetadata.rawLessonDetails(this._id);
-
-    return new LessonData(
-      rawLesson.title,
-      rawLesson.description,
-      rawLesson.summary,
-      LessonMetadata.parseQuestions(rawLesson.questions),
-    );
-  }
-
-  protected static async rawLessonDetails(id: string): Promise<any> {
-    return await (await fetch(rootDirectory + "/" + id + "/index.json")).json();
-  }
-
-  protected static parseQuestions(questions: any): Question[] {
-    let parsedQuestions: Question[] = [];
-
-    for (let question in questions) {
-      parsedQuestions.push(Question.parse(questions[question]));
-    }
-
-    return parsedQuestions;
-  }
-}
-
-export class LessonData {
-  constructor(
-    public readonly title: string,
     public readonly description: string,
-    public readonly questions: Question[],
+    public readonly questions: Map<string, Question>,
   ) {}
-}
-
-export class LessonContent {
-  constructor(
-    public readonly type: "title" | "paragraph" | "image",
-    public readonly content: string,
-  ) {}
-
-  static parse(content: any): LessonContent {
-    if (content.type === "image") {
-      return new LessonContent(
-        content.type,
-        rootDirectory + "/image/" + content.content,
-      );
-    }
-
-    return new LessonContent(content.type, content.content);
-  }
-
-  static parseList(content: any): LessonContent[] {
-    let parsedContent: LessonContent[] = [];
-
-    for (let c of content) {
-      parsedContent.push(LessonContent.parse(c));
-    }
-
-    return parsedContent;
-  }
 }
 
 export class Question {
   constructor(
-    public readonly lesson: LessonContent[],
+    public readonly information: Information[],
     public readonly question: string,
     public readonly answers: string[],
-    private readonly _indexCorrect: number,
+    public readonly correct: number,
   ) {}
-
-  get correct(): string {
-    return this.answers[this._indexCorrect];
-  }
 
   static parse(question: any): Question {
     return new Question(
-      LessonContent.parseList(question.lesson),
+      Information.parseList(question.lesson),
       question.question,
       question.answers,
       question.correct,
@@ -92,36 +27,45 @@ export class Question {
   }
 }
 
-export async function avaibleLessons(): Promise<Map<string, LessonMetadata>> {
-  const lessonIndex = await (await fetch(rootIndex)).json();
+export class Information {
+  constructor(
+    public readonly type: "title" | "paragraph" | "image",
+    public readonly content: string,
+  ) {}
 
-  let lessons = new Map<string, LessonMetadata>();
+  static parse(content: any): Information {
+    if (content.type === "image") {
+      return new Information(
+        content.type,
+        `${rootDirectory}/image/${content.content}`,
+      );
+    }
 
-  for (let rawLesson of lessonIndex) {
-    let require = parseLessonRequeriments(rawLesson.require, lessons);
-
-    lessons.set(
-      rawLesson.id,
-      new LessonMetadata(rawLesson.id, rawLesson.name, require),
-    );
+    return new Information(content.type, content.content);
   }
 
-  return lessons;
+  static parseList(content: any): Information[] {
+    let parsedContent: Information[] = [];
+
+    for (let c of content) {
+      parsedContent.push(Information.parse(c));
+    }
+
+    return parsedContent;
+  }
 }
 
-function parseLessonRequeriments(
-  require: string[],
-  lessons: Map<string, LessonMetadata>,
-): LessonMetadata[] {
-  let requeriments: LessonMetadata[] = [];
+export async function avaibleLessons(): Promise<string[]> {
+  return await (await fetch(rootIndex)).json();
+}
 
-  for (let req of require) {
-    for (let [id, lesson] of lessons) {
-      if (req === id) {
-        requeriments.push(lesson);
-      }
-    }
+export async function loadLesson(id: string): Promise<Lesson> {
+  const lesson = await (await fetch(`${rootDirectory}/${id}.json`)).json();
+  lesson.questions = new Map(Object.entries(lesson.questions));
+
+  for (let [_, question] of lesson.questions) {
+    question.information = Information.parseList(question.information);
   }
 
-  return requeriments;
+  return lesson;
 }

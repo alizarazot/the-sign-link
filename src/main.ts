@@ -38,11 +38,7 @@ export class MainComponent extends LitElement {
       render: (params) =>
         html`<view-lesson lessonId=${params["id"]!}></view-lesson>`,
       enter: async (params) => {
-        if ((await avaibleLessons()).get(params["id"]!) != null) {
-          return true;
-        }
-
-        return false;
+        return (await avaibleLessons()).includes(params["id"]!);
       },
     },
   ]);

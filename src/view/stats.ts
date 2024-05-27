@@ -3,7 +3,7 @@ import { customElement, query, state } from "lit/decorators.js";
 
 import { IgcListComponent, defineComponents } from "igniteui-webcomponents";
 
-import { Lesson } from "lesson";
+import { LessonMetadata, avaibleLessons } from "lesson";
 import { currentSession } from "session";
 
 import type { PartialNavDrawer } from "./partial/nav-drawer";
@@ -22,7 +22,7 @@ export class ViewStats extends LitElement {
   override connectedCallback(): void {
     super.connectedCallback();
 
-    Lesson.avaible().then((lessons) => {
+    avaibleLessons().then((lessons) => {
       this._lessons = lessons;
     });
 
@@ -30,7 +30,7 @@ export class ViewStats extends LitElement {
   }
 
   @state()
-  private _lessons: { [id: string]: Lesson } = {};
+  private _lessons = new Map<string, LessonMetadata>();
   @state()
   private _session = currentSession();
 
@@ -59,7 +59,7 @@ export class ViewStats extends LitElement {
         ${idsWithPoints.map(
           (id) => html`
             <igc-list-item
-              >${this._lessons[id].name}: ${this._session.getPoints(id)}
+              >${this._lessons.get(id)!.name}: ${this._session.getPoints(id)}
               puntos.</igc-list-item
             >
           `,

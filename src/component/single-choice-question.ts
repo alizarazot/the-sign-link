@@ -7,7 +7,7 @@ import {
   defineComponents,
 } from "igniteui-webcomponents";
 
-import { SingleChoiceQuestion } from "lesson";
+import { Question } from "lesson";
 
 @customElement("component-single-choice-question")
 export class ComponentSingleChoiceQuestion extends LitElement {
@@ -26,7 +26,7 @@ export class ComponentSingleChoiceQuestion extends LitElement {
     }
   `;
 
-  constructor(question: SingleChoiceQuestion) {
+  constructor(question: Question) {
     super();
 
     this.question = question;
@@ -39,7 +39,7 @@ export class ComponentSingleChoiceQuestion extends LitElement {
   }
 
   @property({ attribute: false })
-  question: SingleChoiceQuestion;
+  question: Question;
 
   @state()
   private _lastRadio = -1;

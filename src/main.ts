@@ -8,7 +8,7 @@ import { registerServiceWorker } from "service-worker";
 
 import "igniteui-webcomponents/themes/light/fluent.css";
 
-import { Lesson } from "lesson";
+import { avaibleLessons } from "lesson";
 import { currentSession } from "session";
 
 import "view/home";
@@ -38,7 +38,7 @@ export class MainComponent extends LitElement {
       render: (params) =>
         html`<view-lesson lessonId=${params["id"]!}></view-lesson>`,
       enter: async (params) => {
-        if ((await Lesson.avaible())[params["id"]!] != null) {
+        if ((await avaibleLessons()).get(params["id"]!) != null) {
           return true;
         }
 

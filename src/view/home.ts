@@ -8,7 +8,7 @@ import {
   IgcDialogComponent,
 } from "igniteui-webcomponents";
 
-import { Lesson } from "lesson";
+import { LessonData, LessonMetadata, avaibleLessons } from "lesson";
 import { currentSession } from "session";
 
 import type { PartialNavDrawer } from "./partial/nav-drawer";
@@ -49,15 +49,27 @@ export class ViewHome extends LitElement {
 
     defineComponents(IgcDialogComponent, IgcCardComponent, IgcButtonComponent);
 
-    Lesson.avaible().then((lessons) => {
-      this.lessons = lessons;
+    avaibleLessons().then((lessons) => {
+      this._lessonsMetadata = lessons;
+
+      for (let [id] of this._lessonsMetadata) {
+        this._lessonsMetadata
+          .get(id)!
+          .load()
+          .then((lesson) => {
+            this._lessonsData.set(id, lesson);
+            this.requestUpdate();
+          });
+      }
     });
 
     this.loadTotalScore();
   }
 
   @state()
-  lessons: { [id: string]: Lesson } = {};
+  private _lessonsMetadata = new Map<string, LessonMetadata>();
+  @state()
+  private _lessonsData = new Map<string, LessonData>();
 
   @state()
   private _session = currentSession();
@@ -69,10 +81,14 @@ export class ViewHome extends LitElement {
   private _navDrawer!: PartialNavDrawer;
 
   override render() {
-    const lessons: Lesson[] = [];
-    for (let id in this.lessons) {
+    if (this._lessonsData.size === 0) {
+      return html`Loading...`;
+    }
+
+    const lessonsId: string[] = [];
+    for (let [id] of this._lessonsMetadata) {
       if (this._session.getPoints(id) <= 75) {
-        lessons.push(this.lessons[id]);
+        lessonsId.push(id);
       }
     }
 
@@ -90,28 +106,28 @@ export class ViewHome extends LitElement {
             <h2 slot="title">Puntos totales: ${this.totalScore}</h2>
           </igc-card-header>
         </igc-card>
-        ${lessons.map(
-          (i) => html`
+        ${lessonsId.map(
+          (id) => html`
             <igc-card>
               <igc-card-header>
-                <h2 slot="title">${i.name}</h2>
-                <h3 slot="subtitle">${i.title}</h3>
+                <h2 slot="title">${this._lessonsMetadata.get(id)!.name}</h2>
+                <h3 slot="subtitle">${this._lessonsData.get(id)!.title}</h3>
               </igc-card-header>
               <igc-card-content>
-                <p>${i.description}</p>
+                <p>${this._lessonsData.get(id)!.description}</p>
               </igc-card-content>
               <igc-card-actions>
                 <igc-button
                   slot="start"
                   @click=${() => {
-                    this._startLesson(i);
+                    this._startLesson(id);
                   }}
                   >Comenzar</igc-button
                 >
                 <igc-button
                   slot="end"
                   @click=${() => {
-                    this._showLessonDescription(i);
+                    this._showLessonDescription(this._lessonsData.get(id)!);
                   }}
                   >Previsualizar</igc-button
                 >
@@ -130,16 +146,16 @@ export class ViewHome extends LitElement {
   @query("igc-dialog", true)
   private _dialog!: IgcDialogComponent;
 
-  private _showLessonDescription(lesson: Lesson) {
+  private _showLessonDescription(lesson: LessonData) {
     this._dialog.innerHTML = `<p>${lesson.summary}</p>`;
     this._dialog.show();
   }
 
-  private _startLesson(lesson: Lesson) {
+  private _startLesson(id: string) {
     this.dispatchEvent(
       new CustomEvent("goto-url", {
         composed: true,
-        detail: `/lesson/${lesson.id}`,
+        detail: `/lesson/${id}`,
       }),
     );
   }

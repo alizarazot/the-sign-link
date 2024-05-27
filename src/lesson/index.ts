@@ -1,96 +1,46 @@
-export class Lesson {
-  static readonly rootDirectory = location.origin + "/lesson";
-  static readonly rootIndex = Lesson.rootDirectory + "/index.json";
+const rootDirectory = location.origin + "/lesson";
+const rootIndex = rootDirectory + "/index.json";
 
+export class LessonMetadata {
   constructor(
-    public readonly id: string,
+    private readonly _id: string,
     public readonly name: string,
-    public readonly title: string,
-    public readonly require: Lesson[],
-    public readonly description: string,
-    public readonly summary: string,
-    public readonly content: LessonContent[],
-    public readonly questions: SingleChoiceQuestion[],
+    public readonly require: LessonMetadata[],
   ) {}
 
-  static async avaible(): Promise<{ [id: string]: Lesson }> {
-    const lessonIndex = await (await fetch(Lesson.rootIndex)).json();
+  async load(): Promise<LessonData> {
+    const rawLesson = await LessonMetadata.rawLessonDetails(this._id);
 
-    let lessons: { [id: string]: Lesson } = {};
-
-    for (let rawLesson of lessonIndex) {
-      let require = Lesson.parseRequeriments(rawLesson.require, lessons);
-
-      let rawLessonDetails: any;
-      try {
-        rawLessonDetails = await Lesson.rawLessonDetails(rawLesson.id);
-      } catch (e) {
-        console.error("Invalid or unexistent lesson content:", rawLesson.id);
-        continue;
-      }
-
-      lessons[rawLesson.id] = new Lesson(
-        rawLesson.id,
-        rawLesson.name,
-        rawLessonDetails.title,
-        require,
-        rawLessonDetails.description,
-        rawLessonDetails.summary,
-        Lesson.parseContent(rawLessonDetails.content),
-        Lesson.parseQuestions(rawLessonDetails.questions),
-      );
-    }
-
-    return lessons;
+    return new LessonData(
+      rawLesson.title,
+      rawLesson.description,
+      rawLesson.summary,
+      LessonMetadata.parseQuestions(rawLesson.questions),
+    );
   }
 
   protected static async rawLessonDetails(id: string): Promise<any> {
-    return await (
-      await fetch(Lesson.rootDirectory + "/" + id + "/index.json")
-    ).json();
+    return await (await fetch(rootDirectory + "/" + id + "/index.json")).json();
   }
 
-  protected static parseRequeriments(
-    require: string[],
-    lessons: { [id: string]: Lesson },
-  ): Lesson[] {
-    let requeriments: Lesson[] = [];
+  protected static parseQuestions(questions: any): Question[] {
+    let parsedQuestions: Question[] = [];
 
-    for (let req of require) {
-      for (let id in lessons) {
-        if (req === id) {
-          requeriments.push(lessons[id]);
-        }
-      }
-    }
-
-    return requeriments;
-  }
-
-  protected static parseQuestions(questions: any): SingleChoiceQuestion[] {
-    let parsedQuestions: SingleChoiceQuestion[] = [];
-
-    for (let question of questions) {
-      if (question.type !== "single-choice") {
-        console.error("Unkonown question type:", question.type);
-        continue;
-      }
-
-      parsedQuestions.push(SingleChoiceQuestion.parse(question));
+    for (let question in questions) {
+      parsedQuestions.push(Question.parse(questions[question]));
     }
 
     return parsedQuestions;
   }
+}
 
-  protected static parseContent(content: any): LessonContent[] {
-    let parsedContent: LessonContent[] = [];
-
-    for (let c of content) {
-      parsedContent.push(LessonContent.parse(c));
-    }
-
-    return parsedContent;
-  }
+export class LessonData {
+  constructor(
+    public readonly title: string,
+    public readonly description: string,
+    public readonly summary: string,
+    public readonly questions: Question[],
+  ) {}
 }
 
 export class LessonContent {
@@ -103,16 +53,27 @@ export class LessonContent {
     if (content.type === "image") {
       return new LessonContent(
         content.type,
-        Lesson.rootDirectory + "/image/" + content.content,
+        rootDirectory + "/image/" + content.content,
       );
     }
 
     return new LessonContent(content.type, content.content);
   }
+
+  static parseList(content: any): LessonContent[] {
+    let parsedContent: LessonContent[] = [];
+
+    for (let c of content) {
+      parsedContent.push(LessonContent.parse(c));
+    }
+
+    return parsedContent;
+  }
 }
 
-export class SingleChoiceQuestion {
+export class Question {
   constructor(
+    public readonly lesson: LessonContent[],
     public readonly question: string,
     public readonly answers: string[],
     private readonly _indexCorrect: number,
@@ -122,11 +83,46 @@ export class SingleChoiceQuestion {
     return this.answers[this._indexCorrect];
   }
 
-  static parse(question: any): SingleChoiceQuestion {
-    return new SingleChoiceQuestion(
+  static parse(question: any): Question {
+    return new Question(
+      LessonContent.parseList(question.lesson),
       question.question,
       question.answers,
       question.correct,
     );
   }
+}
+
+export async function avaibleLessons(): Promise<Map<string, LessonMetadata>> {
+  const lessonIndex = await (await fetch(rootIndex)).json();
+
+  let lessons = new Map<string, LessonMetadata>();
+
+  for (let rawLesson of lessonIndex) {
+    let require = parseLessonRequeriments(rawLesson.require, lessons);
+
+    lessons.set(
+      rawLesson.id,
+      new LessonMetadata(rawLesson.id, rawLesson.name, require),
+    );
+  }
+
+  return lessons;
+}
+
+function parseLessonRequeriments(
+  require: string[],
+  lessons: Map<string, LessonMetadata>,
+): LessonMetadata[] {
+  let requeriments: LessonMetadata[] = [];
+
+  for (let req of require) {
+    for (let [id, lesson] of lessons) {
+      if (req === id) {
+        requeriments.push(lesson);
+      }
+    }
+  }
+
+  return requeriments;
 }

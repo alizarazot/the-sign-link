@@ -2,54 +2,44 @@
   "title": "Prueba de conocimientos",
   "description": "¡Pon a prueba tus conocimientos de Lengua de Señas Colombiana!",
   "summary": "Esta prueba nos permitirá conocer su nivel de conocimiento actual de la Lengua de Señas Colombiana.",
-  "content": [
-    {
-      "type": "title",
-      "content": "Prueba diagnóstica de Lengua de Señas Colombiana (LSC)"
-    },
-    {
-      "type": "image",
-      "content": "s/hola.png"
-    },
-    {
-      "type": "paragraph",
-      "content": "La prueba diagnóstica de Lengua de Señas Colombiana (LSC) se utiliza para evaluar el nivel de competencia y fluidez en la Lengua de Señas Colombiana. Esta prueba es crucial para determinar el grado de habilidad y comprensión en la comunicación a través de la LSC."
-    }
-  ],
-  "questions": [
-    {
+  "questions": {
+    "q-1": {
+      "lesson": [
+        {
+          "type": "title",
+          "content": "Prueba diagnóstica de Lengua de Señas Colombiana (LSC)"
+        },
+        {
+          "type": "image",
+          "content": "s/hola.png"
+        },
+        {
+          "type": "paragraph",
+          "content": "La prueba diagnóstica de Lengua de Señas Colombiana (LSC) se utiliza para evaluar el nivel de competencia y fluidez en la Lengua de Señas Colombiana. Esta prueba es crucial para determinar el grado de habilidad y comprensión en la comunicación a través de la LSC."
+        }
+      ],
       "question": "¿Qué parte del cuerpo se utiliza principalmente para expresar emociones en Lengua de Señas Colombiana?",
-      "type": "single-choice",
       "answers": ["Manos", "Pies", "Brazos", "Rostro"],
       "correct": 3
     },
-    {
-      "question": "¿Qué significa cuando se agita la mano de un lado a otro en Lengua de Señas Colombiana?",
-      "type": "single-choice",
-      "answers": ["Saludo", "Aprobación", "Negación", "Agradecimiento"],
-      "correct": 2
-    },
-    {
-      "question": "¿Cuál es la importancia de las expresiones faciales en la Lengua de Señas Colombiana?",
-      "type": "single-choice",
-      "answers": [
-        "No tienen importancia",
-        "Solo se utilizan para enfatizar",
-        "Son fundamentales para transmitir significado",
-        "Son opcionales"
+    "q-2": {
+      "lesson": [
+        {
+          "type": "title",
+          "content": "Prueba diagnóstica de Lengua de Señas Colombiana (LSC)"
+        },
+        {
+          "type": "image",
+          "content": "s/hola.png"
+        },
+        {
+          "type": "paragraph",
+          "content": "La prueba diagnóstica de Lengua de Señas Colombiana (LSC) se utiliza para evaluar el nivel de competencia y fluidez en la Lengua de Señas Colombiana. Esta prueba es crucial para determinar el grado de habilidad y comprensión en la comunicación a través de la LSC."
+        }
       ],
-      "correct": 2
-    },
-    {
-      "question": "¿Cómo se expresan los números del 1 al 5 en Lengua de Señas Colombiana?",
-      "type": "single-choice",
-      "answers": [
-        "Con movimientos de los labios",
-        "Con gestos faciales",
-        "Con una sola mano",
-        "Con los dedos de ambas manos"
-      ],
+      "question": "¿Qué parte del cuerpo se utiliza principalmente para expresar emociones en Lengua de Señas Colombiana?",
+      "answers": ["Manos", "Pies", "Brazos", "Rostro"],
       "correct": 3
     }
-  ]
+  }
 }

@@ -25,6 +25,7 @@ export class ViewHome extends LitElement {
     :host {
       display: flex;
       flex-direction: column;
+      height: 100%;
 
       font-family: sans-serif;
     }
@@ -136,6 +137,14 @@ export class ViewHome extends LitElement {
 
         <h2>Lecciones</h2>
 
+        <igc-button
+          class="next-lesson"
+          @click=${() => {
+            this._startLesson(lessons.entries().next().value[0]);
+          }}
+          >Siguiente lección</igc-button
+        >
+
         ${(() => {
           const render = new Array<TemplateResult>();
 
@@ -166,14 +175,6 @@ export class ViewHome extends LitElement {
           return render;
         })()}
       </div>
-
-      <igc-button
-        class="next-lesson"
-        @click=${() => {
-          this._startLesson(lessons.entries().next().value[0]);
-        }}
-        >Siguiente lección</igc-button
-      >
     `;
   }
 

@@ -1,17 +1,24 @@
 import { LitElement, css, html } from "lit";
 
-import { customElement, property, queryAll, state } from "lit/decorators.js";
+import {
+  customElement,
+  property,
+  query,
+  queryAll,
+  state,
+} from "lit/decorators.js";
 
 import {
   IgcButtonComponent,
   IgcCardComponent,
+  IgcCardContentComponent,
   IgcCircularProgressComponent,
   defineComponents,
 } from "igniteui-webcomponents";
 
 import { ComponentSingleChoiceQuestion } from "component/single-choice-question";
 
-import { Lesson, loadLesson } from "lesson";
+import { Lesson, Question, loadLesson } from "lesson";
 import { currentSession } from "session";
 
 @customElement("view-lesson")
@@ -171,7 +178,9 @@ export class ViewLesson extends LitElement {
           })}
         </igc-card-content>
         <igc-card-actions>
-          <igc-button class="next">Continuar</igc-button>
+          <igc-button class="next" @click=${this._nextQuestion}
+            >Continuar</igc-button
+          >
         </igc-card-actions>
       </igc-card>
     `;
@@ -190,8 +199,25 @@ export class ViewLesson extends LitElement {
     });
   }
 
+  @state()
+  private _questionIterator?: IterableIterator<[string, Question]>;
+  @query("igc-card-content")
+  private _informationContainer!: IgcCardContentComponent;
+
   private _nextQuestion() {
-    this._currentQuestion = this._lesson?.questions.entries().next().value[0];
+    if (this._questionIterator == null) {
+      this._questionIterator = this._lesson?.questions.entries();
+    }
+
+    const nextQuestion = this._questionIterator?.next().value?.[0];
+
+    if (nextQuestion == null) {
+      this._handleLessonEnd();
+      return;
+    }
+
+    this._currentQuestion = nextQuestion;
+    this._informationContainer.scrollTop = 0;
   }
 
   private _handleLessonEnd() {

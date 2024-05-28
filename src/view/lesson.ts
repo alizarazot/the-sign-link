@@ -1,12 +1,6 @@
 import { LitElement, css, html } from "lit";
 
-import {
-  customElement,
-  property,
-  query,
-  queryAll,
-  state,
-} from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 
 import {
   IgcButtonComponent,
@@ -116,6 +110,10 @@ export class ViewLesson extends LitElement {
   @state()
   private _currentQuestion = "";
   @state()
+  private _showInformation = false;
+  @state()
+  private _currentQuestionRenderer?: ComponentSingleChoiceQuestion;
+  @state()
   private _score = 0;
 
   protected override render(): unknown {
@@ -156,27 +154,49 @@ export class ViewLesson extends LitElement {
 
     const question = this._lesson.questions.get(this._currentQuestion)!;
 
+    if (this._showInformation) {
+      return html`
+        <igc-button class="close" @click=${this._handleLessonEnd}
+          >Volver al inicio</igc-button
+        >
+        <igc-card>
+          <igc-card-header>
+            <h2 slot="title">Tema</h2>
+            <h3 slot="subtitle">${this._lesson.name}</h3>
+          </igc-card-header>
+          <igc-card-content>
+            ${question.information.map((info) => {
+              switch (info.type) {
+                case "title":
+                  return html`<h4>${info.content}</h4>`;
+                case "paragraph":
+                  return html`<p>${info.content}</p>`;
+                case "image":
+                  return html`<img src=${info.content} />`;
+              }
+            })}
+          </igc-card-content>
+          <igc-card-actions>
+            <igc-button class="next" @click=${this._nextQuestion}
+              >Continuar</igc-button
+            >
+          </igc-card-actions>
+        </igc-card>
+      `;
+    }
+
+    this._currentQuestionRenderer = new ComponentSingleChoiceQuestion(question);
+
     return html`
       <igc-button class="close" @click=${this._handleLessonEnd}
         >Volver al inicio</igc-button
       >
       <igc-card>
         <igc-card-header>
-          <h2 slot="title">Tema</h2>
+          <h2 slot="title">Pregunta</h2>
           <h3 slot="subtitle">${this._lesson.name}</h3>
         </igc-card-header>
-        <igc-card-content>
-          ${question.information.map((info) => {
-            switch (info.type) {
-              case "title":
-                return html`<h4>${info.content}</h4>`;
-              case "paragraph":
-                return html`<p>${info.content}</p>`;
-              case "image":
-                return html`<img src=${info.content} />`;
-            }
-          })}
-        </igc-card-content>
+        <igc-card-content> ${this._currentQuestionRenderer} </igc-card-content>
         <igc-card-actions>
           <igc-button class="next" @click=${this._nextQuestion}
             >Continuar</igc-button
@@ -186,38 +206,50 @@ export class ViewLesson extends LitElement {
     `;
   }
 
-  @queryAll("component-single-choice-question")
-  private _singleChoiceQuestions!: ComponentSingleChoiceQuestion[];
-
-  protected _calculateScore() {
-    this._score = 0;
-
-    this._singleChoiceQuestions.forEach((question) => {
-      if (question.isActiveCorrectAnswer()) {
-        this._score += 100 / this._singleChoiceQuestions.length;
-      }
-    });
-  }
-
   @state()
-  private _questionIterator?: IterableIterator<[string, Question]>;
+  private _questionQueue = new Map<string, boolean>(); // The key holds the id, and the value if the informations has been show.
   @query("igc-card-content")
   private _informationContainer!: IgcCardContentComponent;
 
   private _nextQuestion() {
-    if (this._questionIterator == null) {
-      this._questionIterator = this._lesson?.questions.entries();
+    if (this._showInformation) {
+      this._questionQueue.set(this._currentQuestion, false);
+    } else {
+      this._questionQueue.delete(this._currentQuestion);
     }
 
-    const nextQuestion = this._questionIterator?.next().value?.[0];
+    if (Math.random() > 0.5 || this._questionQueue.size === 0) {
+      this._updateQuestionQueue();
+    }
 
-    if (nextQuestion == null) {
+    if (this._questionQueue.size === 0) {
       this._handleLessonEnd();
       return;
     }
 
-    this._currentQuestion = nextQuestion;
+    this._currentQuestion = this._getRandomQuestionFromQueue();
+    this._showInformation =
+      this._questionQueue.get(this._currentQuestion) ?? false;
     this._informationContainer.scrollTop = 0;
+  }
+
+  @state()
+  private _questionIterator?: IterableIterator<[string, Question]>;
+
+  private _updateQuestionQueue() {
+    if (this._questionIterator == null) {
+      this._questionIterator = this._lesson?.questions.entries();
+    }
+
+    const question = this._questionIterator?.next().value?.[0];
+    if (question != null) {
+      this._questionQueue.set(question, true);
+    }
+  }
+
+  private _getRandomQuestionFromQueue(): string {
+    let questions = Array.from(this._questionQueue.keys());
+    return questions[Math.floor(Math.random() * questions.length)];
   }
 
   private _handleLessonEnd() {

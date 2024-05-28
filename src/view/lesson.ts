@@ -113,8 +113,6 @@ export class ViewLesson extends LitElement {
   private _showInformation = false;
   @state()
   private _currentQuestionRenderer?: ComponentSingleChoiceQuestion;
-  @state()
-  private _score = 0;
 
   protected override render(): unknown {
     if (this._lesson == null) {
@@ -206,16 +204,29 @@ export class ViewLesson extends LitElement {
     `;
   }
 
-  @state()
-  private _questionQueue = new Map<string, boolean>(); // The key holds the id, and the value if the informations has been show.
   @query("igc-card-content")
   private _informationContainer!: IgcCardContentComponent;
 
+  @state()
+  private _questionQueue = new Map<string, boolean>(); // The key holds the id, and the value if the informations has been show.
+  @state()
+  private _pointsPerQuestion = 0;
+  @state()
+  private _score = 0;
+
   private _nextQuestion() {
+    if (this._pointsPerQuestion === 0) {
+      this._pointsPerQuestion = 100 / this._lesson?.questions.size!;
+    }
+
     if (this._showInformation) {
       this._questionQueue.set(this._currentQuestion, false);
     } else {
       this._questionQueue.delete(this._currentQuestion);
+
+      if (this._currentQuestionRenderer?.isActiveCorrectAnswer()) {
+        this._score += this._pointsPerQuestion;
+      }
     }
 
     if (Math.random() > 0.5 || this._questionQueue.size === 0) {

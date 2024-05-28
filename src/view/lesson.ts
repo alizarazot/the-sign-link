@@ -1,17 +1,11 @@
 import { LitElement, css, html } from "lit";
 
-import {
-  customElement,
-  property,
-  query,
-  queryAll,
-  state,
-} from "lit/decorators.js";
+import { customElement, property, queryAll, state } from "lit/decorators.js";
 
 import {
   IgcButtonComponent,
+  IgcCardComponent,
   IgcCircularProgressComponent,
-  IgcStepperComponent,
   defineComponents,
 } from "igniteui-webcomponents";
 
@@ -20,51 +14,16 @@ import { ComponentSingleChoiceQuestion } from "component/single-choice-question"
 import { Lesson, loadLesson } from "lesson";
 import { currentSession } from "session";
 
-import type { PartialNavDrawer } from "view/partial/nav-drawer";
-
-import "view/partial/nav-drawer";
-import "view/partial/navbar";
-
 @customElement("view-lesson")
 export class ViewLesson extends LitElement {
   static override styles = css`
     :host {
-      display: block;
-      height: 80px;
-    }
-
-    :host([hidden]) {
-      display: none;
-    }
-
-    igc-stepper {
-      padding: 2px;
-      overflow-x: auto;
-    }
-
-    .container {
-      max-width: 70ch;
-      margin: auto;
-    }
-
-    .container component-single-choice-question {
-      margin-bottom: 40px;
-    }
-
-    img {
-      max-width: 80%;
-      width: 300px;
-      margin: 40px auto;
-      display: block;
-      border: 5px solid #000;
-      border-radius: 25px;
-    }
-
-    .result {
-      text-align: center;
-      font-weight: bold;
-      font-size: 50px;
-      display: block;
+      display: flex;
+      flex-direction: column;
+      height: 100dvh;
+      padding: 16px;
+      gap: 16px;
+      box-sizing: border-box;
     }
 
     igc-circular-progress {
@@ -72,6 +31,33 @@ export class ViewLesson extends LitElement {
       top: 50%;
       left: 50%;
       transform: translate(-50%, 50%);
+    }
+
+    igc-button.close {
+      align-self: flex-start;
+    }
+
+    igc-card {
+      width: fit-content;
+      align-self: center;
+      margin: auto;
+
+      display: flex;
+      flex-direction: row;
+    }
+
+    .content {
+      max-width: 70ch;
+    }
+
+    @media (max-width: 500px) {
+      igc-card {
+        flex-direction: column;
+      }
+
+      .media {
+        overflow-y: hidden;
+      }
     }
   `;
 
@@ -86,7 +72,7 @@ export class ViewLesson extends LitElement {
 
     defineComponents(
       IgcButtonComponent,
-      IgcStepperComponent,
+      IgcCardComponent,
       IgcCircularProgressComponent,
     );
   }
@@ -96,69 +82,58 @@ export class ViewLesson extends LitElement {
 
   @state()
   private _lesson?: Lesson;
-
+  @state()
+  private _currentQuestion = "";
   @state()
   private _score = 0;
 
-  @query("partial-nav-drawer")
-  private _navDrawer!: PartialNavDrawer;
-
   protected override render(): unknown {
     if (this._lesson == null) {
-      return html`<igc-circular-progress
-        indeterminate
-      ></igc-circular-progress>`;
+      return html`
+        <!-- Show a spinner while lesson loads. -->
+        <igc-circular-progress indeterminate></igc-circular-progress>
+      `;
     }
 
-    let questions: ComponentSingleChoiceQuestion[] = [];
-
-    for (let [_, question] of this._lesson.questions) {
-      questions.push(new ComponentSingleChoiceQuestion(question));
+    if (this._currentQuestion === "") {
+      return html`
+        <igc-button class="close" @click=${this._handleLessonEnd}
+          >Volver al inicio</igc-button
+        >
+        <igc-card>
+          <div class="media">
+            <igc-card-media>
+              <img src=${this._lesson.image} />
+            </igc-card-media>
+          </div>
+          <div class="content">
+            <igc-card-header>
+              <h2>${this._lesson.name}</h2>
+            </igc-card-header>
+            <igc-card-content>
+              <p>${this._lesson.description}</p>
+            </igc-card-content>
+            <igc-card-actions>
+              <igc-button @click=${this._nextQuestion}>
+                Comenzar lección
+              </igc-button>
+            </igc-card-actions>
+          </div>
+        </igc-card>
+      `;
     }
 
     return html`
-      <partial-navbar
-        @open-menu=${() => {
-          this._navDrawer.show();
-        }}
-      ></partial-navbar>
-      <partial-nav-drawer></partial-nav-drawer>
-
-      <igc-stepper @igcActiveStepChanging=${this._calculateScore}>
-        <igc-step>
-          <span slot="title">Descripción</span>
-          <div class="container">
-            ${this._lesson.questions.get("q-1")!.information.map((i) => {
-              // ^ Temporary workarount.
-              switch (i.type) {
-                case "title":
-                  return html`<h2>${i.content}</h2>`;
-                  break;
-                case "paragraph":
-                  return html`<p>${i.content}</p>`;
-                  break;
-                case "image":
-                  return html`<img src=${i.content} />`;
-                  break;
-              }
-            })}
-          </div>
-        </igc-step>
-        <igc-step>
-          <span slot="title">Preguntas</span>
-          <div class="container">${questions}</div>
-        </igc-step>
-        <igc-step>
-          <span slot="title">Resultados</span>
-          <div class="container">
-            <p>Estos son los resultados de tu prueba:</p>
-            <span class="result">${this._score}/100.</span>
-            <igc-button @click=${this._handleLessonEnd}
-              >Finalizar lección</igc-button
-            >
-          </div>
-        </igc-step>
-      </igc-stepper>
+      <igc-button class="close" @click=${this._handleLessonEnd}
+        >Volver al inicio</igc-button
+      >
+      <igc-card>
+        <igc-card-header><h2 slot="title">Títutlo</h2></igc-card-header>
+        <igc-card-content>This is content</igc-card-content>
+        <igc-card-actions>
+          <igc-button>Verificar</igc-button>
+        </igc-card-actions>
+      </igc-card>
     `;
   }
 
@@ -175,6 +150,10 @@ export class ViewLesson extends LitElement {
     });
   }
 
+  private _nextQuestion() {
+    this._currentQuestion = this._lesson?.questions.entries().next().value[0];
+  }
+
   private _handleLessonEnd() {
     if (this._lesson != null) {
       currentSession().setPoints(this.lessonId, this._score);
@@ -183,13 +162,6 @@ export class ViewLesson extends LitElement {
     this.dispatchEvent(
       new CustomEvent("goto-url", { composed: true, detail: "/" }),
     );
-  }
-
-  @query("igc-stepper")
-  private _igcStepper!: IgcStepperComponent;
-
-  reset() {
-    this._igcStepper.navigateTo(0);
   }
 }
 

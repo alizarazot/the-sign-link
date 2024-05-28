@@ -38,24 +38,48 @@ export class ViewLesson extends LitElement {
     }
 
     igc-card {
-      width: fit-content;
+      width: 100%;
+      max-width: 70ch;
+
       align-self: center;
       margin: auto;
+    }
+
+    igc-card.resume {
+      width: fit-content;
+      max-width: none;
 
       display: flex;
       flex-direction: row;
     }
 
-    .content {
+    .resume .content {
       max-width: 70ch;
     }
 
+    igc-card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    igc-card-content img {
+      width: 100%;
+      max-width: 35ch;
+      display: block;
+      margin: 0 auto;
+    }
+
+    igc-button.next {
+      width: 100%;
+    }
+
     @media (max-width: 500px) {
-      igc-card {
+      igc-card.resume {
         flex-direction: column;
       }
 
-      .media {
+      .resume .media {
         overflow-y: hidden;
       }
     }
@@ -100,7 +124,7 @@ export class ViewLesson extends LitElement {
         <igc-button class="close" @click=${this._handleLessonEnd}
           >Volver al inicio</igc-button
         >
-        <igc-card>
+        <igc-card class="resume">
           <div class="media">
             <igc-card-media>
               <img src=${this._lesson.image} />
@@ -123,15 +147,31 @@ export class ViewLesson extends LitElement {
       `;
     }
 
+    const question = this._lesson.questions.get(this._currentQuestion)!;
+
     return html`
       <igc-button class="close" @click=${this._handleLessonEnd}
         >Volver al inicio</igc-button
       >
       <igc-card>
-        <igc-card-header><h2 slot="title">Títutlo</h2></igc-card-header>
-        <igc-card-content>This is content</igc-card-content>
+        <igc-card-header>
+          <h2 slot="title">Tema</h2>
+          <h3 slot="subtitle">${this._lesson.name}</h3>
+        </igc-card-header>
+        <igc-card-content>
+          ${question.information.map((info) => {
+            switch (info.type) {
+              case "title":
+                return html`<h4>${info.content}</h4>`;
+              case "paragraph":
+                return html`<p>${info.content}</p>`;
+              case "image":
+                return html`<img src=${info.content} />`;
+            }
+          })}
+        </igc-card-content>
         <igc-card-actions>
-          <igc-button>Verificar</igc-button>
+          <igc-button class="next">Continuar</igc-button>
         </igc-card-actions>
       </igc-card>
     `;

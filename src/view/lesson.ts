@@ -112,6 +112,8 @@ export class ViewLesson extends LitElement {
   @state()
   private _showInformation = false;
   @state()
+  private _showScore = false;
+  @state()
   private _currentQuestionRenderer?: ComponentSingleChoiceQuestion;
 
   protected override render(): unknown {
@@ -146,6 +148,33 @@ export class ViewLesson extends LitElement {
               </igc-button>
             </igc-card-actions>
           </div>
+        </igc-card>
+      `;
+    }
+
+    if (this._showScore) {
+      return html`
+        <igc-card>
+          <igc-card-header>
+            <h2 slot="title">¡Has terminado la lección!</h2>
+          </igc-card-header>
+          <igc-card-content>
+            <h3>Has obtenido ${this._score} puntos de 100.</h3>
+            ${(() => {
+              if (this._score > 75) {
+                return html`Has obtenido un puntaje muy alto, por lo que no
+                necesitarás volver a hacer la lección. ¡Puedes continuar con las
+                demás lecciones!`;
+              }
+
+              return null;
+            })()}
+          </igc-card-content>
+          <igc-card-actions>
+            <igc-button @click=${this._handleLessonEnd}
+              >Volver al inicio</igc-button
+            >
+          </igc-card-actions>
         </igc-card>
       `;
     }
@@ -234,7 +263,7 @@ export class ViewLesson extends LitElement {
     }
 
     if (this._questionQueue.size === 0) {
-      this._handleLessonEnd();
+      this._showScore = true;
       return;
     }
 

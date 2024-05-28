@@ -16,9 +16,8 @@ export class ComponentSingleChoiceQuestion extends LitElement {
       display: block;
     }
 
-    span {
-      display: block;
-      margin-bottom: 15px;
+    h4 {
+      margin-top: 0;
     }
 
     igc-radio {
@@ -46,7 +45,7 @@ export class ComponentSingleChoiceQuestion extends LitElement {
 
   override render() {
     return html`
-      <span>${this.question.question}</span>
+      <h4>${this.question.question}</h4>
       <igc-radio-group>
         ${this.question.answers.map(
           (elem, i) => html`

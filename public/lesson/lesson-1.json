@@ -1,65 +1,102 @@
 {
-  "name": "Prueba diagnóstica",
-  "image": "s/hola.png",
-  "description": "¡Pon a prueba tus conocimientos de Lengua de Señas Colombiana!",
+  "name": "Vocales en la Lengua de Señas Colombiana",
+  "image": "s/alfabeto-manual.png",
+  "description": "Conoce las representaciones de las vocales en la Lengua de Señas Colombiana.",
   "questions": {
-    "q-1": {
+    "a": {
       "information": [
         {
           "type": "title",
-          "content": "Prueba diagnóstica de Lengua de Señas Colombiana (LSC)"
+          "content": "La vocal «A»."
         },
         {
           "type": "image",
-          "content": "s/hola.png"
+          "content": "s/a.png"
         },
         {
           "type": "paragraph",
-          "content": "La prueba diagnóstica de Lengua de Señas Colombiana (LSC) se utiliza para evaluar el nivel de competencia y fluidez en la Lengua de Señas Colombiana. Esta prueba es crucial para determinar el grado de habilidad y comprensión en la comunicación a través de la LSC."
-        },
-        {
-          "type": "paragraph",
-          "content": "La prueba diagnóstica de Lengua de Señas Colombiana (LSC) se utiliza para evaluar el nivel de competencia y fluidez en la Lengua de Señas Colombiana. Esta prueba es crucial para determinar el grado de habilidad y comprensión en la comunicación a través de la LSC."
-        },
-        {
-          "type": "title",
-          "content": "Prueba diagnóstica de Lengua de Señas Colombiana (LSC)"
-        },
-        {
-          "type": "image",
-          "content": "s/hola.png"
-        },
-        {
-          "type": "paragraph",
-          "content": "La prueba diagnóstica de Lengua de Señas Colombiana (LSC) se utiliza para evaluar el nivel de competencia y fluidez en la Lengua de Señas Colombiana. Esta prueba es crucial para determinar el grado de habilidad y comprensión en la comunicación a través de la LSC."
-        },
-        {
-          "type": "paragraph",
-          "content": "La prueba diagnóstica de Lengua de Señas Colombiana (LSC) se utiliza para evaluar el nivel de competencia y fluidez en la Lengua de Señas Colombiana. Esta prueba es crucial para determinar el grado de habilidad y comprensión en la comunicación a través de la LSC."
+          "content": "Se forma con la mano extendida y los dedos juntos, con el pulgar extendido hacia afuera."
         }
       ],
-      "question": "¿Qué parte del cuerpo se utiliza principalmente para expresar emociones en Lengua de Señas Colombiana?",
-      "answers": ["Manos", "Pies", "Brazos", "Rostro"],
+      "question": "¿Cuál vocal en LSC se señala con el pulgar extendido hacia afuera y los dedos juntos?",
+      "answers": ["A", "E", "I", "O", "U"],
+      "correct": 0
+    },
+    "e": {
+      "information": [
+        {
+          "type": "title",
+          "content": "La vocal «E»."
+        },
+        {
+          "type": "image",
+          "content": "s/e.png"
+        },
+        {
+          "type": "paragraph",
+          "content": "Se forma al extender la mano, pero recogiendo todos los dedos excepto el pulgar, que va extendido hacia afuera."
+        }
+      ],
+      "question": "¿Cuál vocal en LSC se señala al recoger casi todos los dedos?",
+      "answers": ["A", "E", "I", "O", "U"],
+      "correct": 1
+    },
+    "i": {
+      "information": [
+        {
+          "type": "title",
+          "content": "La vocal «I»."
+        },
+        {
+          "type": "image",
+          "content": "s/i.png"
+        },
+        {
+          "type": "paragraph",
+          "content": "Se representa en LSC levantando el dedo meñique, lo cual es una seña fácil de recordar ya que el dedo meñique es el más pequeño, al igual que la «I» es la vocal más corta en la pronunciación."
+        }
+      ],
+      "question": "¿Cuál vocal en LSC se señala con el dedo meñique levantado?",
+      "answers": ["A", "E", "I", "O", "U"],
+      "correct": 2
+    },
+    "o": {
+      "information": [
+        {
+          "type": "title",
+          "content": "La vocal «O»."
+        },
+        {
+          "type": "image",
+          "content": "s/o.png"
+        },
+        {
+          "type": "paragraph",
+          "content": "Se señala en LSC formando un círculo con los labios y la mano, imitando la forma que toman los labios al pronunciar esta vocal en voz alta."
+        }
+      ],
+      "question": "¿Cuál vocal en LSC se señala formando un círculo con los labios?",
+      "answers": ["A", "E", "I", "O", "U"],
       "correct": 3
     },
-    "q-2": {
+    "u": {
       "information": [
         {
           "type": "title",
-          "content": "Prueba diagnóstica de Lengua de Señas Colombiana (LSC)"
+          "content": "La vocal «U»."
         },
         {
           "type": "image",
-          "content": "s/hola.png"
+          "content": "s/u.png"
         },
         {
           "type": "paragraph",
-          "content": "La prueba diagnóstica de Lengua de Señas Colombiana (LSC) se utiliza para evaluar el nivel de competencia y fluidez en la Lengua de Señas Colombiana. Esta prueba es crucial para determinar el grado de habilidad y comprensión en la comunicación a través de la LSC."
+          "content": "Se hace una figura de «U» con los dedos índice y meñique, mientras que los demás dedos están recogidos."
         }
       ],
-      "question": "¿Qué parte del cuerpo se utiliza principalmente para expresar emociones en Lengua de Señas Colombiana?",
-      "answers": ["Manos", "Pies", "Brazos", "Rostro"],
-      "correct": 3
+      "question": "¿Cuál vocal en LSC se extienden únicamente los dedos índice y meñique?",
+      "answers": ["A", "E", "I", "O", "U"],
+      "correct": 4
     }
   }
 }

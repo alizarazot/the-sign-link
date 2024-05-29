@@ -1,45 +1,64 @@
 {
-  "name": "Prueba diagnóstica",
-  "image": "s/hola.png",
-  "description": "¡Pon a prueba tus conocimientos de Lengua de Señas Colombiana!",
+  "name": "Emociones en la Lengua de Señas Colombiana",
+  "image": "s/emocionado.png",
+  "description": "Aprende algunas emociones en LSC, pues, al fin y al cabo, todos somos seres humanos.",
   "questions": {
-    "q-1": {
+    "reir": {
       "information": [
         {
           "type": "title",
-          "content": "Prueba diagnóstica de Lengua de Señas Colombiana (LSC)"
+          "content": "Indicar risa."
         },
         {
           "type": "image",
-          "content": "s/hola.png"
+          "content": "s/reir.png"
         },
         {
           "type": "paragraph",
-          "content": "La prueba diagnóstica de Lengua de Señas Colombiana (LSC) se utiliza para evaluar el nivel de competencia y fluidez en la Lengua de Señas Colombiana. Esta prueba es crucial para determinar el grado de habilidad y comprensión en la comunicación a través de la LSC."
+          "content": "La seña de «reír» se hace la mostrar una sonrisa y utilizar el dedo índice al dibujar la silueta en esta."
         }
       ],
-      "question": "¿Qué parte del cuerpo se utiliza principalmente para expresar emociones en Lengua de Señas Colombiana?",
-      "answers": ["Manos", "Pies", "Brazos", "Rostro"],
-      "correct": 3
+      "question": "¿En qué seña se hace una expresión facial y se dibuja la silueta con el dedo índice?",
+      "answers": ["Reír", "Furia", "Llorar"],
+      "correct": 0
     },
-    "q-2": {
+    "furia": {
       "information": [
         {
           "type": "title",
-          "content": "Prueba diagnóstica de Lengua de Señas Colombiana (LSC)"
+          "content": "¡Estoy furioso!"
         },
         {
           "type": "image",
-          "content": "s/hola.png"
+          "content": "s/furioso.png"
         },
         {
           "type": "paragraph",
-          "content": "La prueba diagnóstica de Lengua de Señas Colombiana (LSC) se utiliza para evaluar el nivel de competencia y fluidez en la Lengua de Señas Colombiana. Esta prueba es crucial para determinar el grado de habilidad y comprensión en la comunicación a través de la LSC."
+          "content": "Para hacer la seña de «furia», primero se hace una expresión facial de enojo y luego se abre la mano y se mueve hacia arriba y hacia abajo."
         }
       ],
-      "question": "¿Qué parte del cuerpo se utiliza principalmente para expresar emociones en Lengua de Señas Colombiana?",
-      "answers": ["Manos", "Pies", "Brazos", "Rostro"],
-      "correct": 3
+      "question": "¿En qué seña se mueve la mano hacia arriba y hacia abajo?",
+      "answers": ["Reír", "Furia", "Llorar"],
+      "correct": 1
+    },
+    "llorar": {
+      "information": [
+        {
+          "type": "title",
+          "content": "Seña de «llorar»."
+        },
+        {
+          "type": "image",
+          "content": "s/llorar.png"
+        },
+        {
+          "type": "paragraph",
+          "content": "La seña de «llorar» se realiza llevando la yema del dedo de hacia el rostro, debajo de los ojos, y luego moviendo el dedo hacia abajo por la cara, simulando el acto de llorar. La expresión facial debe ser triste y conmovida para acompañar el gesto."
+        }
+      ],
+      "question": "¿En qué seña la llema del dedo comienza debajo del ojo?",
+      "answers": ["Reír", "Furia", "Llorar"],
+      "correct": 2
     }
   }
 }

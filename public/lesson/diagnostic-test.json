@@ -1,0 +1,76 @@
+{
+  "name": "Prueba diagnóstica",
+  "image": "deaf-flag.png",
+  "description": "Esta prueba le permitirá ver sus conocimientos actuales de Lengua de Señas Colombiana.",
+  "questions": {
+    "q-1": {
+      "information": [
+        {
+          "type": "title",
+          "content": "La Lengua de Señas Colombiana es un lenguaje visual-gestual."
+        },
+        {
+          "type": "image",
+          "content": "colombia-flag.png"
+        },
+        {
+          "type": "paragraph",
+          "content": "A diferencia de los lenguajes hablados, el LSC se basa en señas y movimientos realizados con las manos, el cuerpo y las expresiones faciales para comunicar mensajes. Este lenguaje es una parte integral de la identidad y cultura de la comunidad sorda, permitiéndoles interactuar y expresarse plenamente."
+        }
+      ],
+      "question": "¿Qué representa principalmente el LSC?",
+      "answers": [
+        "Una forma de comunicación escrita.",
+        "Un lenguaje visual-gestual.",
+        "Un dialecto del español.",
+        "Un código secreto utilizado por el gobierno."
+      ],
+      "correct": 2
+    },
+    "q-2": {
+      "information": [
+        {
+          "type": "title",
+          "content": "La Lengua de Señas Colombiana no solo involucra las manos para formar señas."
+        },
+        {
+          "type": "image",
+          "content": "sign-flag.jpg"
+        },
+        {
+          "type": "paragraph",
+          "content": "La LSC también incorpora expresiones faciales y movimientos corporales para transmitir emociones y énfasis. Estos componentes no manuales son esenciales para entender el contexto y el tono de lo que se está comunicando, haciendo del LSC un lenguaje rico y expresivo."
+        }
+      ],
+      "question": "¿Cuál de los siguientes es un aspecto importante del LSC?",
+      "answers": [
+        "Utiliza principalmente la voz para transmitir mensajes.",
+        "Se basa en un alfabeto fonético.",
+        "Incluye expresiones faciales y del cuerpo como parte de la comunicación.",
+        "Es idéntico al lenguaje de señas utilizado en España."
+      ],
+      "correct": 3
+    },
+    "q-3": {
+      "information": [
+        {
+          "type": "title",
+          "content": "La Federación Nacional de Sordos de Colombia (FENASCOL)."
+        },
+        { "type": "image", "content": "fenascol-icon.jpg" },
+        {
+          "type": "paragraph",
+          "content": "Es la principal organización que promueve la enseñanza y difusión del LSC. FENASCOL trabaja para garantizar que las personas sordas en Colombia tengan acceso a la educación y a otros servicios en su propio lenguaje de señas, y también aboga por los derechos y la inclusión de la comunidad sorda en la sociedad colombiana."
+        }
+      ],
+      "question": "¿Qué organización promueve la enseñanza y difusión del LSC?",
+      "answers": [
+        "La Real Academia Española.",
+        "La Federación Nacional de Sordos de Colombia (FENASCOL).",
+        "El Ministerio de Educación Nacional de Colombia.",
+        "La UNESCO."
+      ],
+      "correct": 2
+    }
+  }
+}

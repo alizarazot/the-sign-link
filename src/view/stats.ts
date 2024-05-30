@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, type TemplateResult } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 
 import { IgcListComponent, defineComponents } from "igniteui-webcomponents";
@@ -14,8 +14,27 @@ import "view/partial/nav-drawer";
 @customElement("view-stats")
 export class ViewStats extends LitElement {
   static override styles = css`
+    :host {
+      font-family: sans-serif;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
     igc-list {
-      padding: 15px;
+      margin: auto;
+      max-width: 70ch;
+    }
+
+    strong {
+      font-weight: bold;
+    }
+
+    p.nothing {
+      text-align: center;
+      margin: 0 16px;
+      margin-bottom: 8px;
     }
   `;
 
@@ -51,6 +70,27 @@ export class ViewStats extends LitElement {
       }
     }
 
+    let points: TemplateResult;
+
+    if (lessonsWithPoints.length === 0) {
+      points = html`
+        <p class="nothing">¡Aun no hay puntos!</p>
+        <p class="nothing">Haz lecciones para ganar puntos.</p>
+      `;
+    } else {
+      points = html`
+        <igc-list>
+          ${lessonsWithPoints.map(
+            (lesson) => html`
+              <igc-list-item>
+                <strong>${lesson.name}:</strong> ${lesson.points} puntos.
+              </igc-list-item>
+            `,
+          )}
+        </igc-list>
+      `;
+    }
+
     return html`
       <partial-navbar
         @open-menu=${() => {
@@ -59,17 +99,9 @@ export class ViewStats extends LitElement {
       ></partial-navbar>
       <partial-nav-drawer></partial-nav-drawer>
 
-      <h1>Estadísticas</h1>
+      <h2>Estadísticas</h2>
 
-      <igc-list>
-        ${lessonsWithPoints.map(
-          (lesson) => html`
-            <igc-list-item
-              >${lesson.name}: ${lesson.points} puntos.</igc-list-item
-            >
-          `,
-        )}
-      </igc-list>
+      ${points}
     `;
   }
 }

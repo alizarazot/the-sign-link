@@ -159,7 +159,7 @@ export class ViewLesson extends LitElement {
             <h2 slot="title">¡Has terminado la lección!</h2>
           </igc-card-header>
           <igc-card-content>
-            <h3>Has obtenido ${this._score} puntos de 100.</h3>
+            <h3>Has obtenido ${Math.floor(this._score)} puntos de 100.</h3>
             ${(() => {
               if (this._score > 75) {
                 return html`Has obtenido un puntaje muy alto, por lo que no
@@ -294,7 +294,7 @@ export class ViewLesson extends LitElement {
 
   private _handleLessonEnd() {
     if (this._lesson != null) {
-      currentSession().setPoints(this.lessonId, this._score);
+      currentSession().setPoints(this.lessonId, Math.floor(this._score));
     }
 
     this.dispatchEvent(

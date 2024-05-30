@@ -5,6 +5,7 @@ import type { PartialNavDrawer } from "./partial/nav-drawer";
 
 import "./partial/navbar";
 import "./partial/nav-drawer";
+import { IgcListComponent, defineComponents } from "igniteui-webcomponents";
 
 interface Player {
   name: string;
@@ -14,13 +15,25 @@ interface Player {
 @customElement("view-ranking")
 export class ViewRanking extends LitElement {
   static override styles = css`
-    h2 {
+    :host {
+      font-family: sans-serif;
+
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
     }
-    ul {
-      display: grid;
-      place-items: center;
+
+    partial-navbar {
+      align-self: stretch;
+    }
+
+    h2 {
+      margin: 0;
+    }
+
+    strong {
+      font-weight: bold;
     }
   `;
 
@@ -30,6 +43,8 @@ export class ViewRanking extends LitElement {
     super.connectedCallback();
 
     this.usuarios();
+
+    defineComponents(IgcListComponent);
   }
 
   addPlayer(name: string, score: number) {
@@ -51,23 +66,27 @@ export class ViewRanking extends LitElement {
       <partial-nav-drawer></partial-nav-drawer>
 
       <h2>Ranking</h2>
-      <ul>
+      <igc-list>
         ${this.players.map(
-          (player) => html`<li>${player.name}: ${player.score + " pts"}</li>`,
+          (player) => html`
+            <igc-list-item>
+              <strong>${player.name}:</strong> ${player.score} puntos.
+            </igc-list-item>
+          `,
         )}
-      </ul>
+      </igc-list>
     `;
   }
 
   private usuarios() {
     const ranking = this;
 
-    // Ejemplo: Agregar usuarios al ranking
-    ranking.addPlayer("Usuario 1", 100);
-    ranking.addPlayer("Usuario 2", 80);
-    ranking.addPlayer("Usuario 3", 120);
+    ranking.addPlayer("Usuario anónimo", 100);
+    ranking.addPlayer("Usuario anónimo", 80);
+    ranking.addPlayer("Usuario anónimo", 120);
   }
 }
+
 declare global {
   interface HTMLElementTagNameMap {
     "view-ranking": ViewRanking;
